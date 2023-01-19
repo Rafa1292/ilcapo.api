@@ -10,6 +10,7 @@ export type ProviderVM = Omit<Provider, 'id'>
 
 export const mapToProviderVM = (provider: Provider): ProviderVM => {
   const { id, ...rest } = provider
+  console.log(rest)
   return rest
 }
 
