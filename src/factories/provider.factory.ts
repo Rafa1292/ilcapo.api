@@ -8,6 +8,10 @@ export const toNewProvider = (provider: any): Provider => {
     id: provider.id,
     name: provider.name,
     phone: provider.phone,
-    fixedExpense: provider.fixedExpense
+    fixedExpense: provider.fixedExpense,
+    createdBy: provider.createdBy,
+    updatedBy: provider.updatedBy,
+    createdAt: provider.createdAt,
+    updatedAt: provider.updatedAt
   }
 }

@@ -1,7 +1,20 @@
 import { sequelize } from '../../libs/sequelize'
-import { DataTypes } from 'sequelize'
+import { DataTypes, Model } from 'sequelize'
+import { Provider, ProviderAttributes } from '../../services/types'
 
-export const ProviderModel = sequelize.define('provider', {
+class ProviderModel extends Model<ProviderAttributes, Provider> implements ProviderAttributes {
+  public id!: number
+  public name!: string
+  public phone!: number
+  public fixedExpense!: boolean
+  public createdBy!: number
+  public updatedBy!: number
+
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
+}
+
+ProviderModel.init({
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -16,7 +29,7 @@ export const ProviderModel = sequelize.define('provider', {
     allowNull: false,
     type: DataTypes.STRING
   },
-  spent: {
+  fixedExpense: {
     type: DataTypes.BOOLEAN
   },
   createdBy: {
@@ -27,4 +40,11 @@ export const ProviderModel = sequelize.define('provider', {
     allowNull: false,
     type: DataTypes.INTEGER
   }
+},
+{
+  timestamps: true,
+  sequelize,
+  tableName: 'providers'
 })
+
+export default ProviderModel

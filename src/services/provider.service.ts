@@ -1,6 +1,6 @@
 import providerData from '../provider.json'
 import { Provider, ProviderVM, mapToProviderVM, mapToProvidersVM, mapToProvider } from './types'
-import { ProviderModel } from '../db/models/provider.model'
+import ProviderModel from '../db/models/provider.model'
 import { toNewProvider } from '../factories/provider.factory'
 const providers: Provider[] = providerData as Provider[]
 

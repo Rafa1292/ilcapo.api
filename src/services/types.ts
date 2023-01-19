@@ -1,16 +1,21 @@
-export interface Provider {
+export interface ProviderAttributes {
   id: number
   name: string
   phone: number
   fixedExpense: boolean
+  createdAt?: Date
+  updatedAt?: Date
+  createdBy?: number
+  updatedBy?: number
 }
 
-// export type ProviderVM = Pick<Provider, 'id' | 'name' | 'fixedExpense'>
-export type ProviderVM = Omit<Provider, 'id'>
+export interface Provider extends Required<ProviderAttributes> {}
+
+export interface ProviderVM extends Required<ProviderAttributes> {}
 
 export const mapToProviderVM = (provider: Provider): ProviderVM => {
-  const { id, ...rest } = provider
-  console.log(rest)
+  const { ...rest } = provider
+  console.log(provider)
   return rest
 }
 
