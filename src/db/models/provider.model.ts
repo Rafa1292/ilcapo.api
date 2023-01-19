@@ -1,8 +1,8 @@
 import { sequelize } from '../../libs/sequelize'
 import { DataTypes, Model } from 'sequelize'
-import { Provider, ProviderAttributes } from '../../services/types'
+import { ProviderVM, ProviderAttributes } from '../../services/types'
 
-class ProviderModel extends Model<ProviderAttributes, Provider> implements ProviderAttributes {
+class ProviderModel extends Model<ProviderAttributes, ProviderVM> implements ProviderAttributes {
   public id!: number
   public name!: string
   public phone!: number

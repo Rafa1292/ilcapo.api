@@ -1,23 +1,27 @@
-import providerData from '../provider.json'
-import { Provider, ProviderVM, mapToProviderVM, mapToProvidersVM, mapToProvider } from './types'
+import { ProviderVM } from './types'
 import ProviderModel from '../db/models/provider.model'
-import { toNewProvider } from '../factories/provider.factory'
-const providers: Provider[] = providerData as Provider[]
+import { toNewProviderVM } from '../factories/provider.factory'
 
-export const getProviders = (): Provider[] => providers
+export const getProvidersVM = async (): Promise<ProviderVM[]> => {
+  const providers = await ProviderModel.findAll()
+  return providers
+}
 
 export const getProviderById = async (id: number): Promise<ProviderVM | undefined> => {
   const response = await ProviderModel.findByPk(id)
-  const provider = toNewProvider(response)
+  const provider = toNewProviderVM(response)
   if (provider !== undefined) {
-    return mapToProviderVM(provider)
+    return provider
   }
   return undefined
 }
 
-export const getProvidersVM = (): ProviderVM[] => mapToProvidersVM(providers)
+export const saveProvider = async (provider: ProviderVM): Promise<ProviderVM> => {
+  const providerModel = await ProviderModel.create(provider)
+  return toNewProviderVM(providerModel)
+}
 
-export const saveProvider = (provider: ProviderVM): ProviderVM => {
-  providers.push(mapToProvider(provider))
-  return provider
+export const updateProvider = async (provider: Partial<ProviderVM>, id: number): Promise<ProviderVM | undefined> => {
+  await ProviderModel.update(provider, { where: { id } })
+  return await getProviderById(id)
 }

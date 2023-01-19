@@ -5,8 +5,8 @@ import * as providerFactory from '../factories/provider.factory'
 
 const router = express.Router()
 
-router.get('/', (_req: Request, res: Response) => {
-  res.send(providerService.getProvidersVM())
+router.get('/', async (_req: Request, res: Response) => {
+  res.send(await providerService.getProvidersVM())
 })
 
 router.get('/:id', async (req: Request, res: Response) => {
@@ -23,9 +23,16 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 })
 
-router.post('/', (req: Request, res: Response) => {
-  const provider = providerFactory.toNewProvider(req.body)
-  const savedProvider = providerService.saveProvider(provider)
+router.post('/', async (req: Request, res: Response) => {
+  const provider = providerFactory.toNewProviderVM(req.body)
+  const savedProvider = await providerService.saveProvider(provider)
+  res.json(savedProvider)
+})
+
+router.patch('/:id', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id)
+  const provider = providerFactory.toNewProviderVM(req.body)
+  const savedProvider = await providerService.updateProvider(provider, id)
   res.json(savedProvider)
 })
 
