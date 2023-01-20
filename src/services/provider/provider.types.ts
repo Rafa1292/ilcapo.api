@@ -9,4 +9,4 @@ export interface ProviderAttributes {
   updatedBy?: number
 }
 
-export interface ProviderVM extends Required<ProviderAttributes> {}
+export interface Provider extends Required<ProviderAttributes> {}

@@ -1,7 +1,7 @@
-import { ProviderVM } from '../services/types'
+import { Provider } from '../services/provider/provider.types'
 import * as providerValidator from '../validations/provider.validator'
 
-export const toNewProviderVM = (provider: any): ProviderVM => {
+export const toNewProvider = (provider: any): Provider => {
   providerValidator.newProviderIsValid(provider)
 
   return {

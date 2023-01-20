@@ -1,39 +1,58 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express, { Request, Response } from 'express'
-import * as providerService from '../services/provider.service'
+import * as providerService from '../services/provider/provider.service'
 import * as providerFactory from '../factories/provider.factory'
+import * as responseFactory from '../factories/response.factory'
 
 const router = express.Router()
 
 router.get('/', async (_req: Request, res: Response) => {
-  res.send(await providerService.getProvidersVM())
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    response.setResponse(await providerService.getProviders(), 'Providers retrieved successfully', false)
+  } catch (error) {
+    response.setResponse([], 'Providers could not be retrieved', true)
+  }
+  res.send(response)
 })
 
 router.get('/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
   try {
-    const id: number = parseInt(req.params.id, 10)
+    const id = parseInt(req.params.id)
     const provider = await providerService.getProviderById(id)
     if (provider !== undefined) {
-      res.json(provider)
-    } else {
-      res.status(404).send('Provider not found')
+      response.setResponse(provider, 'Provider retrieved successfully', false)
     }
   } catch (error) {
-    res.status(400).send('Invalid provider id')
+    response.setResponse(undefined, 'Provider could not be retrieved', true)
   }
+  res.json(response)
 })
 
 router.post('/', async (req: Request, res: Response) => {
-  const provider = providerFactory.toNewProviderVM(req.body)
-  const savedProvider = await providerService.saveProvider(provider)
-  res.json(savedProvider)
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const provider = providerFactory.toNewProvider(req.body)
+    const savedProvider = await providerService.saveProvider(provider)
+    response.setResponse(savedProvider, 'Provider saved successfully', false)
+  } catch (error) {
+    response.setResponse(undefined, 'Provider could not be saved', true)
+  }
+  res.json(response)
 })
 
 router.patch('/:id', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id)
-  const provider = providerFactory.toNewProviderVM(req.body)
-  const savedProvider = await providerService.updateProvider(provider, id)
-  res.json(savedProvider)
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+    const provider = providerFactory.toNewProvider(req.body)
+    const savedProvider = await providerService.updateProvider(provider, id)
+    response.setResponse(savedProvider, 'Provider updated successfully', false)
+  } catch (error) {
+    response.setResponse(undefined, 'Provider could not be updated', true)
+  }
+  res.json(response)
 })
 
 export default router

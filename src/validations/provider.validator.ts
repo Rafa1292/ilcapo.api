@@ -1,4 +1,4 @@
-import * as validator from '../utils/validator.util'
+import * as validator from '../utils/genericValidators/validator.util'
 
 const parseName = (name: any): string => {
   if (!validator.isString(name)) {
