@@ -1,8 +1,6 @@
-import { sequelize } from '../../libs/sequelize'
-import { DataTypes, Model } from 'sequelize'
-import { Provider, ProviderAttributes } from '../../services/provider/provider.types'
-
-class ProviderModel extends Model<ProviderAttributes, Provider> implements ProviderAttributes {
+import { DataTypes, Model, Sequelize } from 'sequelize'
+import { ProviderAttributes } from '../../services/provider/provider.types'
+export class ProviderModel extends Model implements ProviderAttributes {
   public id!: number
   public name!: string
   public phone!: number
@@ -12,9 +10,25 @@ class ProviderModel extends Model<ProviderAttributes, Provider> implements Provi
 
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
+
+  static associate (models: any): void {
+    this.hasMany(models.providerInput, {
+      foreignKey: 'providerModelId',
+      as: 'providerInputs'
+    })
+  }
+
+  static config (sequelize: Sequelize): any {
+    return {
+      sequelize,
+      tableName: 'providers',
+      modelName: 'provider',
+      timestamps: true
+    }
+  }
 }
 
-ProviderModel.init({
+export const providerSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -40,11 +54,4 @@ ProviderModel.init({
     allowNull: false,
     type: DataTypes.INTEGER
   }
-},
-{
-  timestamps: true,
-  sequelize,
-  tableName: 'providers'
-})
-
-export default ProviderModel
+}

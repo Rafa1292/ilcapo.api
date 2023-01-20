@@ -1,5 +1,5 @@
 import { Provider } from './provider.types'
-import ProviderModel from '../../db/models/provider.model'
+import { ProviderModel } from '../../db/models/provider.model'
 import { toNewProvider } from '../../factories/provider.factory'
 
 export const getProviders = async (): Promise<Provider[]> => {

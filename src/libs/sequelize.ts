@@ -14,5 +14,6 @@ const options: Options = {
 if (config.dbUrl === undefined) {
   throw new Error('DB_URL is undefined')
 }
+const sequelize = new Sequelize(config.dbUrl, options)
 
-export const sequelize = new Sequelize(config.dbUrl, options)
+export default sequelize

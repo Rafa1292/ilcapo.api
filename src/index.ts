@@ -1,6 +1,7 @@
 import express from 'express'
-import providersRouter from './routes/provider.route'
 import { setUpModels } from './db/models'
+import sequelize from './libs/sequelize'
+import providersRouter from './routes/provider.route'
 
 const app = express()
 app.use(express.json())
@@ -17,8 +18,7 @@ app.listen(PORT, () => {
   console.log(`Server running again on port ${PORT}`)
 })
 
-setUpModels().then(() => {
-  console.log('Models are set up')
-}).catch((err) => {
-  console.log('Error setting up models', err)
-})
+setUpModels(sequelize).then(() =>
+  console.log('models setup'))
+  .catch(() =>
+    console.log('unable to set models'))
