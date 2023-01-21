@@ -27,7 +27,7 @@ export class ProviderInputModel extends Model implements ProviderInputAttributes
   }
 }
 
-export const ProviderInputSchema = {
+export const providerInputSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
