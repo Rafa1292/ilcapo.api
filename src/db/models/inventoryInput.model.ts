@@ -1,66 +1,62 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { InventoryAttributes } from '../../services/inventory/inventory.types'
+import { InventoryInputAttributes } from '../../services/inventoryInput/inventoryInput.types'
 
-export class InventoryModel extends Model implements InventoryAttributes {
+export class InventoryInputModel extends Model implements InventoryInputAttributes {
   public id!: number
-  public initialValue!: number
-  public finalValue!: number
-  public addedValue!: number
-  public initialDate!: Date
-  public finalDate!: Date
-  public investedPercentage!: number
+  public inventoryId!: number
+  public inputId!: number
+  public initialQuantity!: number
+  public addedQuantity!: number
+  public finalQuantity!: number
+  public measureId!: number
   public createdBy!: number
   public updatedBy!: number
 
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
-  static associate (models: any): void {
-    this.belongsToMany(models.input, {
-      through: models.inventoryInput,
-      foreignKey: 'inventoryId',
-      as: 'inputs'
-    })
-  }
+  // static associate (models: any): void {
+
+  // }
 
   static config (sequelize: Sequelize): any {
     return {
       sequelize,
-      tableName: 'inventories',
-      modelName: 'inventory',
+      tableName: 'inventoryInputs',
+      modelName: 'inventoryInput',
       timestamps: true
     }
   }
 }
 
-export const inventorySchema = {
+export const inventoryInputSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  initialValue: {
+  inventoryId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  finalValue: {
+  inputId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  addedValue: {
+  initialQuantity: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  initialDate: {
+  addedQuantity: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.INTEGER
   },
-  finalDate: {
+  finalQuantity: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.INTEGER
   },
-  investedPercentage: {
+  measureId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },

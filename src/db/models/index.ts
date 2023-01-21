@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize'
 import { InputModel, inputSchema } from './input.model'
 import { InputCategoryModel, inputCategorySchema } from './inputCategory.model'
 import { InventoryModel, inventorySchema } from './inventory.model'
+import { InventoryInputModel, inventoryInputSchema } from './inventoryInput.model'
 import { MagnitudeModel, magnitudeSchema } from './magnitude.model'
 import { MeasureModel, measureSchema } from './measure.model'
 import { ProviderModel, providerSchema } from './provider.model'
@@ -15,12 +16,14 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   MeasureModel.init(measureSchema, MeasureModel.config(sequelize))
   MagnitudeModel.init(magnitudeSchema, MagnitudeModel.config(sequelize))
   InventoryModel.init(inventorySchema, InventoryModel.config(sequelize))
+  InventoryInputModel.init(inventoryInputSchema, InventoryInputModel.config(sequelize))
 
   InputCategoryModel.associate(sequelize.models)
   ProviderModel.associate(sequelize.models)
   InputModel.associate(sequelize.models)
   MeasureModel.associate(sequelize.models)
   MagnitudeModel.associate(sequelize.models)
+  InventoryModel.associate(sequelize.models)
 
   await InventoryModel.sync()
   await MagnitudeModel.sync()
@@ -29,4 +32,5 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   await ProviderModel.sync()
   await InputModel.sync()
   await ProviderInputModel.sync()
+  await InventoryInputModel.sync()
 }

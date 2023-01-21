@@ -27,6 +27,11 @@ export class InputModel extends Model implements InputAttributes {
       foreignKey: 'inputModelId',
       as: 'providers'
     })
+    this.belongsToMany(models.inventory, {
+      through: models.inventoryInput,
+      foreignKey: 'inputId',
+      as: 'inventories'
+    })
   }
 
   static config (sequelize: Sequelize): any {
