@@ -20,5 +20,5 @@ app.listen(PORT, () => {
 
 setUpModels(sequelize).then(() =>
   console.log('models setup'))
-  .catch(() =>
-    console.log('unable to set models'))
+  .catch((err: string) =>
+    console.log('unable to set models' + err))

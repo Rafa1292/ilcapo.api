@@ -1,5 +1,4 @@
-import { DataTypes, Model } from 'sequelize'
-import sequelize from '../../libs/sequelize'
+import { DataTypes, Model, Sequelize } from 'sequelize'
 import { InputAttributes } from '../../services/input/input.types'
 
 export class InputModel extends Model implements InputAttributes {
@@ -22,11 +21,19 @@ export class InputModel extends Model implements InputAttributes {
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
-  static config (): any {
+  static associate (models: any): void {
+    this.belongsToMany(models.provider, {
+      through: models.providerInput,
+      foreignKey: 'inputModelId',
+      as: 'providers'
+    })
+  }
+
+  static config (sequelize: Sequelize): any {
     return {
       sequelize,
-      tableName: 'providerInputs',
-      modelName: 'providerInput',
+      tableName: 'inputs',
+      modelName: 'input',
       timestamps: true
     }
   }

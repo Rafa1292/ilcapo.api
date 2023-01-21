@@ -12,9 +12,10 @@ export class ProviderModel extends Model implements ProviderAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.hasMany(models.providerInput, {
+    this.belongsToMany(models.input, {
+      through: models.providerInput,
       foreignKey: 'providerModelId',
-      as: 'providerInputs'
+      as: 'inputs'
     })
   }
 
