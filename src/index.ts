@@ -2,16 +2,15 @@ import express from 'express'
 import { setUpModels } from './db/models'
 import sequelize from './libs/sequelize'
 import providersRouter from './routes/provider.route'
+import cors from 'cors'
 
 const app = express()
 app.use(express.json())
-const PORT = 3000
+const PORT = 3001
 
-app.get('/ping', (_req: any, res: any) => {
-  console.log('ping')
-  res.send('pong')
-})
-
+app.use(cors({
+  origin: 'http://localhost:3000'
+}))
 app.use('/api/v1/providers', providersRouter)
 
 app.listen(PORT, () => {

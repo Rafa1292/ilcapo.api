@@ -10,3 +10,5 @@ export interface ProviderAttributes {
 }
 
 export interface Provider extends Required<ProviderAttributes> {}
+
+export interface NewProvider extends Omit<ProviderAttributes, 'id'> {}

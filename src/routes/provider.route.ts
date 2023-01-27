@@ -33,11 +33,12 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const provider = providerFactory.toNewProvider(req.body)
-    const savedProvider = await providerService.saveProvider(provider)
+    const { id, ...createProvider } = providerFactory.toNewProvider(req.body)
+    const savedProvider = await providerService.saveProvider(createProvider)
     response.setResponse(savedProvider, 'Provider saved successfully', false)
-  } catch (error) {
-    response.setResponse(undefined, 'Provider could not be saved', true)
+  } catch (error: any) {
+    console.log(error)
+    response.setResponse(undefined, error.message, true)
   }
   res.json(response)
 })

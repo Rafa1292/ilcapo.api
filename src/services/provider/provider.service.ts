@@ -1,4 +1,4 @@
-import { Provider } from './provider.types'
+import { Provider, NewProvider } from './provider.types'
 import { ProviderModel } from '../../db/models/provider.model'
 import { toNewProvider } from '../../factories/provider.factory'
 
@@ -11,7 +11,8 @@ export const getProviderById = async (id: number): Promise<Provider> => {
   return toNewProvider(response)
 }
 
-export const saveProvider = async (provider: Provider): Promise<Provider> => {
+export const saveProvider = async (provider: NewProvider): Promise<Provider> => {
+  console.log('proveedor:', provider)
   return await ProviderModel.create(provider)
 }
 
