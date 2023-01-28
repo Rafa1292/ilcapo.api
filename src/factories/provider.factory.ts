@@ -1,8 +1,8 @@
 import { Provider } from '../services/provider/provider.types'
 import * as providerValidator from '../validations/provider.validator'
 
-export const toNewProvider = (provider: any): Provider => {
-  providerValidator.newProviderIsValid(provider)
+export const toNewProvider = async (provider: any): Promise<Provider> => {
+  await providerValidator.newProviderIsValid(provider)
 
   return {
     id: provider.id,

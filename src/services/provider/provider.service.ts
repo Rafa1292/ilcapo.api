@@ -8,7 +8,7 @@ export const getProviders = async (): Promise<Provider[]> => {
 
 export const getProviderById = async (id: number): Promise<Provider> => {
   const response = await ProviderModel.findByPk(id)
-  return toNewProvider(response)
+  return await toNewProvider(response)
 }
 
 export const saveProvider = async (provider: NewProvider): Promise<Provider> => {

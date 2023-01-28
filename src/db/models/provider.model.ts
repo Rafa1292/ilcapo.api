@@ -42,7 +42,11 @@ export const providerSchema = {
   },
   name: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    unique: true,
+    validate: {
+      notEmpty: true
+    }
   },
   fixedExpense: {
     type: DataTypes.BOOLEAN
