@@ -8,6 +8,13 @@ const parseName = (name: any): string => {
   return name
 }
 
+const maxLenght = (text: string, max: number): string => {
+  if (text.length > max) {
+    throw new Error(`The text is too long. Max ${max} characters`)
+  }
+  return text
+}
+
 const validateUniqueName = async (name: string, id: number): Promise<void> => {
   const measures = await getMeasuresWithDeletedItems()
   const measure = measures.find((measure) => measure.name.toLowerCase() === name.toLowerCase())
@@ -23,6 +30,8 @@ const validateUniqueName = async (name: string, id: number): Promise<void> => {
 
 export const newMeasureIsValid = async (measure: any): Promise<boolean> => {
   parseName(measure?.name)
+  parseName(measure?.abbreviation)
+  maxLenght(measure?.name, 3)
   await validateUniqueName(measure?.name, measure?.id)
   return true
 }

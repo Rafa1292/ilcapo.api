@@ -1,4 +1,5 @@
 import { getProvidersWithDeletedItems } from '../services/provider/provider.service'
+import { Provider } from '../services/provider/provider.types'
 import * as validator from '../utils/genericValidators/validator.util'
 
 const parseName = (name: any): string => {
@@ -6,6 +7,13 @@ const parseName = (name: any): string => {
     throw new Error('Incorrect or missing name:')
   }
   return name
+}
+
+const maxLenght = (text: string, max: number): string => {
+  if (text.length > max) {
+    throw new Error(`Phone number needs ${max} digits`)
+  }
+  return text
 }
 
 const validateUniqueName = async (name: string, id: number): Promise<void> => {
@@ -21,8 +29,9 @@ const validateUniqueName = async (name: string, id: number): Promise<void> => {
   }
 }
 
-export const newProviderIsValid = async (provider: any): Promise<boolean> => {
+export const newProviderIsValid = async (provider: Provider): Promise<boolean> => {
   parseName(provider?.name)
+  maxLenght(provider?.phone.toString(), 8)
   await validateUniqueName(provider?.name, provider?.id)
   return true
 }
