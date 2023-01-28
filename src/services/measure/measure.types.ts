@@ -13,3 +13,5 @@ export interface MeasureAttributes {
 }
 
 export interface Measure extends Required<MeasureAttributes> { }
+
+export interface NewMeasure extends Omit<MeasureAttributes, 'id'> { }

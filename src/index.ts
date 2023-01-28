@@ -3,6 +3,7 @@ import { setUpModels } from './db/models'
 import sequelize from './libs/sequelize'
 import providersRouter from './routes/provider.route'
 import magnitudesRouter from './routes/magnitude.router'
+import measureRouter from './routes/measure.router'
 import cors from 'cors'
 
 const app = express()
@@ -14,6 +15,7 @@ app.use(cors({
 }))
 app.use('/api/v1/providers', providersRouter)
 app.use('/api/v1/magnitudes', magnitudesRouter)
+app.use('/api/v1/measures', measureRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running again on port ${PORT}`)
