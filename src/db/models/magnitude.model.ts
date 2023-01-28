@@ -34,7 +34,9 @@ export const magnitudeSchema = {
   },
   name: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    unique: true
+
   },
   delete: {
     type: DataTypes.BOOLEAN,

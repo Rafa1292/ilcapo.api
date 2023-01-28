@@ -12,6 +12,10 @@ export const getProviders = async (): Promise<Provider[]> => {
   )
 }
 
+export const getProvidersWithDeletedItems = async (): Promise<Provider[]> => {
+  return await ProviderModel.findAll()
+}
+
 export const getProviderById = async (id: number): Promise<Provider> => {
   const response = await ProviderModel.findByPk(id)
   if (response === null) throw new Error('Provider not found')
@@ -31,5 +35,11 @@ export const updateProvider = async (provider: Partial<Provider>, id: number): P
 export const deleteProvider = async (id: number): Promise<Provider> => {
   const provider = await getProviderById(id)
   provider.delete = true
+  return await updateProvider(provider, id)
+}
+
+export const recoveryProvider = async (id: number): Promise<Provider> => {
+  const provider = await getProviderById(id)
+  provider.delete = false
   return await updateProvider(provider, id)
 }

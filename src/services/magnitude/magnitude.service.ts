@@ -33,3 +33,13 @@ export const deleteMagnitude = async (id: number): Promise<Magnitude> => {
   magnitude.delete = true
   return await updateMagnitude(magnitude, id)
 }
+
+export const getMagnitudesWithDeletedItems = async (): Promise<Magnitude[]> => {
+  return await MagnitudeModel.findAll()
+}
+
+export const recoveryMagnitude = async (id: number): Promise<Magnitude> => {
+  const magnitude = await getMagnitudeById(id)
+  magnitude.delete = false
+  return await updateMagnitude(magnitude, id)
+}

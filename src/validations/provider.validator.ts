@@ -1,4 +1,4 @@
-import { getProviders } from '../services/provider/provider.service'
+import { getProvidersWithDeletedItems } from '../services/provider/provider.service'
 import * as validator from '../utils/genericValidators/validator.util'
 
 const parseName = (name: any): string => {
@@ -9,10 +9,15 @@ const parseName = (name: any): string => {
 }
 
 const validateUniqueName = async (name: string, id: number): Promise<void> => {
-  const providers = await getProviders()
+  const providers = await getProvidersWithDeletedItems()
   const provider = providers.find((provider) => provider.name.toLowerCase() === name.toLowerCase())
-  if (provider !== null && provider?.id !== id) {
-    throw new Error('Este nombre de proveedor ya existe')
+  if (provider !== null && provider !== undefined) {
+    if (provider.id !== id) {
+      if (provider.delete) {
+        throw new Error('Este nombre ya existe y  fue borrado. Si desea recuperarlo dirigase a la sección de proveedores borrados')
+      }
+      throw new Error('Este nombre de proveedor ya existe')
+    }
   }
 }
 
