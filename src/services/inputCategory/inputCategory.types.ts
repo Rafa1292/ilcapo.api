@@ -9,3 +9,5 @@ export interface InputCategoryAttributes {
 }
 
 export interface InputCategory extends Required<InputCategoryAttributes> { }
+
+export interface NewInputCategory extends Omit<InputCategoryAttributes, 'id'> { }
