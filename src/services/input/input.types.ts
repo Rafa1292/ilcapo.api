@@ -20,3 +20,5 @@ export interface InputAttributes {
 }
 
 export interface Input extends Required<InputAttributes> { }
+
+export interface NewInput extends Omit<InputAttributes, 'id'> { }
