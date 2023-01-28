@@ -12,6 +12,7 @@ export interface InputAttributes {
   currentProviderId: number
   measureId: number
   inputCategoryId: number
+  delete: boolean
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

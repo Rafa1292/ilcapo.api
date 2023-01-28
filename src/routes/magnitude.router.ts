@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express, { Request, Response } from 'express'
-import * as providerService from '../services/provider/provider.service'
-import * as providerFactory from '../factories/provider.factory'
+import * as magnitudeService from '../services/magnitude/magnitude.service'
+import * as magnitudeFactory from '../factories/magnitude.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
 
@@ -10,7 +10,7 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await providerService.getProviders(), ['Providers retrieved successfully'], false)
+    response.setResponse(await magnitudeService.getMagnitudes(), ['Magnitudes retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -22,9 +22,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const provider = await providerService.getProviderById(id)
-    if (provider !== undefined) {
-      response.setResponse(provider, ['Provider retrieved successfully'], false)
+    const magnitude = await magnitudeService.getMagnitudeById(id)
+    if (magnitude !== undefined) {
+      response.setResponse(magnitude, ['Magnitude retrieved successfully'], false)
     }
   } catch (error) {
     const errors = errorHandler(error)
@@ -36,9 +36,9 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createProvider } = await providerFactory.toNewProvider(req.body)
-    const savedProvider = await providerService.saveProvider(createProvider)
-    response.setResponse(savedProvider, ['Provider saved successfully'], false)
+    const { id, ...createMagnitude } = await magnitudeFactory.toNewMagnitude(req.body)
+    const savedMagnitude = await magnitudeService.saveMagnitude(createMagnitude)
+    response.setResponse(savedMagnitude, ['Magnitude saved successfully'], false)
   } catch (error: any) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -50,9 +50,9 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const provider = await providerFactory.toNewProvider(req.body)
-    const savedProvider = await providerService.updateProvider(provider, id)
-    response.setResponse(savedProvider, ['Provider updated successfully'], false)
+    const magnitude = await magnitudeFactory.toNewMagnitude(req.body)
+    const savedMagnitude = await magnitudeService.updateMagnitude(magnitude, id)
+    response.setResponse(savedMagnitude, ['Magnitude updated successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -64,8 +64,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedProvider = await providerService.deleteProvider(id)
-    response.setResponse(deletedProvider, ['Provider deleted successfully'], false)
+    const deletedMagnitude = await magnitudeService.deleteMagnitude(id)
+    response.setResponse(deletedMagnitude, ['Magnitude deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

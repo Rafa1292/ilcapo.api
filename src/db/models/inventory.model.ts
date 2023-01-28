@@ -11,7 +11,7 @@ export class InventoryModel extends Model implements InventoryAttributes {
   public investedPercentage!: number
   public createdBy!: number
   public updatedBy!: number
-
+  public delete!: boolean
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
@@ -63,6 +63,10 @@ export const inventorySchema = {
   investedPercentage: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  delete: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
   },
   createdBy: {
     allowNull: false,

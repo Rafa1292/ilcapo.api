@@ -9,6 +9,7 @@ export class InventoryInputModel extends Model implements InventoryInputAttribut
   public addedQuantity!: number
   public finalQuantity!: number
   public measureId!: number
+  public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
 
@@ -59,6 +60,10 @@ export const inventoryInputSchema = {
   measureId: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  delete: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
   },
   createdBy: {
     allowNull: false,

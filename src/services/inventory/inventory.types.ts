@@ -6,6 +6,7 @@ export interface InventoryAttributes {
   initialDate: Date
   finalDate: Date
   investedPercentage: number
+  delete: boolean
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

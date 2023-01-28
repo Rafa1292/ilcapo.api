@@ -9,6 +9,7 @@ export interface ProviderInputAttributes {
   expectedPrice: number
   presentation: number
   measureId: number
+  delete: boolean
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

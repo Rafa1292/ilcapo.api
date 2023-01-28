@@ -4,6 +4,7 @@ import { MagnitudeAttributes } from '../../services/magnitude/magnitude.types'
 export class MagnitudeModel extends Model implements MagnitudeAttributes {
   public id!: number
   public name!: string
+  public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
 
@@ -34,6 +35,10 @@ export const magnitudeSchema = {
   name: {
     allowNull: false,
     type: DataTypes.STRING
+  },
+  delete: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
   },
   createdBy: {
     allowNull: false,

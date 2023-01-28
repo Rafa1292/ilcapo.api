@@ -5,6 +5,7 @@ export class ProviderModel extends Model implements ProviderAttributes {
   public name!: string
   public phone!: number
   public fixedExpense!: boolean
+  public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
 
@@ -50,6 +51,10 @@ export const providerSchema = {
   },
   fixedExpense: {
     type: DataTypes.BOOLEAN
+  },
+  delete: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
   },
   createdBy: {
     allowNull: false,

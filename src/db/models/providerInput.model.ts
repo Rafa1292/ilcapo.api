@@ -12,6 +12,7 @@ export class ProviderInputModel extends Model implements ProviderInputAttributes
   public expectedPrice!: number
   public presentation!: number
   public measureId!: number
+  public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
   public readonly createdAt!: Date
@@ -69,6 +70,10 @@ export const providerInputSchema = {
   measureId: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  delete: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
   },
   createdBy: {
     allowNull: false,

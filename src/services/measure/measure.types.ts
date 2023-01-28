@@ -5,6 +5,7 @@ export interface MeasureAttributes {
   value: number
   magnitudeId: number
   abbreviation: string
+  delete: boolean
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

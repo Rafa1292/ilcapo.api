@@ -12,6 +12,7 @@ export const toNewProvider = async (provider: any): Promise<Provider> => {
     createdBy: provider.createdBy,
     updatedBy: provider.updatedBy,
     createdAt: provider.createdAt,
-    updatedAt: provider.updatedAt
+    updatedAt: provider.updatedAt,
+    delete: provider.delete
   }
 }

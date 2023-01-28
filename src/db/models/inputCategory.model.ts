@@ -4,6 +4,7 @@ import { InputCategoryAttributes } from '../../services/inputCategory/inputCateg
 export class InputCategoryModel extends Model implements InputCategoryAttributes {
   public id!: number
   public name!: string
+  public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
 
@@ -34,6 +35,10 @@ export const inputCategorySchema = {
   name: {
     allowNull: false,
     type: DataTypes.STRING
+  },
+  delete: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
   },
   createdBy: {
     allowNull: false,

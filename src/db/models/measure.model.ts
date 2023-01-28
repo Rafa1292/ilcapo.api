@@ -8,6 +8,7 @@ export class MeasureModel extends Model implements MeasureAttributes {
   public value!: number
   public magnitudeId!: number
   public abbreviation!: string
+  public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
 
@@ -54,6 +55,10 @@ export const measureSchema = {
   abbreviation: {
     allowNull: false,
     type: DataTypes.STRING
+  },
+  delete: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
   },
   createdBy: {
     allowNull: false,

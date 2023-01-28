@@ -6,6 +6,7 @@ export interface InventoryInputAttributes {
   addedQuantity: number
   finalQuantity: number
   measureId: number
+  delete: boolean
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

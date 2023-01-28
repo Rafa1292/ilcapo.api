@@ -3,6 +3,7 @@ export interface ProviderAttributes {
   name: string
   phone: number
   fixedExpense: boolean
+  delete: boolean
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

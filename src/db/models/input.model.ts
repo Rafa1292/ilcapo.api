@@ -15,6 +15,7 @@ export class InputModel extends Model implements InputAttributes {
   public currentProviderId!: number
   public measureId!: number
   public inputCategoryId!: number
+  public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
 
@@ -98,6 +99,10 @@ export const inputSchema = {
   inputCategoryId: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  delete: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN
   },
   createdBy: {
     allowNull: false,
