@@ -31,7 +31,7 @@ const validateUniqueName = async (name: string, id: number): Promise<void> => {
 export const newMeasureIsValid = async (measure: any): Promise<boolean> => {
   parseName(measure?.name)
   parseName(measure?.abbreviation)
-  maxLenght(measure?.name, 3)
+  maxLenght(measure?.abbreviation, 3)
   await validateUniqueName(measure?.name, measure?.id)
   return true
 }

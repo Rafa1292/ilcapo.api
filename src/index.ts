@@ -6,6 +6,7 @@ import magnitudesRouter from './routes/magnitude.router'
 import measureRouter from './routes/measure.router'
 import inputCategoryRouter from './routes/inputCategory.router'
 import inputRouter from './routes/input.router'
+import providerInputRouter from './routes/providerInput.router'
 import cors from 'cors'
 
 const app = express()
@@ -20,6 +21,7 @@ app.use('/api/v1/magnitudes', magnitudesRouter)
 app.use('/api/v1/measures', measureRouter)
 app.use('/api/v1/inputCategories', inputCategoryRouter)
 app.use('/api/v1/inputs', inputRouter)
+app.use('/api/v1/providerInputs', providerInputRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running again on port ${PORT}`)

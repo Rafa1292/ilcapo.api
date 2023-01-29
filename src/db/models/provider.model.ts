@@ -15,7 +15,7 @@ export class ProviderModel extends Model implements ProviderAttributes {
   static associate (models: any): void {
     this.belongsToMany(models.input, {
       through: models.providerInput,
-      foreignKey: 'providerModelId',
+      foreignKey: 'providerId',
       as: 'inputs'
     })
   }

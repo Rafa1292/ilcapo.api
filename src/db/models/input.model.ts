@@ -25,7 +25,7 @@ export class InputModel extends Model implements InputAttributes {
   static associate (models: any): void {
     this.belongsToMany(models.provider, {
       through: models.providerInput,
-      foreignKey: 'inputModelId',
+      foreignKey: 'inputId',
       as: 'providers'
     })
     this.belongsToMany(models.inventory, {

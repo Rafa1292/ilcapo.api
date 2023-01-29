@@ -3,8 +3,8 @@ import { ProviderInputAttributes } from '../../services/providerInput/providerIn
 
 export class ProviderInputModel extends Model implements ProviderInputAttributes {
   public id!: number
-  public inputModelId!: number
-  public providerModelId!: number
+  public inputId!: number
+  public providerId!: number
   public lowerPrice!: number
   public currentPrice!: number
   public upperPrice!: number
@@ -35,11 +35,11 @@ export const providerInputSchema = {
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  inputModelId: {
+  inputId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  providerModelId: {
+  providerId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },

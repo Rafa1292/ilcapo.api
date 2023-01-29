@@ -1,7 +1,7 @@
 export interface ProviderInputAttributes {
   id: number
-  inputModelId: number
-  providerModelId: number
+  inputId: number
+  providerId: number
   lowerPrice: number
   upperPrice: number
   currentPrice: number
@@ -17,3 +17,5 @@ export interface ProviderInputAttributes {
 }
 
 export interface ProviderInput extends Required<ProviderInputAttributes> { }
+
+export interface NewProviderInput extends Omit<ProviderInputAttributes, 'id'> { }
