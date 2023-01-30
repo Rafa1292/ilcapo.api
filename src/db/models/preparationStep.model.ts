@@ -1,14 +1,13 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { IngredientAttributes } from '../../services/ingredient/ingredient.types'
+import { PreparationStepAttributes } from '../../services/preparationStep/preparationStep.types'
 
-export class IngredientModel extends Model implements IngredientAttributes {
+export class PreparationStepModel extends Model implements PreparationStepAttributes {
   public id!: number
-  public name!: string
+  public stepNumber!: number
+  public description!: string
   public cost!: number
-  public measureId!: number
-  public ingredientCategoryId!: number
-  public presentation!: number
-  public price!: number
+  public minutesOfPreparation!: number
+  public ingredientId!: number
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -17,49 +16,49 @@ export class IngredientModel extends Model implements IngredientAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.hasMany(models.preparationStep, { foreignKey: 'ingredientId' })
+    this.belongsToMany(models.input, {
+      through: models.preparationStepInput,
+      foreignKey: 'preparationStepId',
+      as: 'inputs'
+    })
   }
 
   static config (sequelize: Sequelize): any {
     return {
       sequelize,
-      tableName: 'ingredients',
-      modelName: 'ingredient',
+      tableName: 'preparationSteps',
+      modelName: 'preparationStep',
       timestamps: true
     }
   }
 }
 
-export const ingredientSchema = {
+export const preparationStepSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  name: {
+  stepNumber: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  description: {
     allowNull: false,
     type: DataTypes.STRING
   },
   cost: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL
   },
-  measureId: {
+  minutesOfPreparation: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  ingredientCategoryId: {
+  ingredientId: {
     allowNull: false,
     type: DataTypes.INTEGER
-  },
-  presentation: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
-  price: {
-    allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
   },
   delete: {
     type: DataTypes.BOOLEAN,

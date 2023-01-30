@@ -33,6 +33,11 @@ export class InputModel extends Model implements InputAttributes {
       foreignKey: 'inputId',
       as: 'inventories'
     })
+    this.belongsToMany(models.preparationStep, {
+      through: models.preparationStepInput,
+      foreignKey: 'inputId',
+      as: 'preparationSteps'
+    })
   }
 
   static config (sequelize: Sequelize): any {
