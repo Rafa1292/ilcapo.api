@@ -27,19 +27,18 @@ export const saveMeasure = async (measure: NewMeasure): Promise<Measure> => {
   return await MeasureModel.create(measure)
 }
 
-export const updateMeasure = async (measure: Partial<Measure>, id: number): Promise<Measure> => {
+export const updateMeasure = async (measure: Partial<Measure>, id: number): Promise<void> => {
   await MeasureModel.update(measure, { where: { id } })
-  return await getMeasureById(id)
 }
 
-export const deleteMeasure = async (id: number): Promise<Measure> => {
+export const deleteMeasure = async (id: number): Promise<void> => {
   const measure = await getMeasureById(id)
   measure.delete = true
-  return await updateMeasure(measure, id)
+  await updateMeasure(measure, id)
 }
 
-export const recoveryMeasure = async (id: number): Promise<Measure> => {
+export const recoveryMeasure = async (id: number): Promise<void> => {
   const measure = await getMeasureById(id)
   measure.delete = false
-  return await updateMeasure(measure, id)
+  await updateMeasure(measure, id)
 }

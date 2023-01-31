@@ -23,23 +23,22 @@ export const saveMagnitude = async (magnitude: NewMagnitude): Promise<Magnitude>
   return await MagnitudeModel.create(magnitude)
 }
 
-export const updateMagnitude = async (magnitude: Partial<Magnitude>, id: number): Promise<Magnitude> => {
+export const updateMagnitude = async (magnitude: Partial<Magnitude>, id: number): Promise<void> => {
   await MagnitudeModel.update(magnitude, { where: { id } })
-  return await getMagnitudeById(id)
 }
 
-export const deleteMagnitude = async (id: number): Promise<Magnitude> => {
+export const deleteMagnitude = async (id: number): Promise<void> => {
   const magnitude = await getMagnitudeById(id)
   magnitude.delete = true
-  return await updateMagnitude(magnitude, id)
+  await updateMagnitude(magnitude, id)
 }
 
 export const getMagnitudesWithDeletedItems = async (): Promise<Magnitude[]> => {
   return await MagnitudeModel.findAll()
 }
 
-export const recoveryMagnitude = async (id: number): Promise<Magnitude> => {
+export const recoveryMagnitude = async (id: number): Promise<void> => {
   const magnitude = await getMagnitudeById(id)
   magnitude.delete = false
-  return await updateMagnitude(magnitude, id)
+  await updateMagnitude(magnitude, id)
 }
