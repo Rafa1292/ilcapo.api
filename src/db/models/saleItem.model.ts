@@ -1,14 +1,13 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { IngredientAttributes } from '../../services/ingredient/ingredient.types'
+import { SaleItemAttributes } from '../../services/saleItem/saleItem.types'
 
-export class IngredientModel extends Model implements IngredientAttributes {
+export class SaleItemModel extends Model implements SaleItemAttributes {
   public id!: number
   public name!: string
-  public cost!: number
-  public measureId!: number
-  public ingredientCategoryId!: number
-  public presentation!: number
+  public description!: string
   public price!: number
+  public saleItemCategoryId!: number
+  public pictureUrl!: string
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -17,26 +16,24 @@ export class IngredientModel extends Model implements IngredientAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.hasMany(models.preparationStep, { foreignKey: 'ingredientId' })
-
-    this.belongsToMany(models.recipeStep, {
-      through: models.recipeStepIngredient,
-      foreignKey: 'ingredientId',
-      as: 'recipeSteps'
+    this.belongsToMany(models.product, {
+      through: models.saleItemProduct,
+      foreignKey: 'saleItemId',
+      as: 'products'
     })
   }
 
   static config (sequelize: Sequelize): any {
     return {
       sequelize,
-      tableName: 'ingredients',
-      modelName: 'ingredient',
+      tableName: 'saleItems',
+      modelName: 'saleItem',
       timestamps: true
     }
   }
 }
 
-export const ingredientSchema = {
+export const saleItemSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -47,25 +44,21 @@ export const ingredientSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  cost: {
+  description: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
-  },
-  measureId: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
-  ingredientCategoryId: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
-  presentation: {
-    allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.STRING
   },
   price: {
     allowNull: false,
     type: DataTypes.DECIMAL(10, 2)
+  },
+  saleItemCategoryId: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  pictureUrl: {
+    allowNull: false,
+    type: DataTypes.STRING
   },
   delete: {
     type: DataTypes.BOOLEAN,

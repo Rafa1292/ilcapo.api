@@ -1,14 +1,13 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { IngredientAttributes } from '../../services/ingredient/ingredient.types'
+import { RecipeStepAttributes } from '../../services/recipeStep/recipeStep.types'
 
-export class IngredientModel extends Model implements IngredientAttributes {
+export class RecipeStepModel extends Model implements RecipeStepAttributes {
   public id!: number
-  public name!: string
+  public description!: string
   public cost!: number
-  public measureId!: number
-  public ingredientCategoryId!: number
-  public presentation!: number
-  public price!: number
+  public stepNumber!: number
+  public minutesOfPreparation!: number
+  public recipeId!: number
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -17,33 +16,31 @@ export class IngredientModel extends Model implements IngredientAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.hasMany(models.preparationStep, { foreignKey: 'ingredientId' })
-
-    this.belongsToMany(models.recipeStep, {
+    this.belongsToMany(models.ingredient, {
       through: models.recipeStepIngredient,
-      foreignKey: 'ingredientId',
-      as: 'recipeSteps'
+      foreignKey: 'recipeId',
+      as: 'ingredients'
     })
   }
 
   static config (sequelize: Sequelize): any {
     return {
       sequelize,
-      tableName: 'ingredients',
-      modelName: 'ingredient',
+      tableName: 'recipeSteps',
+      modelName: 'recipeStep',
       timestamps: true
     }
   }
 }
 
-export const ingredientSchema = {
+export const recipeStepSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  name: {
+  description: {
     allowNull: false,
     type: DataTypes.STRING
   },
@@ -51,21 +48,17 @@ export const ingredientSchema = {
     allowNull: false,
     type: DataTypes.DECIMAL(10, 2)
   },
-  measureId: {
+  stepNumber: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  ingredientCategoryId: {
+  minutesOfPreparation: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  presentation: {
+  recipeId: {
     allowNull: false,
     type: DataTypes.INTEGER
-  },
-  price: {
-    allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
   },
   delete: {
     type: DataTypes.BOOLEAN,

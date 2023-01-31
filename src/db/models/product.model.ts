@@ -1,14 +1,14 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { IngredientAttributes } from '../../services/ingredient/ingredient.types'
+import { ProductAttributes } from '../../services/product/product.types'
 
-export class IngredientModel extends Model implements IngredientAttributes {
+export class ProductModel extends Model implements ProductAttributes {
   public id!: number
   public name!: string
-  public cost!: number
-  public measureId!: number
-  public ingredientCategoryId!: number
-  public presentation!: number
   public price!: number
+  public description!: string
+  public pictureUrl!: string
+  public allowsModify!: boolean
+  public recipeId!: number
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -17,26 +17,32 @@ export class IngredientModel extends Model implements IngredientAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.hasMany(models.preparationStep, { foreignKey: 'ingredientId' })
-
-    this.belongsToMany(models.recipeStep, {
-      through: models.recipeStepIngredient,
-      foreignKey: 'ingredientId',
-      as: 'recipeSteps'
+    this.belongsToMany(models.saleItem, {
+      through: models.saleItemProduct,
+      foreignKey: 'productId',
+      as: 'saleItems'
     })
+
+    this.belongsToMany(models.modifierGroup, {
+      through: models.productModifier,
+      foreignKey: 'productId',
+      as: 'modifierGroups'
+    })
+
+    this.hasOne(models.recipe, { foreignKey: 'productId' })
   }
 
   static config (sequelize: Sequelize): any {
     return {
       sequelize,
-      tableName: 'ingredients',
-      modelName: 'ingredient',
+      tableName: 'products',
+      modelName: 'product',
       timestamps: true
     }
   }
 }
 
-export const ingredientSchema = {
+export const productSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -47,25 +53,25 @@ export const ingredientSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  cost: {
-    allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
-  },
-  measureId: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
-  ingredientCategoryId: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
-  presentation: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
   price: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL
+  },
+  description: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  pictureUrl: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  allowsModify: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN
+  },
+  recipeId: {
+    allowNull: false,
+    type: DataTypes.INTEGER
   },
   delete: {
     type: DataTypes.BOOLEAN,
