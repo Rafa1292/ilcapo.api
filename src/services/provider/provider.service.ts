@@ -23,23 +23,22 @@ export const getProviderById = async (id: number): Promise<Provider> => {
   return await toNewProvider(response)
 }
 
-export const saveProvider = async (provider: NewProvider): Promise<Provider> => {
-  return await ProviderModel.create(provider)
+export const saveProvider = async (provider: NewProvider): Promise<void> => {
+  await ProviderModel.create(provider)
 }
 
-export const updateProvider = async (provider: Partial<Provider>, id: number): Promise<Provider> => {
+export const updateProvider = async (provider: Partial<Provider>, id: number): Promise<void> => {
   await ProviderModel.update(provider, { where: { id } })
-  return await getProviderById(id)
 }
 
-export const deleteProvider = async (id: number): Promise<Provider> => {
+export const deleteProvider = async (id: number): Promise<void> => {
   const provider = await getProviderById(id)
   provider.delete = true
-  return await updateProvider(provider, id)
+  await updateProvider(provider, id)
 }
 
-export const recoveryProvider = async (id: number): Promise<Provider> => {
+export const recoveryProvider = async (id: number): Promise<void> => {
   const provider = await getProviderById(id)
   provider.delete = false
-  return await updateProvider(provider, id)
+  await updateProvider(provider, id)
 }
