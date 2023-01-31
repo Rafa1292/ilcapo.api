@@ -17,6 +17,7 @@ export class MeasureModel extends Model implements MeasureAttributes {
 
   static associate (models: any): void {
     this.hasMany(models.input, { foreignKey: 'measureId' })
+    this.belongsTo(models.magnitude, { foreignKey: 'magnitudeId' })
   }
 
   static config (sequelize: Sequelize): any {

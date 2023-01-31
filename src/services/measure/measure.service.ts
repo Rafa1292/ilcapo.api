@@ -7,7 +7,12 @@ export const getMeasures = async (): Promise<Measure[]> => {
     {
       where: {
         delete: false
-      }
+      },
+      include: [
+        {
+          association: 'magnitude'
+        }
+      ]
     }
   )
 }
