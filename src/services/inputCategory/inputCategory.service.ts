@@ -27,19 +27,18 @@ export const saveInputCategory = async (inputCategory: NewInputCategory): Promis
   return await InputCategoryModel.create(inputCategory)
 }
 
-export const updateInputCategory = async (inputCategory: Partial<InputCategory>, id: number): Promise<InputCategory> => {
+export const updateInputCategory = async (inputCategory: Partial<InputCategory>, id: number): Promise<void> => {
   await InputCategoryModel.update(inputCategory, { where: { id } })
-  return await getInputCategoryById(id)
 }
 
-export const deleteInputCategory = async (id: number): Promise<InputCategory> => {
+export const deleteInputCategory = async (id: number): Promise<void> => {
   const inputCategory = await getInputCategoryById(id)
   inputCategory.delete = true
-  return await updateInputCategory(inputCategory, id)
+  await updateInputCategory(inputCategory, id)
 }
 
-export const recoveryInputCategory = async (id: number): Promise<InputCategory> => {
+export const recoveryInputCategory = async (id: number): Promise<void> => {
   const inputCategory = await getInputCategoryById(id)
   inputCategory.delete = false
-  return await updateInputCategory(inputCategory, id)
+  await updateInputCategory(inputCategory, id)
 }
