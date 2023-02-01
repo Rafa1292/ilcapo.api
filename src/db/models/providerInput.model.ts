@@ -12,6 +12,7 @@ export class ProviderInputModel extends Model implements ProviderInputAttributes
   public expectedPrice!: number
   public presentation!: number
   public measureId!: number
+  public brandId!: number
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -68,6 +69,10 @@ export const providerInputSchema = {
     type: DataTypes.INTEGER
   },
   measureId: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  brandId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },

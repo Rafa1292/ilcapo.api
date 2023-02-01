@@ -16,7 +16,8 @@ export const toNewProviderInput = async (providerInput: any): Promise<ProviderIn
     updatedAt: providerInput.updatedAt,
     delete: providerInput.delete,
     inputId: providerInput.inputId,
-    providerId: providerInput.providerId
+    providerId: providerInput.providerId,
+    brandId: providerInput.brandId
   }
 }
 

@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize'
+import { BrandModel, brandSchema } from './brand.model'
 import { GroupElementModel, groupElementSchema } from './groupElement.model'
 import { IngredientModel, ingredientSchema } from './ingredient.model'
 import { IngredientCategoryModel, ingredientCategorySchema } from './ingredientCategory.model'
@@ -47,6 +48,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   ModifierGroupModel.init(modifierGroupSchema, ModifierGroupModel.config(sequelize))
   ModifierElementModel.init(modifierElementSchema, ModifierElementModel.config(sequelize))
   GroupElementModel.init(groupElementSchema, GroupElementModel.config(sequelize))
+  BrandModel.init(brandSchema, BrandModel.config(sequelize))
 
   InputCategoryModel.associate(sequelize.models)
   IngredientCategoryModel.associate(sequelize.models)
@@ -64,6 +66,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   SaleItemModel.associate(sequelize.models)
   ModifierElementModel.associate(sequelize.models)
   ModifierGroupModel.associate(sequelize.models)
+  BrandModel.associate(sequelize.models)
 
   await MagnitudeModel.sync()
   await MeasureModel.sync()
@@ -76,6 +79,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   await InventoryModel.sync()
   await InventoryInputModel.sync()
   await ProviderModel.sync()
+  await BrandModel.sync()
   await ProviderInputModel.sync()
   await ProductModel.sync()
   await RecipeModel.sync()

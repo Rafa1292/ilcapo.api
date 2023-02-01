@@ -31,8 +31,8 @@ export const recoveryProviderInput = async (id: number): Promise<ProviderInput> 
   return await updateProviderInput(providerInput, id)
 }
 
-export const getProviderInputByProviderIdAndInputId = async (providerId: number, inputId: number): Promise<ProviderInput | null> => {
-  const response = await ProviderInputModel.findOne({ where: { providerId, inputId } })
+export const getProviderInputByProviderIdAndInputIdAndBrandId = async (providerId: number, inputId: number, brandId: number): Promise<ProviderInput | null> => {
+  const response = await ProviderInputModel.findOne({ where: { providerId, inputId, brandId } })
   if (response !== null) {
     return await toNewProviderInput(response)
   }
