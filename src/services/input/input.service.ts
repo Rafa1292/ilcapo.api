@@ -27,19 +27,18 @@ export const saveInput = async (input: NewInput): Promise<Input> => {
   return await InputModel.create(input)
 }
 
-export const updateInput = async (input: Partial<Input>, id: number): Promise<Input> => {
+export const updateInput = async (input: Partial<Input>, id: number): Promise<void> => {
   await InputModel.update(input, { where: { id } })
-  return await getInputById(id)
 }
 
-export const deleteInput = async (id: number): Promise<Input> => {
+export const deleteInput = async (id: number): Promise<void> => {
   const input = await getInputById(id)
   input.delete = true
-  return await updateInput(input, id)
+  await updateInput(input, id)
 }
 
-export const recoveryInput = async (id: number): Promise<Input> => {
+export const recoveryInput = async (id: number): Promise<void> => {
   const input = await getInputById(id)
   input.delete = false
-  return await updateInput(input, id)
+  await updateInput(input, id)
 }
