@@ -13,11 +13,7 @@ export class ProviderModel extends Model implements ProviderAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.belongsToMany(models.input, {
-      through: models.providerInput,
-      foreignKey: 'providerId',
-      as: 'inputs'
-    })
+    this.hasMany(models.providerInput, { foreignKey: 'providerId', as: 'providerInputs' })
   }
 
   static config (sequelize: Sequelize): any {

@@ -17,7 +17,10 @@ export const toNewProviderInput = async (providerInput: any): Promise<ProviderIn
     delete: providerInput.delete,
     inputId: providerInput.inputId,
     providerId: providerInput.providerId,
-    brandId: providerInput.brandId
+    brandId: providerInput.brandId,
+    provider: providerInput.provider,
+    measure: providerInput.measure,
+    brand: providerInput.brand
   }
 }
 

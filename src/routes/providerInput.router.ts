@@ -15,6 +15,21 @@ const router = express.Router()
 
 // export const getProviderInputByProviderIdAndInputId = async (providerId: number, inputId: number): Promise<ProviderInput | null> =>
 
+router.get('/providerInputsByInputId/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+    const providerInputs = await providerInputService.getProviderInputsByInputId(id)
+    if (providerInputs !== undefined) {
+      response.setResponse(providerInputs, ['Provider inputs retrieved successfully'], false)
+    }
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {

@@ -67,6 +67,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   ModifierElementModel.associate(sequelize.models)
   ModifierGroupModel.associate(sequelize.models)
   BrandModel.associate(sequelize.models)
+  ProviderInputModel.associate(sequelize.models)
 
   await MagnitudeModel.sync()
   await MeasureModel.sync()

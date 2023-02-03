@@ -1,6 +1,6 @@
 import { ProviderInput, NewProviderInput } from './providerInput.types'
 import { ProviderInputModel } from '../../db/models/providerInput.model'
-import { toNewProviderInput } from '../../factories/providerInput.factory'
+import { toNewProviderInput, toNewProviderInputs } from '../../factories/providerInput.factory'
 import { newProviderInputIsValid } from '../../validations/providerInput.validator'
 
 export const getProviderInputById = async (id: number): Promise<ProviderInput> => {
@@ -15,6 +15,7 @@ export const saveProviderInput = async (providerInput: NewProviderInput): Promis
 }
 
 export const updateProviderInput = async (providerInput: Partial<ProviderInput>, id: number): Promise<ProviderInput> => {
+  await newProviderInputIsValid(providerInput)
   await ProviderInputModel.update(providerInput, { where: { id } })
   return await getProviderInputById(id)
 }
@@ -40,14 +41,34 @@ export const getProviderInputByProviderIdAndInputIdAndBrandId = async (providerI
   return null
 }
 
+export const getProviderInputsByInputId = async (inputId: number): Promise<ProviderInput[]> => {
+  const response = await ProviderInputModel.findAll(
+    {
+      where:
+      {
+        inputId, delete: false
+      },
+      include: [
+        {
+          association: 'provider',
+          where: { delete: false }
+        },
+        {
+          association: 'brand',
+          where: { delete: false }
+        },
+        {
+          association: 'measure',
+          where: { delete: false }
+        }
+      ]
+    })
+  if (response === null) throw new Error('ProviderInput not found')
+  return await toNewProviderInputs(response)
+}
+
 // export const getProviderInputsByProviderId = async (providerId: number): Promise<ProviderInput[]> => {
 //   const response = await ProviderInputModel.findAll({ where: { providerId } })
-//   if (response === null) throw new Error('ProviderInput not found')
-//   return await toNewProviderInputs(response)
-// }
-
-// export const getProviderInputsByInputId = async (inputId: number): Promise<ProviderInput[]> => {
-//   const response = await ProviderInputModel.findAll({ where: { inputId } })
 //   if (response === null) throw new Error('ProviderInput not found')
 //   return await toNewProviderInputs(response)
 // }

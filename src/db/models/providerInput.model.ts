@@ -1,4 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
+import { Brand } from '../../services/brand/brand.types'
+import { Measure } from '../../services/measure/measure.types'
+import { Provider } from '../../services/provider/provider.types'
 import { ProviderInputAttributes } from '../../services/providerInput/providerInput.types'
 
 export class ProviderInputModel extends Model implements ProviderInputAttributes {
@@ -13,11 +16,21 @@ export class ProviderInputModel extends Model implements ProviderInputAttributes
   public presentation!: number
   public measureId!: number
   public brandId!: number
+  public provider!: Provider
+  public measure!: Measure
+  public brand!: Brand
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
+
+  static associate (models: any): void {
+    this.belongsTo(models.input, { foreignKey: 'inputId', as: 'input' })
+    this.belongsTo(models.provider, { foreignKey: 'providerId', as: 'provider' })
+    this.belongsTo(models.measure, { foreignKey: 'measureId', as: 'measure' })
+    this.belongsTo(models.brand, { foreignKey: 'brandId', as: 'brand' })
+  }
 
   static config (sequelize: Sequelize): any {
     return {

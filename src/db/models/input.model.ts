@@ -23,11 +23,8 @@ export class InputModel extends Model implements InputAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.belongsToMany(models.provider, {
-      through: models.providerInput,
-      foreignKey: 'inputId',
-      as: 'providers'
-    })
+    this.hasMany(models.providerInput, { foreignKey: 'inputId', as: 'providerInputs' })
+
     this.belongsToMany(models.inventory, {
       through: models.inventoryInput,
       foreignKey: 'inputId',

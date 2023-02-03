@@ -1,3 +1,7 @@
+import { Brand } from '../brand/brand.types'
+import { Measure } from '../measure/measure.types'
+import { Provider } from '../provider/provider.types'
+
 export interface ProviderInputAttributes {
   id: number
   inputId: number
@@ -10,6 +14,9 @@ export interface ProviderInputAttributes {
   presentation: number
   measureId: number
   brandId: number
+  provider?: Provider
+  measure?: Measure
+  brand?: Brand
   delete: boolean
   createdAt?: Date
   updatedAt?: Date
