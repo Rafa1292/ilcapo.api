@@ -20,7 +20,8 @@ export const toNewProviderInput = async (providerInput: any): Promise<ProviderIn
     brandId: providerInput.brandId,
     provider: providerInput.provider,
     measure: providerInput.measure,
-    brand: providerInput.brand
+    brand: providerInput.brand,
+    input: providerInput.input
   }
 }
 

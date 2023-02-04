@@ -1,4 +1,5 @@
 import { Brand } from '../brand/brand.types'
+import { Input } from '../input/input.types'
 import { Measure } from '../measure/measure.types'
 import { Provider } from '../provider/provider.types'
 
@@ -15,6 +16,7 @@ export interface ProviderInputAttributes {
   measureId: number
   brandId: number
   provider?: Provider
+  input?: Input
   measure?: Measure
   brand?: Brand
   delete: boolean
@@ -26,4 +28,4 @@ export interface ProviderInputAttributes {
 
 export interface ProviderInput extends Required<ProviderInputAttributes> { }
 
-export interface NewProviderInput extends Omit<ProviderInputAttributes, 'id'> { }
+export interface NewProviderInput extends Omit<ProviderInputAttributes, 'id' | 'provider' | 'input'> { }

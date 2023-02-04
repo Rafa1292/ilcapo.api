@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Brand } from '../../services/brand/brand.types'
+import { Input } from '../../services/input/input.types'
 import { Measure } from '../../services/measure/measure.types'
 import { Provider } from '../../services/provider/provider.types'
 import { ProviderInputAttributes } from '../../services/providerInput/providerInput.types'
@@ -17,6 +18,7 @@ export class ProviderInputModel extends Model implements ProviderInputAttributes
   public measureId!: number
   public brandId!: number
   public provider!: Provider
+  public input!: Input
   public measure!: Measure
   public brand!: Brand
   public delete!: boolean

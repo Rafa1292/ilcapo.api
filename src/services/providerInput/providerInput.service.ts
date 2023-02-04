@@ -67,8 +67,28 @@ export const getProviderInputsByInputId = async (inputId: number): Promise<Provi
   return await toNewProviderInputs(response)
 }
 
-// export const getProviderInputsByProviderId = async (providerId: number): Promise<ProviderInput[]> => {
-//   const response = await ProviderInputModel.findAll({ where: { providerId } })
-//   if (response === null) throw new Error('ProviderInput not found')
-//   return await toNewProviderInputs(response)
-// }
+export const getProviderInputsByProviderId = async (providerId: number): Promise<ProviderInput[]> => {
+  const response = await ProviderInputModel.findAll(
+    {
+      where:
+      {
+        providerId, delete: false
+      },
+      include: [
+        {
+          association: 'input',
+          where: { delete: false }
+        },
+        {
+          association: 'brand',
+          where: { delete: false }
+        },
+        {
+          association: 'measure',
+          where: { delete: false }
+        }
+      ]
+    })
+  if (response === null) throw new Error('ProviderInput not found')
+  return await toNewProviderInputs(response)
+}
