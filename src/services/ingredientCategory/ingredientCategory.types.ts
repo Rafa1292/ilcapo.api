@@ -8,6 +8,6 @@ export interface IngredientCategoryAttributes {
   updatedBy?: number
 }
 
-export interface IngredienttCategory extends Required<IngredientCategoryAttributes> { }
+export interface IngredientCategory extends Required<IngredientCategoryAttributes> { }
 
 export interface NewIngredientCategory extends Omit<IngredientCategoryAttributes, 'id'> { }

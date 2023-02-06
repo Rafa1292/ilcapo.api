@@ -8,6 +8,7 @@ import inputCategoryRouter from './routes/inputCategory.router'
 import inputRouter from './routes/input.router'
 import providerInputRouter from './routes/providerInput.router'
 import brandRouter from './routes/brand.router'
+import ingredientCategoryRouter from './routes/ingredientCategory.router'
 import cors from 'cors'
 
 const app = express()
@@ -24,6 +25,7 @@ app.use('/api/v1/inputCategories', inputCategoryRouter)
 app.use('/api/v1/inputs', inputRouter)
 app.use('/api/v1/providerInputs', providerInputRouter)
 app.use('/api/v1/brands', brandRouter)
+app.use('/api/v1/ingredientCategories', ingredientCategoryRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running again on port ${PORT}`)
