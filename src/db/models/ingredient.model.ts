@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { IngredientAttributes } from '../../services/ingredient/ingredient.types'
+import { PreparationStep } from '../../services/preparationStep/preparationStep.types'
 
 export class IngredientModel extends Model implements IngredientAttributes {
   public id!: number
@@ -9,6 +10,7 @@ export class IngredientModel extends Model implements IngredientAttributes {
   public ingredientCategoryId!: number
   public presentation!: number
   public price!: number
+  public preparationSteps!: PreparationStep[]
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number

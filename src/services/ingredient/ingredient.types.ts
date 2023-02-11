@@ -1,3 +1,5 @@
+import { PreparationStep } from '../preparationStep/preparationStep.types'
+
 export interface IngredientAttributes {
   id: number
   name: string
@@ -6,6 +8,7 @@ export interface IngredientAttributes {
   presentation: number
   price: number
   ingredientCategoryId: number
+  preparationSteps?: PreparationStep[]
   delete: boolean
   createdAt?: Date
   updatedAt?: Date

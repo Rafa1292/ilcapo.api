@@ -11,6 +11,7 @@ import brandRouter from './routes/brand.router'
 import ingredientCategoryRouter from './routes/ingredientCategory.router'
 import ingredientRouter from './routes/ingredient.router'
 import preparationStepRouter from './routes/preparationStep.router'
+import preparationStepInputRouter from './routes/preparationStepInput.router'
 
 import cors from 'cors'
 
@@ -31,6 +32,7 @@ app.use('/api/v1/brands', brandRouter)
 app.use('/api/v1/ingredientCategories', ingredientCategoryRouter)
 app.use('/api/v1/ingredients', ingredientRouter)
 app.use('/api/v1/preparationSteps', preparationStepRouter)
+app.use('/api/v1/preparationStepInputs', preparationStepInputRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running again on port ${PORT}`)

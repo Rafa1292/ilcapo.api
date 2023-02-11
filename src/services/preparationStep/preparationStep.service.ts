@@ -7,7 +7,9 @@ export const getPreparationStepsWithDeletedItems = async (): Promise<Preparation
 }
 
 export const getPreparationStepById = async (id: number): Promise<PreparationStep> => {
-  const response = await PreparationStepModel.findByPk(id)
+  const response = await PreparationStepModel.findByPk(id,
+    { include: { all: true } }
+  )
   if (response === null) throw new Error('PreparationStep not found')
   if (response.delete) throw new Error('PreparationStep deleted')
   return await toNewPreparationStep(response)

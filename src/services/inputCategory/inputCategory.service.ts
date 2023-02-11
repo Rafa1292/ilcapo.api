@@ -7,7 +7,15 @@ export const getInputCategories = async (): Promise<InputCategory[]> => {
     {
       where: {
         delete: false
-      }
+      },
+      include: [
+        {
+          association: 'inputs',
+          where: {
+            delete: false
+          }
+        }
+      ]
     }
   )
 }

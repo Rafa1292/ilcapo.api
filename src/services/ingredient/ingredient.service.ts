@@ -7,6 +7,9 @@ export const getIngredients = async (): Promise<Ingredient[]> => {
     {
       where: {
         delete: false
+      },
+      include: {
+        all: true
       }
     }
   )

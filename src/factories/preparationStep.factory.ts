@@ -2,7 +2,7 @@ import { PreparationStep } from '../services/preparationStep/preparationStep.typ
 import * as preparationStepValidator from '../validations/preparationStep.validator'
 
 export const toNewPreparationStep = async (preparationStep: any): Promise<PreparationStep> => {
-  await preparationStepValidator.newPreparationStepIsValid(preparationStep)
+  await preparationStepValidator.newPreparationStepIsValid()
 
   return {
     id: preparationStep.id,
@@ -11,6 +11,7 @@ export const toNewPreparationStep = async (preparationStep: any): Promise<Prepar
     cost: preparationStep.cost,
     minutesOfPreparation: preparationStep.minutesOfPreparation,
     ingredientId: preparationStep.ingredientId,
+    preparationStepInputs: preparationStep.preparationStepInputs,
     createdBy: preparationStep.createdBy,
     updatedBy: preparationStep.updatedBy,
     createdAt: preparationStep.createdAt,

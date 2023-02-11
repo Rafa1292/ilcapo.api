@@ -1,3 +1,5 @@
+import { PreparationStepInput } from '../preparationStepInput/preparationStepInput.types'
+
 export interface PreparationStepAttributes {
   id: number
   stepNumber: number
@@ -5,6 +7,7 @@ export interface PreparationStepAttributes {
   cost: number
   minutesOfPreparation: number
   ingredientId: number
+  preparationStepInputs?: PreparationStepInput[]
   delete: boolean
   createdAt?: Date
   updatedAt?: Date
