@@ -12,3 +12,10 @@ export const updatePreparationStepInput = async (preparationStepInput: Partial<P
 export const deletePreparationStepInput = async (id: number): Promise<void> => {
   await PreparationStepInputModel.destroy({ where: { id } })
 }
+
+export const savePreparationStepInputs = async (preparationStepInputs: PreparationStepInput[], preparationStepId: number): Promise<void> => {
+  for (const preparationStepInput of preparationStepInputs) {
+    const { id, ...rest } = preparationStepInput
+    await savePreparationStepInput({ ...rest, preparationStepId })
+  }
+}

@@ -8,9 +8,24 @@ export const getIngredients = async (): Promise<Ingredient[]> => {
       where: {
         delete: false
       },
-      include: {
-        all: true
-      }
+      include: [
+        {
+          association: 'preparationSteps',
+          include: [
+            {
+              association: 'preparationStepInputs',
+              include: [
+                {
+                  association: 'input'
+                },
+                {
+                  association: 'measure'
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   )
 }
@@ -20,7 +35,27 @@ export const getIngredientsWithDeletedItems = async (): Promise<Ingredient[]> =>
 }
 
 export const getIngredientById = async (id: number): Promise<Ingredient> => {
-  const response = await IngredientModel.findByPk(id)
+  const response = await IngredientModel.findByPk(id,
+    {
+      include: [
+        {
+          association: 'preparationSteps',
+          include: [
+            {
+              association: 'preparationStepInputs',
+              include: [
+                {
+                  association: 'input'
+                },
+                {
+                  association: 'measure'
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    })
   if (response === null) throw new Error('Ingredient not found')
   if (response.delete) throw new Error('Ingredient deleted')
   return await toNewIngredient(response)

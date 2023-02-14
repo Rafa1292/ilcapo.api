@@ -22,6 +22,21 @@ export class PreparationStepInputModel extends Model implements PreparationStepI
   //   })
   // }
 
+  public static associate (models: any): void {
+    this.belongsTo(models.input, {
+      foreignKey: 'inputId',
+      as: 'input'
+    })
+    this.belongsTo(models.preparationStep, {
+      foreignKey: 'preparationStepId',
+      as: 'preparationStep'
+    })
+    this.belongsTo(models.measure, {
+      foreignKey: 'measureId',
+      as: 'measure'
+    })
+  }
+
   static config (sequelize: Sequelize): any {
     return {
       sequelize,
