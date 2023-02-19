@@ -18,7 +18,7 @@ import { ProductModifierModel, productModifierSchema } from './productModifier.m
 import { ProviderModel, providerSchema } from './provider.model'
 import { ProviderInputModel, providerInputSchema } from './providerInput.model'
 import { RecipeModel, recipeSchema } from './recipe.model'
-import { RecipeStepModel, recipeStepSchema } from './recipeStep.model.'
+import { RecipeStepModel, recipeStepSchema } from './recipeStep.model'
 import { RecipeStepIngredientModel, recipeStepIngredientSchema } from './recipeStepIngredient.model'
 import { SaleItemModel, saleItemSchema } from './saleItem.model'
 import { SaleItemCategoryModel, saleItemCategorySchema } from './saleItemCategory.model'

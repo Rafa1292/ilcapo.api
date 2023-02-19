@@ -1,3 +1,5 @@
+import { RecipeStepIngredient } from '../recipeStepIngredient/recipeStepIngredient.type'
+
 export interface RecipeStepAttributes {
   id: number
   recipeId: number
@@ -5,6 +7,7 @@ export interface RecipeStepAttributes {
   stepNumber: number
   cost: number
   minutesOfPreparation: number
+  recipeStepIngredients?: RecipeStepIngredient[]
   delete: boolean
   createdAt?: Date
   updatedAt?: Date
