@@ -34,7 +34,6 @@ router.post('/', async (req: Request, res: Response) => {
     await transaction.commit()
     response.setResponse(savedPreparationStep, ['PreparationStep saved successfully'], false)
   } catch (error: any) {
-    console.log(error)
     const errors = errorHandler(error)
     await transaction.rollback()
     response.setResponse(undefined, errors, true)
@@ -42,14 +41,47 @@ router.post('/', async (req: Request, res: Response) => {
   res.json(response)
 })
 
+router.get('/stepUp/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+    const preparationStep = await preparationStepService.getPreparationStepById(id)
+    if (preparationStep === undefined) throw new Error('PreparationStep not found')
+    await preparationStepService.stepUp(preparationStep)
+    response.setResponse(preparationStep, ['PreparationStep moved up successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
+router.get('/stepDown/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+    const preparationStep = await preparationStepService.getPreparationStepById(id)
+    if (preparationStep === undefined) throw new Error('PreparationStep not found')
+    await preparationStepService.stepDown(preparationStep)
+    response.setResponse(preparationStep, ['PreparationStep moved down successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
+  const transaction = await sequelize.transaction()
   try {
     const id = parseInt(req.params.id)
     const preparationStep = await preparationStepFactory.toNewPreparationStep(req.body)
     const savedPreparationStep = await preparationStepService.updatePreparationStep(preparationStep, id)
     response.setResponse(savedPreparationStep, ['PreparationStep updated successfully'], false)
+    await transaction.commit()
   } catch (error) {
+    await transaction.rollback()
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
   }

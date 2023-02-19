@@ -1,4 +1,5 @@
 import { Ingredient } from '../services/ingredient/ingredient.types'
+import { PreparationStep } from '../services/preparationStep/preparationStep.types'
 import * as ingredientValidator from '../validations/ingredient.validator'
 
 export const toNewIngredient = async (ingredient: any): Promise<Ingredient> => {
@@ -12,11 +13,15 @@ export const toNewIngredient = async (ingredient: any): Promise<Ingredient> => {
     cost: ingredient.cost,
     presentation: ingredient.presentation,
     price: ingredient.price,
-    preparationSteps: ingredient.preparationSteps,
+    preparationSteps: ingredient.preparationSteps.filter((preparationStep: PreparationStep) => !preparationStep.delete),
     createdBy: ingredient.createdBy,
     updatedBy: ingredient.updatedBy,
     createdAt: ingredient.createdAt,
     updatedAt: ingredient.updatedAt,
     delete: ingredient.delete
   }
+}
+
+export const toNewIngredients = async (ingredients: any[]): Promise<Ingredient[]> => {
+  return await Promise.all(ingredients.map(async (ingredient: any) => await toNewIngredient(ingredient)))
 }

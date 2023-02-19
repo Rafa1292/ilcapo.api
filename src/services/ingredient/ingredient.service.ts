@@ -1,9 +1,9 @@
 import { Ingredient, NewIngredient } from './ingredient.types'
 import { IngredientModel } from '../../db/models/ingredient.model'
-import { toNewIngredient } from '../../factories/ingredient.factory'
+import { toNewIngredient, toNewIngredients } from '../../factories/ingredient.factory'
 
 export const getIngredients = async (): Promise<Ingredient[]> => {
-  return await IngredientModel.findAll(
+  const ingredients = await IngredientModel.findAll(
     {
       where: {
         delete: false
@@ -28,6 +28,8 @@ export const getIngredients = async (): Promise<Ingredient[]> => {
       ]
     }
   )
+
+  return await toNewIngredients(ingredients)
 }
 
 export const getIngredientsWithDeletedItems = async (): Promise<Ingredient[]> => {
