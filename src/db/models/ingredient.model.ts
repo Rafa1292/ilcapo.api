@@ -19,13 +19,7 @@ export class IngredientModel extends Model implements IngredientAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.hasMany(models.preparationStep, { foreignKey: 'ingredientId' })
-
-    this.belongsToMany(models.recipeStep, {
-      through: models.recipeStepIngredient,
-      foreignKey: 'ingredientId',
-      as: 'recipeSteps'
-    })
+    this.hasMany(models.preparationStep, { foreignKey: 'ingredientId', as: 'preparationSteps' })
   }
 
   static config (sequelize: Sequelize): any {
@@ -63,7 +57,7 @@ export const ingredientSchema = {
   },
   presentation: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.DECIMAL(10, 2)
   },
   price: {
     allowNull: false,

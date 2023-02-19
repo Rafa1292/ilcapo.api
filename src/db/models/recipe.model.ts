@@ -1,10 +1,12 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { RecipeAttributes } from '../../services/recipe/recipe.types'
+import { RecipeStep } from '../../services/recipeStep/recipeStep.types'
 
 export class RecipeModel extends Model implements RecipeAttributes {
   public id!: number
-  public description!: string
+  public name!: string
   public cost!: number
+  public recipeSteps!: RecipeStep[]
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -33,7 +35,7 @@ export const recipeSchema = {
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  description: {
+  name: {
     allowNull: false,
     type: DataTypes.STRING
   },

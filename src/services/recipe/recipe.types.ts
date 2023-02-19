@@ -1,7 +1,10 @@
+import { RecipeStep } from '../recipeStep/recipeStep.types'
+
 export interface RecipeAttributes {
   id: number
-  description: string
+  name: string
   cost: number
+  recipeSteps: RecipeStep[]
   delete: boolean
   createdAt?: Date
   updatedAt?: Date

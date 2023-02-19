@@ -14,14 +14,6 @@ export class PreparationStepInputModel extends Model implements PreparationStepI
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
-  // static associate (models: any): void {
-  //   this.belongsToMany(models.input, {
-  //     through: models.providerInput,
-  //     foreignKey: 'providerId',
-  //     as: 'inputs'
-  //   })
-  // }
-
   public static associate (models: any): void {
     this.belongsTo(models.input, {
       foreignKey: 'inputId',

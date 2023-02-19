@@ -16,10 +16,9 @@ export class RecipeStepModel extends Model implements RecipeStepAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.belongsToMany(models.ingredient, {
-      through: models.recipeStepIngredient,
-      foreignKey: 'recipeId',
-      as: 'ingredients'
+    this.hasMany(models.recipeStepIngredient, {
+      foreignKey: 'recipeStepId',
+      as: 'recipeStepIngredients'
     })
   }
 

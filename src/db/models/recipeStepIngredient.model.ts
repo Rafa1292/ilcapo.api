@@ -16,9 +16,22 @@ export class RecipeStepIngredientModel extends Model implements RecipeStepIngred
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
-  // static associate (models: any): void {
-  //   this.hasMany(models.input, { foreignKey: 'inputCategoryId' })
-  // }
+  static associate (models: any): void {
+    this.belongsTo(models.ingredient, {
+      foreignKey: 'ingredientId',
+      as: 'ingredient'
+    })
+
+    this.belongsTo(models.recipeStep, {
+      foreignKey: 'recipeStepId',
+      as: 'recipeStep'
+    })
+
+    this.belongsTo(models.measure, {
+      foreignKey: 'measureId',
+      as: 'measure'
+    })
+  }
 
   static config (sequelize: Sequelize): any {
     return {
