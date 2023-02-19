@@ -13,6 +13,8 @@ import ingredientRouter from './routes/ingredient.router'
 import preparationStepRouter from './routes/preparationStep.router'
 import preparationStepInputRouter from './routes/preparationStepInput.router'
 import recipeRouter from './routes/recipe.router'
+import recipeStepRouter from './routes/recipeStep.router'
+import recipeStepIngredientRouter from './routes/recipeStepIngredient.router'
 
 import cors from 'cors'
 
@@ -35,6 +37,8 @@ app.use('/api/v1/ingredients', ingredientRouter)
 app.use('/api/v1/preparationSteps', preparationStepRouter)
 app.use('/api/v1/preparationStepInputs', preparationStepInputRouter)
 app.use('/api/v1/recipes', recipeRouter)
+app.use('/api/v1/recipeSteps', recipeStepRouter)
+app.use('/api/v1/recipeStepIngredients', recipeStepIngredientRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running again on port ${PORT}`)
