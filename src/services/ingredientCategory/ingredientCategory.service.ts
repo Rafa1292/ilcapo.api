@@ -7,7 +7,12 @@ export const getIngredientCategories = async (): Promise<IngredientCategory[]> =
     {
       where: {
         delete: false
-      }
+      },
+      include: [
+        {
+          association: 'ingredients'
+        }
+      ]
     }
   )
 }

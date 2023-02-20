@@ -4,8 +4,7 @@ import * as ingredientValidator from '../validations/ingredient.validator'
 
 export const toNewIngredient = async (ingredient: any): Promise<Ingredient> => {
   await ingredientValidator.newIngredientIsValid(ingredient)
-
-  return {
+  const newIngredient: Ingredient = {
     id: ingredient.id,
     name: ingredient.name,
     measureId: ingredient.measureId,
@@ -20,6 +19,7 @@ export const toNewIngredient = async (ingredient: any): Promise<Ingredient> => {
     updatedAt: ingredient.updatedAt,
     delete: ingredient.delete
   }
+  return newIngredient
 }
 
 export const toNewIngredients = async (ingredients: any[]): Promise<Ingredient[]> => {

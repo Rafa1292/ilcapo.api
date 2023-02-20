@@ -60,6 +60,7 @@ export const getRecipeById = async (id: number): Promise<Recipe> => {
     })
   if (response === null) throw new Error('Recipe not found')
   if (response.delete) throw new Error('Recipe deleted')
+  console.log(response)
   return await toNewRecipe(response)
 }
 

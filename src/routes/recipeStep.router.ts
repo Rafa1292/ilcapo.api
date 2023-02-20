@@ -5,7 +5,7 @@ import * as recipeStepFactory from '../factories/recipeStep.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
 import sequelize from '../libs/sequelize'
-// import { savePreparationStepInputs } from '../services/preparationStepInput/preparationStepInput.service'
+import { saveRecipeStepIngredients } from '../services/recipeStepIngredient/recipeStepIngredient.service'
 
 const router = express.Router()
 
@@ -30,7 +30,7 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     const { id, ...createRecipeStep } = await recipeStepFactory.toNewRecipeStep(req.body)
     const savedRecipeStep = await recipeStepService.saveRecipeStep(createRecipeStep)
-    // await savePreparationStepInputs(createPreparationStep.preparationStepInputs, savedPreparationStep.id)
+    await saveRecipeStepIngredients(createRecipeStep.recipeStepIngredients, savedRecipeStep.id)
     await transaction.commit()
     response.setResponse(savedRecipeStep, ['RecipeStep saved successfully'], false)
   } catch (error: any) {

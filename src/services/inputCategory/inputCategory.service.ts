@@ -10,10 +10,7 @@ export const getInputCategories = async (): Promise<InputCategory[]> => {
       },
       include: [
         {
-          association: 'inputs',
-          where: {
-            delete: false
-          }
+          association: 'inputs'
         }
       ]
     }

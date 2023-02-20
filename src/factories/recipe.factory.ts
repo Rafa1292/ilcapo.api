@@ -4,7 +4,6 @@ import * as recipeValidator from '../validations/recipe.validator'
 
 export const toNewRecipe = async (recipe: any): Promise<Recipe> => {
   await recipeValidator.newRecipeIsValid(recipe)
-
   return {
     id: recipe.id,
     name: recipe.name,
