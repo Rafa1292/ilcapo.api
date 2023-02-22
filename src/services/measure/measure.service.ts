@@ -29,11 +29,21 @@ export const getMeasureById = async (id: number): Promise<Measure> => {
 }
 
 export const saveMeasure = async (measure: NewMeasure): Promise<Measure> => {
-  return await MeasureModel.create(measure)
+  const savedMeasure = await MeasureModel.create(measure)
+  if (savedMeasure.principalMeasure) await updatePrincipalMeasure(savedMeasure.id, savedMeasure.magnitudeId)
+  return await toNewMeasure(savedMeasure)
 }
 
 export const updateMeasure = async (measure: Partial<Measure>, id: number): Promise<void> => {
   await MeasureModel.update(measure, { where: { id } })
+  if (measure.principalMeasure !== undefined && measure.principalMeasure) {
+    if (measure.magnitudeId === undefined) {
+      const measure = await getMeasureById(id)
+      await updatePrincipalMeasure(id, measure.magnitudeId)
+    } else {
+      await updatePrincipalMeasure(id, measure.magnitudeId)
+    }
+  }
 }
 
 export const deleteMeasure = async (id: number): Promise<void> => {
@@ -46,4 +56,10 @@ export const recoveryMeasure = async (id: number): Promise<void> => {
   const measure = await getMeasureById(id)
   measure.delete = false
   await updateMeasure(measure, id)
+}
+
+const updatePrincipalMeasure = async (principalMeasureId: number, magnitudeId: number): Promise<void> => {
+  const measures = await (await getMeasures()).filter(measure => measure.magnitudeId === magnitudeId && measure.id !== principalMeasureId)
+  measures.map(async measure => (await updateMeasure({ principalMeasure: false }, measure.id))
+  )
 }

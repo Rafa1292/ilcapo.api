@@ -81,7 +81,7 @@ export const providerInputSchema = {
   },
   presentation: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.FLOAT
   },
   measureId: {
     allowNull: false,

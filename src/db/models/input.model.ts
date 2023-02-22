@@ -79,11 +79,11 @@ export const inputSchema = {
   },
   stock: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.FLOAT
   },
   presentation: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.FLOAT
   },
   suggestedStock: {
     allowNull: false,

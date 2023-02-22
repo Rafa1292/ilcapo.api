@@ -7,7 +7,12 @@ export const getMagnitudes = async (): Promise<Magnitude[]> => {
     {
       where: {
         delete: false
-      }
+      },
+      include: [
+        {
+          all: true
+        }
+      ]
     }
   )
 }
