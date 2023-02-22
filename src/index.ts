@@ -9,6 +9,7 @@ import inputRouter from './routes/input.router'
 import providerInputRouter from './routes/providerInput.router'
 import brandRouter from './routes/brand.router'
 import ingredientCategoryRouter from './routes/ingredientCategory.router'
+import saleItemCategoryRouter from './routes/saleItemCategory.router'
 import ingredientRouter from './routes/ingredient.router'
 import preparationStepRouter from './routes/preparationStep.router'
 import preparationStepInputRouter from './routes/preparationStepInput.router'
@@ -29,6 +30,7 @@ app.use('/api/v1/providers', providersRouter)
 app.use('/api/v1/magnitudes', magnitudesRouter)
 app.use('/api/v1/measures', measureRouter)
 app.use('/api/v1/inputCategories', inputCategoryRouter)
+app.use('/api/v1/saleItemCategories', saleItemCategoryRouter)
 app.use('/api/v1/inputs', inputRouter)
 app.use('/api/v1/providerInputs', providerInputRouter)
 app.use('/api/v1/brands', brandRouter)
