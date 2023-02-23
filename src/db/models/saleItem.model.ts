@@ -16,11 +16,7 @@ export class SaleItemModel extends Model implements SaleItemAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.belongsToMany(models.product, {
-      through: models.saleItemProduct,
-      foreignKey: 'saleItemId',
-      as: 'products'
-    })
+    this.hasMany(models.saleItemProduct, { foreignKey: 'saleItemId' })
   }
 
   static config (sequelize: Sequelize): any {

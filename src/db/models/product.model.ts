@@ -17,18 +17,7 @@ export class ProductModel extends Model implements ProductAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.belongsToMany(models.saleItem, {
-      through: models.saleItemProduct,
-      foreignKey: 'productId',
-      as: 'saleItems'
-    })
-
-    this.belongsToMany(models.modifierGroup, {
-      through: models.productModifier,
-      foreignKey: 'productId',
-      as: 'modifierGroups'
-    })
-
+    this.hasMany(models.saleItemProduct, { foreignKey: 'productId' })
     this.hasOne(models.recipe, { foreignKey: 'productId' })
   }
 
