@@ -17,6 +17,7 @@ export class SaleItemModel extends Model implements SaleItemAttributes {
 
   static associate (models: any): void {
     this.hasMany(models.saleItemProduct, { foreignKey: 'saleItemId' })
+    this.belongsTo(models.saleItemCategory, { foreignKey: 'saleItemCategoryId' })
   }
 
   static config (sequelize: Sequelize): any {

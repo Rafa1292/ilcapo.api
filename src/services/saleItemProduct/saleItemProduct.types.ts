@@ -11,6 +11,6 @@ export interface SaleItemProductAttributes {
   updatedBy?: number
 }
 
-export interface SaleItem extends Required<SaleItemProductAttributes> { }
+export interface SaleItemProduct extends Required<SaleItemProductAttributes> { }
 
-export interface NewSaleItem extends Omit<SaleItemProductAttributes, 'id'> { }
+export interface NewSaleItemProduct extends Omit<SaleItemProductAttributes, 'id'> { }

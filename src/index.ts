@@ -20,6 +20,7 @@ import recipeStepRouter from './routes/recipeStep.router'
 import recipeStepIngredientRouter from './routes/recipeStepIngredient.router'
 
 import cors from 'cors'
+import saleItemProductRouter from './routes/saleItemProduct.router'
 
 const app = express()
 app.use(express.json())
@@ -33,6 +34,7 @@ app.use('/api/v1/magnitudes', magnitudesRouter)
 app.use('/api/v1/measures', measureRouter)
 app.use('/api/v1/inputCategories', inputCategoryRouter)
 app.use('/api/v1/saleItemCategories', saleItemCategoryRouter)
+app.use('/api/v1/saleItemProducts', saleItemProductRouter)
 app.use('/api/v1/saleItems', saleItemRouter)
 app.use('/api/v1/inputs', inputRouter)
 app.use('/api/v1/products', productRouter)
