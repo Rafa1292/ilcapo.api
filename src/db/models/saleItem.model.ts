@@ -16,7 +16,7 @@ export class SaleItemModel extends Model implements SaleItemAttributes {
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.hasMany(models.saleItemProduct, { foreignKey: 'saleItemId' })
+    this.hasMany(models.saleItemProduct, { foreignKey: 'saleItemId', as: 'saleItemProducts' })
     this.belongsTo(models.saleItemCategory, { foreignKey: 'saleItemCategoryId' })
   }
 

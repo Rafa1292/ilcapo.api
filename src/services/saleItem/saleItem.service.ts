@@ -8,7 +8,16 @@ export const getSaleItems = async (): Promise<SaleItem[]> => {
       where: {
         delete: false
       },
-      include: { all: true }
+      include: [
+        {
+          association: 'saleItemProducts',
+          include: [
+            {
+              association: 'product'
+            }
+          ]
+        }
+      ]
     }
   )
 }

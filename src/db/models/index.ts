@@ -64,6 +64,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   ProductModel.associate(sequelize.models)
   SaleItemCategoryModel.associate(sequelize.models)
   SaleItemModel.associate(sequelize.models)
+  SaleItemProductModel.associate(sequelize.models)
   ModifierElementModel.associate(sequelize.models)
   ModifierGroupModel.associate(sequelize.models)
   BrandModel.associate(sequelize.models)
