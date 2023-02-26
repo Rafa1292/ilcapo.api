@@ -7,7 +7,17 @@ export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
     {
       where: {
         delete: false
-      }
+      },
+      include: [
+        {
+          association: 'elements',
+          include: [
+            {
+              association: 'modifierElement'
+            }
+          ]
+        }
+      ]
     }
   )
 }

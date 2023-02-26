@@ -7,7 +7,27 @@ export const getProducts = async (): Promise<Product[]> => {
     {
       where: {
         delete: false
-      }
+      },
+      include: [
+        {
+          association: 'productModifiers',
+          include: [
+            {
+              association: 'modifierGroup',
+              include: [
+                {
+                  association: 'elements',
+                  include: [
+                    {
+                      association: 'modifierElement'
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   )
 }

@@ -71,6 +71,8 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   ProviderInputModel.associate(sequelize.models)
   PreparationStepInputModel.associate(sequelize.models)
   RecipeStepIngredientModel.associate(sequelize.models)
+  GroupElementModel.associate(sequelize.models)
+  ProductModifierModel.associate(sequelize.models)
 
   await MagnitudeModel.sync()
   await MeasureModel.sync()

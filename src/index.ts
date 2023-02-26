@@ -18,6 +18,10 @@ import preparationStepInputRouter from './routes/preparationStepInput.router'
 import recipeRouter from './routes/recipe.router'
 import recipeStepRouter from './routes/recipeStep.router'
 import recipeStepIngredientRouter from './routes/recipeStepIngredient.router'
+import modifierGroupRouter from './routes/modifierGroup.router'
+import modifierElementRouter from './routes/modifierElement.router'
+import groupElementRouter from './routes/groupElement.router'
+import productModifierRouter from './routes/productModifier.router'
 
 import cors from 'cors'
 import saleItemProductRouter from './routes/saleItemProduct.router'
@@ -47,6 +51,10 @@ app.use('/api/v1/preparationStepInputs', preparationStepInputRouter)
 app.use('/api/v1/recipes', recipeRouter)
 app.use('/api/v1/recipeSteps', recipeStepRouter)
 app.use('/api/v1/recipeStepIngredients', recipeStepIngredientRouter)
+app.use('/api/v1/modifierGroups', modifierGroupRouter)
+app.use('/api/v1/modifierElements', modifierElementRouter)
+app.use('/api/v1/groupElements', groupElementRouter)
+app.use('/api/v1/productModifiers', productModifierRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running again on port ${PORT}`)

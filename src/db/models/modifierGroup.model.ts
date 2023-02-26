@@ -16,16 +16,9 @@ export class ModifierGroupModel extends Model implements ModifierGroupAttributes
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.belongsToMany(models.product, {
-      through: models.productModifier,
+    ModifierGroupModel.hasMany(models.groupElement, {
       foreignKey: 'modifierGroupId',
-      as: 'products'
-    })
-
-    this.belongsToMany(models.modifierElement, {
-      through: models.groupElement,
-      foreignKey: 'modifierGroupId',
-      as: 'modifierElements'
+      as: 'elements'
     })
   }
 

@@ -4,10 +4,8 @@ import { ModifierElementAttributes } from '../../services/modifierElement/modifi
 export class ModifierElementModel extends Model implements ModifierElementAttributes {
   public id!: number
   public name!: string
-  public productId!: number
   public price!: number
   public quantity!: number
-  public measureId!: number
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -44,19 +42,11 @@ export const modifierElementSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  productId: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
   price: {
     allowNull: false,
     type: DataTypes.DECIMAL(10, 2)
   },
   quantity: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
-  measureId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },

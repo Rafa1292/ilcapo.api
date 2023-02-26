@@ -1,4 +1,4 @@
-import { getModifierGroupsWithDeletedItems } from '../services/modifierGrouo/modifierGroup.service'
+import { getModifierGroupsWithDeletedItems } from '../services/modifierGroup/modifierGroup.service'
 import * as validator from '../utils/genericValidators/validator.util'
 
 const parseName = (name: any): string => {

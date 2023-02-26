@@ -8,8 +8,6 @@ export const toNewModifierElement = async (modifierElement: any): Promise<Modifi
     id: modifierElement.id,
     name: modifierElement.name,
     price: modifierElement.price,
-    productId: modifierElement.productId,
-    measureId: modifierElement.measureId,
     quantity: modifierElement.quantity,
     createdBy: modifierElement.createdBy,
     updatedBy: modifierElement.updatedBy,

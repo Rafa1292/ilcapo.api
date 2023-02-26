@@ -12,15 +12,12 @@ export class GroupElementModel extends Model implements GroupElementAttributes {
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
-  // static associate (models: any): void {
-  //   this.belongsToMany(models.saleItem, {
-  //     through: models.saleItemProduct,
-  //     foreignKey: 'productId',
-  //     as: 'saleItems'
-  //   })
-
-  //   this.hasOne(models.recipe, { foreignKey: 'productId' })
-  // }
+  static associate (models: any): void {
+    this.belongsTo(models.modifierElement, {
+      foreignKey: 'modifierElementId',
+      as: 'modifierElement'
+    })
+  }
 
   static config (sequelize: Sequelize): any {
     return {
