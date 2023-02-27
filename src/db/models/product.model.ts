@@ -8,7 +8,6 @@ export class ProductModel extends Model implements ProductAttributes {
   public description!: string
   public pictureUrl!: string
   public allowsModify!: boolean
-  public recipeId!: number
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -19,7 +18,6 @@ export class ProductModel extends Model implements ProductAttributes {
   static associate (models: any): void {
     this.hasMany(models.productModifier, { foreignKey: 'productId', as: 'productModifiers' })
     this.hasMany(models.saleItemProduct, { foreignKey: 'productId' })
-    this.hasOne(models.recipe, { foreignKey: 'productId' })
   }
 
   static config (sequelize: Sequelize): any {
@@ -58,10 +56,6 @@ export const productSchema = {
   allowsModify: {
     allowNull: false,
     type: DataTypes.BOOLEAN
-  },
-  recipeId: {
-    allowNull: false,
-    type: DataTypes.INTEGER
   },
   delete: {
     type: DataTypes.BOOLEAN,

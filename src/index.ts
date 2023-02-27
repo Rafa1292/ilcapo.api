@@ -25,6 +25,7 @@ import productModifierRouter from './routes/productModifier.router'
 
 import cors from 'cors'
 import saleItemProductRouter from './routes/saleItemProduct.router'
+import productRecipeRouter from './routes/productRecipe.router'
 
 const app = express()
 app.use(express.json())
@@ -55,6 +56,7 @@ app.use('/api/v1/modifierGroups', modifierGroupRouter)
 app.use('/api/v1/modifierElements', modifierElementRouter)
 app.use('/api/v1/groupElements', groupElementRouter)
 app.use('/api/v1/productModifiers', productModifierRouter)
+app.use('/api/v1/productRecipes', productRecipeRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running again on port ${PORT}`)

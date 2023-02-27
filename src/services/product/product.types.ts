@@ -5,7 +5,6 @@ export interface ProductAttributes {
   description: string
   pictureUrl: string
   allowsModify: boolean
-  recipeId: number
   delete: boolean
   createdAt?: Date
   updatedAt?: Date
