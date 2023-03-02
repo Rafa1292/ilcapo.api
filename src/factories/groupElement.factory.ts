@@ -5,6 +5,7 @@ export const toNewGroupElement = async (groupElement: any): Promise<GroupElement
     id: groupElement.id,
     modifierGroupId: groupElement.modifierGroupId,
     modifierElementId: groupElement.modifierElementId,
+    modifierElement: groupElement.modifierElement,
     createdBy: groupElement.createdBy,
     updatedBy: groupElement.updatedBy,
     createdAt: groupElement.createdAt,

@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express, { Request, Response } from 'express'
 import * as modifierElementService from '../services/modifierElement/modifierElement.service'
+import * as groupElementService from '../services/groupElement/groupElement.service'
 import * as modifierElementFactory from '../factories/modifierElement.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
+import { NewGroupElement } from '../services/groupElement/groupElement.types'
 
 const router = express.Router()
 
@@ -33,11 +35,20 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.json(response)
 })
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/:modifierGroupId', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
+    const modifierGroupId = parseInt(req.params.modifierGroupId)
     const { id, ...createModifierElement } = await modifierElementFactory.toNewModifierElement(req.body)
     const savedModifierElement = await modifierElementService.saveModifierElement(createModifierElement)
+    const newGroupElement: NewGroupElement = {
+      modifierGroupId,
+      modifierElementId: savedModifierElement.id,
+      delete: false,
+      createdBy: 0,
+      updatedBy: 0
+    }
+    await groupElementService.saveGroupElement(newGroupElement)
     response.setResponse(savedModifierElement, ['ModifierElement saved successfully'], false)
   } catch (error: any) {
     const errors = errorHandler(error)

@@ -1,4 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
+import { GroupElement } from '../../services/groupElement/groupElement.types'
 import { ModifierGroupAttributes } from '../../services/modifierGroup/modifierGroup.types'
 
 export class ModifierGroupModel extends Model implements ModifierGroupAttributes {
@@ -8,6 +9,7 @@ export class ModifierGroupModel extends Model implements ModifierGroupAttributes
   public maxSelectable!: number
   public isRequired!: boolean
   public label!: string
+  public elements!: GroupElement[]
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number

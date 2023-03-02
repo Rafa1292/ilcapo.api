@@ -6,6 +6,8 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   public name!: string
   public price!: number
   public quantity!: number
+  public isProduct!: boolean
+  public productReferenceId!: number
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -47,6 +49,14 @@ export const modifierElementSchema = {
     type: DataTypes.DECIMAL(10, 2)
   },
   quantity: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  isProduct: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN
+  },
+  productReferenceId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },

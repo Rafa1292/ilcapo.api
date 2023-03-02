@@ -4,6 +4,8 @@ export interface ModifierElementAttributes {
   price: number
   quantity: number
   delete: boolean
+  isProduct: boolean
+  productReferenceId: number
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

@@ -1,9 +1,9 @@
 import { ModifierGroup, NewModifierGroup } from './modifierGroup.types'
 import { ModifierGroupModel } from '../../db/models/modifierGroup.model'
-import { toNewModifierGroup } from '../../factories/modifierGroup.factory'
+import { toNewModifierGroup, toNewModifierGroups } from '../../factories/modifierGroup.factory'
 
 export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
-  return await ModifierGroupModel.findAll(
+  const modifierGroups: ModifierGroupModel[] = await ModifierGroupModel.findAll(
     {
       where: {
         delete: false
@@ -20,6 +20,7 @@ export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
       ]
     }
   )
+  return await toNewModifierGroups(modifierGroups)
 }
 
 export const getModifierGroupsWithDeletedItems = async (): Promise<ModifierGroup[]> => {

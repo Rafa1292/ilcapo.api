@@ -1,11 +1,13 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { GroupElementAttributes } from '../../services/groupElement/groupElement.types'
+import { ModifierElement } from '../../services/modifierElement/modifierElement.types'
 
 export class GroupElementModel extends Model implements GroupElementAttributes {
   public id!: number
   public modifierGroupId!: number
   public modifierElementId!: number
   public delete!: boolean
+  public modifierElement!: ModifierElement
   public createdBy!: number
   public updatedBy!: number
 

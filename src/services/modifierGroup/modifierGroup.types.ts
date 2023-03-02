@@ -1,3 +1,5 @@
+import { GroupElement } from '../groupElement/groupElement.types'
+
 export interface ModifierGroupAttributes {
   id: number
   name: string
@@ -6,6 +8,7 @@ export interface ModifierGroupAttributes {
   isRequired: boolean
   label: string
   delete: boolean
+  elements?: GroupElement[]
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number
