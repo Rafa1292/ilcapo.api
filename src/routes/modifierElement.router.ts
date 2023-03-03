@@ -40,16 +40,21 @@ router.post('/:modifierGroupId', async (req: Request, res: Response) => {
   try {
     const modifierGroupId = parseInt(req.params.modifierGroupId)
     const { id, ...createModifierElement } = await modifierElementFactory.toNewModifierElement(req.body)
-    const savedModifierElement = await modifierElementService.saveModifierElement(createModifierElement)
-    const newGroupElement: NewGroupElement = {
-      modifierGroupId,
-      modifierElementId: savedModifierElement.id,
-      delete: false,
-      createdBy: 0,
-      updatedBy: 0
+    if (id === 0) {
+      const savedModifierElement = await modifierElementService.saveModifierElement(createModifierElement)
+      const newGroupElement: NewGroupElement = {
+        modifierGroupId,
+        modifierElementId: savedModifierElement.id,
+        delete: false,
+        createdBy: 0,
+        updatedBy: 0
+      }
+      await groupElementService.saveGroupElement(newGroupElement)
+      response.setResponse(savedModifierElement, ['ModifierElement saved successfully'], false)
+    } else {
+      await modifierElementService.updateModifierElement(createModifierElement, id)
+      response.setResponse(undefined, ['ModifierElement updated successfully'], false)
     }
-    await groupElementService.saveGroupElement(newGroupElement)
-    response.setResponse(savedModifierElement, ['ModifierElement saved successfully'], false)
   } catch (error: any) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

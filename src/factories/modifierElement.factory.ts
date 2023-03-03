@@ -2,10 +2,10 @@ import { ModifierElement } from '../services/modifierElement/modifierElement.typ
 import * as modifierElementValidator from '../validations/modifierElement.validator'
 
 export const toNewModifierElement = async (modifierElement: any): Promise<ModifierElement> => {
-  await modifierElementValidator.newModifierElementIsValid(modifierElement)
+  const id = await modifierElementValidator.newModifierElementIsValid(modifierElement)
 
   return {
-    id: modifierElement.id,
+    id: id > 0 ? id : modifierElement.id,
     name: modifierElement.name,
     price: modifierElement.price,
     quantity: modifierElement.quantity,

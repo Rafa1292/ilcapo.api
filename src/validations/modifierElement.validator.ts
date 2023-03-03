@@ -1,4 +1,4 @@
-import { getModifierElementsWithDeletedItems } from '../services/modifierElement/modifierElement.service'
+import { getModifierElementsWithDeletedItems, recoveryModifierElement } from '../services/modifierElement/modifierElement.service'
 import * as validator from '../utils/genericValidators/validator.util'
 
 const parseName = (name: any): string => {
@@ -8,21 +8,24 @@ const parseName = (name: any): string => {
   return name
 }
 
-const validateUniqueName = async (name: string, id: number): Promise<void> => {
+const validateUniqueName = async (name: string, id: number): Promise<number | undefined> => {
   const modifierElements = await getModifierElementsWithDeletedItems()
-  const modiifierElement = modifierElements.find((x) => x.name.toLowerCase() === name.toLowerCase())
-  if (modiifierElement !== null && modiifierElement !== undefined) {
-    if (modiifierElement?.id !== id) {
-      if (modiifierElement.delete) {
-        throw new Error('Este nombre ya existe y fue borrado. Si desea recuperarlo dirigase a la sección de grupos borrados')
+  const modifierElement = modifierElements.find((x) => x.name.toLowerCase() === name.toLowerCase())
+  if (modifierElement !== null && modifierElement !== undefined) {
+    if (modifierElement?.id !== id) {
+      if (modifierElement.delete) {
+        await recoveryModifierElement(modifierElement.id)
+        return modifierElement.id
       }
-      throw new Error('Este nombre de grupo ya existe')
+      throw new Error('Este nombre de elemento ya existe')
     }
   }
+  return undefined
 }
 
-export const newModifierElementIsValid = async (modifierElement: any): Promise<boolean> => {
+export const newModifierElementIsValid = async (modifierElement: any): Promise<number> => {
   parseName(modifierElement?.name)
-  await validateUniqueName(modifierElement?.name, modifierElement?.id)
-  return true
+  const id = await validateUniqueName(modifierElement?.name, modifierElement?.id)
+  if (id === undefined) return 0
+  return id
 }

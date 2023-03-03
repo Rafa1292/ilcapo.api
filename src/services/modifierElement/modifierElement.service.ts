@@ -19,7 +19,6 @@ export const getModifierElementsWithDeletedItems = async (): Promise<ModifierEle
 export const getModifierElementById = async (id: number): Promise<ModifierElement> => {
   const response = await ModifierElementModel.findByPk(id)
   if (response === null) throw new Error('ModifierElement not found')
-  if (response.delete) throw new Error('ModifierElement deleted')
   return await toNewModifierElement(response)
 }
 
