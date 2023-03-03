@@ -1,9 +1,9 @@
 import { Product, NewProduct } from './product.types'
 import { ProductModel } from '../../db/models/product.model'
-import { toNewProduct } from '../../factories/product.factory'
+import { toNewProduct, toNewProducts } from '../../factories/product.factory'
 
 export const getProducts = async (): Promise<Product[]> => {
-  return await ProductModel.findAll(
+  const products = await ProductModel.findAll(
     {
       where: {
         delete: false
@@ -30,6 +30,7 @@ export const getProducts = async (): Promise<Product[]> => {
       ]
     }
   )
+  return await toNewProducts(products)
 }
 
 export const getProductsWithDeletedItems = async (): Promise<Product[]> => {

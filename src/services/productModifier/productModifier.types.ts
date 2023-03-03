@@ -1,7 +1,10 @@
+import { ModifierGroup } from '../modifierGroup/modifierGroup.types'
+
 export interface ProductModifierAttributes {
   id: number
   productId: number
   modifierGroupId: number
+  modifierGroup: ModifierGroup
   delete: boolean
   createdAt?: Date
   updatedAt?: Date

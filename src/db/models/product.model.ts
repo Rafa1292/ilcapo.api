@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ProductAttributes } from '../../services/product/product.types'
+import { ProductModifier } from '../../services/productModifier/productModifier.types'
 
 export class ProductModel extends Model implements ProductAttributes {
   public id!: number
@@ -8,6 +9,7 @@ export class ProductModel extends Model implements ProductAttributes {
   public description!: string
   public pictureUrl!: string
   public allowsModify!: boolean
+  public productModifiers!: ProductModifier[]
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
