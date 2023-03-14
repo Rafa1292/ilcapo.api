@@ -1,13 +1,10 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { ModifierGroup } from '../../services/modifierGroup/modifierGroup.types'
-import { ProductModifierAttributes } from '../../services/productModifier/productModifier.types'
+import { ProductReferenceAttributes } from '../../services/productReference/productReference.types'
 
-export class ProductModifierModel extends Model implements ProductModifierAttributes {
+export class ProductReferenceModel extends Model implements ProductReferenceAttributes {
   public id!: number
   public productId!: number
-  public modifierGroupId!: number
-  public modifierGroup!: ModifierGroup
-  public delete!: boolean
+  public modifierElementId!: number
   public createdBy!: number
   public updatedBy!: number
 
@@ -15,23 +12,23 @@ export class ProductModifierModel extends Model implements ProductModifierAttrib
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.belongsTo(models.modifierGroup, {
-      foreignKey: 'modifierGroupId',
-      as: 'modifierGroup'
+    this.belongsTo(models.modifierElement, {
+      foreignKey: 'modifierElementId',
+      as: 'productReference'
     })
   }
 
   static config (sequelize: Sequelize): any {
     return {
       sequelize,
-      tableName: 'productModifiers',
-      modelName: 'productModifier',
+      tableName: 'productRefrences',
+      modelName: 'productReference',
       timestamps: true
     }
   }
 }
 
-export const productModifierSchema = {
+export const productReferenceSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -42,13 +39,9 @@ export const productModifierSchema = {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  modifierGroupId: {
+  modifierElementId: {
     allowNull: false,
     type: DataTypes.INTEGER
-  },
-  delete: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false
   },
   createdBy: {
     allowNull: false,

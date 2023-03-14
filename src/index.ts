@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import { setUpModels } from './db/models'
 import sequelize from './libs/sequelize'
 import providersRouter from './routes/provider.route'
@@ -22,10 +23,9 @@ import modifierGroupRouter from './routes/modifierGroup.router'
 import modifierElementRouter from './routes/modifierElement.router'
 import groupElementRouter from './routes/groupElement.router'
 import productModifierRouter from './routes/productModifier.router'
-
-import cors from 'cors'
 import saleItemProductRouter from './routes/saleItemProduct.router'
 import productRecipeRouter from './routes/productRecipe.router'
+import productReferenceRouter from './routes/productReference.router'
 
 const app = express()
 app.use(express.json())
@@ -57,6 +57,7 @@ app.use('/api/v1/modifierElements', modifierElementRouter)
 app.use('/api/v1/groupElements', groupElementRouter)
 app.use('/api/v1/productModifiers', productModifierRouter)
 app.use('/api/v1/productRecipes', productRecipeRouter)
+app.use('/api/v1/productReferences', productReferenceRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running again on port ${PORT}`)

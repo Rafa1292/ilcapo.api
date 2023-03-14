@@ -4,7 +4,6 @@ import * as modifierGroupValidator from '../validations/modifierGroup.validator'
 
 export const toNewModifierGroup = async (modifierGroup: any): Promise<ModifierGroup> => {
   await modifierGroupValidator.newModifierGroupIsValid(modifierGroup)
-
   return {
     id: modifierGroup.id,
     name: modifierGroup.name,

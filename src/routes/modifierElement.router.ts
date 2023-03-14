@@ -2,10 +2,12 @@
 import express, { Request, Response } from 'express'
 import * as modifierElementService from '../services/modifierElement/modifierElement.service'
 import * as groupElementService from '../services/groupElement/groupElement.service'
+import * as productReferenceService from '../services/productReference/productReference.service'
 import * as modifierElementFactory from '../factories/modifierElement.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
 import { NewGroupElement } from '../services/groupElement/groupElement.types'
+import { NewProductReference, ProductReference } from '../services/productReference/productReference.types'
 
 const router = express.Router()
 
@@ -40,21 +42,23 @@ router.post('/:modifierGroupId', async (req: Request, res: Response) => {
   try {
     const modifierGroupId = parseInt(req.params.modifierGroupId)
     const { id, ...createModifierElement } = await modifierElementFactory.toNewModifierElement(req.body)
-    if (id === 0) {
-      const savedModifierElement = await modifierElementService.saveModifierElement(createModifierElement)
-      const newGroupElement: NewGroupElement = {
-        modifierGroupId,
-        modifierElementId: savedModifierElement.id,
-        delete: false,
-        createdBy: 0,
-        updatedBy: 0
-      }
-      await groupElementService.saveGroupElement(newGroupElement)
-      response.setResponse(savedModifierElement, ['ModifierElement saved successfully'], false)
-    } else {
-      await modifierElementService.updateModifierElement(createModifierElement, id)
-      response.setResponse(undefined, ['ModifierElement updated successfully'], false)
+    const savedModifierElement = await modifierElementService.saveModifierElement(createModifierElement)
+    const newGroupElement: NewGroupElement = {
+      modifierGroupId,
+      modifierElementId: savedModifierElement.id,
+      delete: false,
+      createdBy: 0,
+      updatedBy: 0
     }
+    await groupElementService.saveGroupElement(newGroupElement)
+    if (createModifierElement.productReference !== undefined) {
+      const productReference: ProductReference = {
+        ...createModifierElement.productReference,
+        modifierElementId: savedModifierElement.id
+      }
+      await productReferenceService.saveProductReference(productReference)
+    }
+    response.setResponse(savedModifierElement, ['ModifierElement saved successfully'], false)
   } catch (error: any) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -65,9 +69,21 @@ router.post('/:modifierGroupId', async (req: Request, res: Response) => {
 router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const id = parseInt(req.params.id)
+    const elementId = parseInt(req.params.id)
     const modifierElement = await modifierElementFactory.toNewModifierElement(req.body)
-    const savedModifierElement = await modifierElementService.updateModifierElement(modifierElement, id)
+    const savedModifierElement = await modifierElementService.updateModifierElement(modifierElement, elementId)
+    if (modifierElement.productReference !== undefined) {
+      if (modifierElement.productReference.id === 0) {
+        const { id, ...createProductReference } = modifierElement.productReference
+        const productReference: NewProductReference = {
+          ...createProductReference,
+          modifierElementId: elementId
+        }
+        await productReferenceService.saveProductReference(productReference)
+      } else {
+        await productReferenceService.updateProductReference(modifierElement.productReference, modifierElement.productReference.id)
+      }
+    }
     response.setResponse(savedModifierElement, ['ModifierElement updated successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)

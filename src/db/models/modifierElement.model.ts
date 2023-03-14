@@ -6,8 +6,10 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   public name!: string
   public price!: number
   public quantity!: number
-  public isProduct!: boolean
-  public productReferenceId!: number
+  public defaultRecipeId!: number
+  public combinable!: boolean
+  public numberOfParts!: number
+  public combinableModifierGroupId!: number
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -20,6 +22,11 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
       through: models.groupElement,
       foreignKey: 'modifierElementId',
       as: 'modifierGroups'
+    })
+
+    this.hasOne(models.productReference, {
+      foreignKey: 'modifierElementId',
+      as: 'productReference'
     })
   }
 
@@ -52,11 +59,19 @@ export const modifierElementSchema = {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  isProduct: {
+  combinable: {
     allowNull: false,
     type: DataTypes.BOOLEAN
   },
-  productReferenceId: {
+  numberOfParts: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  combinableModifierGroupId: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  defaultRecipeId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
