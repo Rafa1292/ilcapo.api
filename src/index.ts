@@ -26,6 +26,7 @@ import productModifierRouter from './routes/productModifier.router'
 import saleItemProductRouter from './routes/saleItemProduct.router'
 import productRecipeRouter from './routes/productRecipe.router'
 import productReferenceRouter from './routes/productReference.router'
+import modifierGroupUpgradeRouter from './routes/modifierGroupUpgrade.router'
 
 const app = express()
 app.use(express.json())
@@ -53,6 +54,7 @@ app.use('/api/v1/recipes', recipeRouter)
 app.use('/api/v1/recipeSteps', recipeStepRouter)
 app.use('/api/v1/recipeStepIngredients', recipeStepIngredientRouter)
 app.use('/api/v1/modifierGroups', modifierGroupRouter)
+app.use('/api/v1/modifierGroupUpgrades', modifierGroupUpgradeRouter)
 app.use('/api/v1/modifierElements', modifierElementRouter)
 app.use('/api/v1/groupElements', groupElementRouter)
 app.use('/api/v1/productModifiers', productModifierRouter)
