@@ -8,8 +8,8 @@ const parseName = (name: any): string => {
   return name
 }
 
-const validateUniqueName = async (name: string, id: number): Promise<number | undefined> => {
-  const modifierElements = await getModifierElementsWithDeletedItems()
+const validateUniqueName = async (name: string, id: number, modifierGroupId: number): Promise<number | undefined> => {
+  const modifierElements = await getModifierElementsWithDeletedItems(modifierGroupId)
   const modifierElement = modifierElements.find((x) => x.name.toLowerCase() === name.toLowerCase())
   if (modifierElement !== null && modifierElement !== undefined) {
     if (modifierElement?.id !== id) {
@@ -23,9 +23,9 @@ const validateUniqueName = async (name: string, id: number): Promise<number | un
   return undefined
 }
 
-export const newModifierElementIsValid = async (modifierElement: any): Promise<number> => {
+export const newModifierElementIsValid = async (modifierElement: any, modifierGroupId: number): Promise<number> => {
   parseName(modifierElement?.name)
-  const id = await validateUniqueName(modifierElement?.name, modifierElement?.id)
+  const id = await validateUniqueName(modifierElement?.name, modifierElement?.id, modifierGroupId)
   if (id === undefined) return 0
   return id
 }

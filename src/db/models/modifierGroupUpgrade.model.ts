@@ -4,6 +4,7 @@ import { ModifierGroupUpgradeAttributes } from '../../services/modifierGroupUpgr
 export class ModifierGroupUpgradeModel extends Model implements ModifierGroupUpgradeAttributes {
   public id!: number
   public label!: string
+  public price!: number
   public createdBy!: number
   public updatedBy!: number
   public modifierGroupId!: number
@@ -21,7 +22,7 @@ export class ModifierGroupUpgradeModel extends Model implements ModifierGroupUpg
   }
 }
 
-export const modifierGroupSchema = {
+export const modifierGroupUpgradeSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -37,6 +38,10 @@ export const modifierGroupSchema = {
     type: DataTypes.INTEGER
   },
   newModifierGroupId: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  price: {
     allowNull: false,
     type: DataTypes.INTEGER
   },

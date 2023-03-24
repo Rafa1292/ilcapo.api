@@ -11,6 +11,7 @@ export const toNewModifierGroup = async (modifierGroup: any): Promise<ModifierGr
     maxSelectable: modifierGroup.maxSelectable,
     isRequired: modifierGroup.isRequired,
     label: modifierGroup.label,
+    modifierGroupUpgrade: modifierGroup.modifierGroupUpgrade,
     elements: modifierGroup.elements.filter((element: GroupElement) => !element.modifierElement.delete),
     createdBy: modifierGroup.createdBy,
     updatedBy: modifierGroup.updatedBy,

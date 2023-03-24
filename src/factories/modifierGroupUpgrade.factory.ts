@@ -6,6 +6,7 @@ export const toNewModifierGroupUpgrade = async (modifierGroup: any): Promise<Mod
     modifierGroupId: modifierGroup.modifierGroupId,
     newModifierGroupId: modifierGroup.newModifierGroupId,
     label: modifierGroup.label,
+    price: modifierGroup.price,
     createdBy: modifierGroup.createdBy,
     updatedBy: modifierGroup.updatedBy,
     createdAt: modifierGroup.createdAt,

@@ -21,6 +21,9 @@ export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
               ]
             }
           ]
+        },
+        {
+          association: 'modifierGroupUpgrade'
         }
       ]
     }

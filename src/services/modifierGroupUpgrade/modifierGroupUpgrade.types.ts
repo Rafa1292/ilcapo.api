@@ -4,6 +4,7 @@ export interface ModifierGroupUpgradeAttributes {
   label: string
   modifierGroupId: number
   newModifierGroupId: number
+  price: number
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

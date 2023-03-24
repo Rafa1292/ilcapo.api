@@ -10,7 +10,7 @@ const router = express.Router()
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createModifierGroupUpgrade } = await modifierGroupUpgradeFactory.toNewModifierGroupUpgrade(req.body)
+    const createModifierGroupUpgrade = await modifierGroupUpgradeFactory.toNewModifierGroupUpgrade(req.body)
     const savedModifierGroupUpgrade = await modifierGroupUpgradeService.saveModifierGroupUpgrade(createModifierGroupUpgrade)
     response.setResponse(savedModifierGroupUpgrade, ['ModifierGroupUpgrade saved successfully'], false)
   } catch (error: any) {

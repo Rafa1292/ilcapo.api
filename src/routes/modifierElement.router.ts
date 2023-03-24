@@ -41,7 +41,7 @@ router.post('/:modifierGroupId', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const modifierGroupId = parseInt(req.params.modifierGroupId)
-    const { id, ...createModifierElement } = await modifierElementFactory.toNewModifierElement(req.body)
+    const { id, ...createModifierElement } = await modifierElementFactory.toNewModifierElement(req.body, modifierGroupId)
     const savedModifierElement = await modifierElementService.saveModifierElement(createModifierElement)
     const newGroupElement: NewGroupElement = {
       modifierGroupId,
@@ -56,7 +56,8 @@ router.post('/:modifierGroupId', async (req: Request, res: Response) => {
         ...createModifierElement.productReference,
         modifierElementId: savedModifierElement.id
       }
-      await productReferenceService.saveProductReference(productReference)
+      const { id, ...newProductReference } = productReference
+      await productReferenceService.saveProductReference(newProductReference)
     }
     response.setResponse(savedModifierElement, ['ModifierElement saved successfully'], false)
   } catch (error: any) {
@@ -66,11 +67,12 @@ router.post('/:modifierGroupId', async (req: Request, res: Response) => {
   res.json(response)
 })
 
-router.patch('/:id', async (req: Request, res: Response) => {
+router.patch('/:id/:modifierGroupId', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
+    const modifierGroupId = parseInt(req.params.modifierGroupId)
     const elementId = parseInt(req.params.id)
-    const modifierElement = await modifierElementFactory.toNewModifierElement(req.body)
+    const modifierElement = await modifierElementFactory.toNewModifierElement(req.body, modifierGroupId)
     const savedModifierElement = await modifierElementService.updateModifierElement(modifierElement, elementId)
     if (modifierElement.productReference !== undefined) {
       if (modifierElement.productReference.id === 0) {

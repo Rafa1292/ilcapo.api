@@ -16,6 +16,11 @@ export const deleteGroupElement = async (id: number): Promise<void> => {
 export const saveGroupElements = async (groupElements: GroupElement[], modifierGroupId: number): Promise<void> => {
   for (const groupElement of groupElements) {
     const { id, ...rest } = groupElement
-    await saveGroupElement({ ...rest, modifierGroupId: modifierGroupId })
+    await saveGroupElement({ ...rest, modifierGroupId })
   }
+}
+
+export const getElementsByModifierGroupId = async (modifierGroupId: number): Promise<GroupElement[]> => {
+  const elements = await GroupElementModel.findAll({ where: { modifierGroupId } })
+  return elements
 }

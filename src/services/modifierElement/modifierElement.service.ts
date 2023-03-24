@@ -1,6 +1,7 @@
 import { ModifierElement, NewModifierElement } from './modifierElement.types'
 import { ModifierElementModel } from '../../db/models/modifierElement.model'
 import { toNewModifierElement } from '../../factories/modifierElement.factory'
+import { getElementsByModifierGroupId } from '../groupElement/groupElement.service'
 
 export const getModifierElements = async (): Promise<ModifierElement[]> => {
   return await ModifierElementModel.findAll(
@@ -12,14 +13,17 @@ export const getModifierElements = async (): Promise<ModifierElement[]> => {
   )
 }
 
-export const getModifierElementsWithDeletedItems = async (): Promise<ModifierElement[]> => {
-  return await ModifierElementModel.findAll()
+export const getModifierElementsWithDeletedItems = async (modifierGroupId: number): Promise<ModifierElement[]> => {
+  const groupElements = await getElementsByModifierGroupId(modifierGroupId)
+  const elements = await ModifierElementModel.findAll()
+
+  return elements.filter(element => groupElements.some(groupElement => groupElement.modifierElementId === element.id))
 }
 
 export const getModifierElementById = async (id: number): Promise<ModifierElement> => {
   const response = await ModifierElementModel.findByPk(id)
   if (response === null) throw new Error('ModifierElement not found')
-  return await toNewModifierElement(response)
+  return await toNewModifierElement(response, 0)
 }
 
 export const saveModifierElement = async (modifierElement: NewModifierElement): Promise<ModifierElement> => {

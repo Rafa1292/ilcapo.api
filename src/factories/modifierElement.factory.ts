@@ -1,8 +1,8 @@
 import { ModifierElement } from '../services/modifierElement/modifierElement.types'
 import * as modifierElementValidator from '../validations/modifierElement.validator'
 
-export const toNewModifierElement = async (modifierElement: any): Promise<ModifierElement> => {
-  const id = await modifierElementValidator.newModifierElementIsValid(modifierElement)
+export const toNewModifierElement = async (modifierElement: any, modifierGroupId: number): Promise<ModifierElement> => {
+  const id = await modifierElementValidator.newModifierElementIsValid(modifierElement, modifierGroupId)
 
   return {
     id: id > 0 ? id : modifierElement.id,
