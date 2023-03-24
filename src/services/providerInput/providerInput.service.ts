@@ -15,7 +15,7 @@ export const saveProviderInput = async (providerInput: NewProviderInput): Promis
 }
 
 export const updateProviderInput = async (providerInput: Partial<ProviderInput>, id: number): Promise<ProviderInput> => {
-  await newProviderInputIsValid(providerInput)
+  await newProviderInputIsValid({ ...providerInput, id })
   await ProviderInputModel.update(providerInput, { where: { id } })
   return await getProviderInputById(id)
 }
@@ -32,9 +32,9 @@ export const recoveryProviderInput = async (id: number): Promise<ProviderInput> 
   return await updateProviderInput(providerInput, id)
 }
 
-export const getProviderInputByProviderIdAndInputIdAndBrandId = async (providerId: number, inputId: number, brandId: number): Promise<ProviderInput | null> => {
+export const getProviderInputByProviderIdAndInputIdAndBrandId = async (id: number, providerId: number, inputId: number, brandId: number): Promise<ProviderInput | null> => {
   const response = await ProviderInputModel.findOne({ where: { providerId, inputId, brandId } })
-  if (response !== null) {
+  if (response !== null && response.id !== id) {
     return await toNewProviderInput(response)
   }
 

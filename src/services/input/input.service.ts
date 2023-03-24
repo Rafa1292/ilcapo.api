@@ -7,7 +7,12 @@ export const getInputs = async (): Promise<Input[]> => {
     {
       where: {
         delete: false
-      }
+      },
+      include: [
+        {
+          association: 'measure'
+        }
+      ]
     }
   )
 }

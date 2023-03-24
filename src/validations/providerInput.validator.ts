@@ -1,7 +1,7 @@
 import { getProviderInputByProviderIdAndInputIdAndBrandId } from '../services/providerInput/providerInput.service'
 
 export const newProviderInputIsValid = async (ProviderInputParams: any): Promise<void> => {
-  const providerInput = await getProviderInputByProviderIdAndInputIdAndBrandId(ProviderInputParams.providerId,
+  const providerInput = await getProviderInputByProviderIdAndInputIdAndBrandId(ProviderInputParams.id, ProviderInputParams.providerId,
     ProviderInputParams.inputId, ProviderInputParams.brandId)
 
   if (providerInput !== null) {

@@ -34,6 +34,8 @@ export class InputModel extends Model implements InputAttributes {
       foreignKey: 'inputId',
       as: 'preparationStepInputs'
     })
+
+    this.belongsTo(models.measure, { foreignKey: 'measureId', as: 'measure' })
   }
 
   static config (sequelize: Sequelize): any {
