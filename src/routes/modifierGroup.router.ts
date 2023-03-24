@@ -4,7 +4,7 @@ import * as modifierGroupService from '../services/modifierGroup/modifierGroup.s
 import * as modifierGroupFactory from '../factories/modifierGroup.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
-import { saveModifierGroupUpgrade, updateModifierGroupUpgrade } from '../services/modifierGroupUpgrade/modifierGroupUpgrade.service'
+import { deleteModifierGroupUpgradeByModifierGroupId, saveModifierGroupUpgrade, updateModifierGroupUpgrade } from '../services/modifierGroupUpgrade/modifierGroupUpgrade.service'
 
 const router = express.Router()
 
@@ -54,7 +54,16 @@ router.patch('/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     const modifierGroup = await modifierGroupFactory.toNewModifierGroup(req.body)
     const savedModifierGroup = await modifierGroupService.updateModifierGroup(modifierGroup, id)
-    await updateModifierGroupUpgrade(modifierGroup.modifierGroupUpgrade, modifierGroup.modifierGroupUpgrade.id)
+    if (modifierGroup.modifierGroupUpgrade.id === undefined) {
+      await deleteModifierGroupUpgradeByModifierGroupId(id)
+    } else {
+      if (modifierGroup.modifierGroupUpgrade.id === 0) {
+        await saveModifierGroupUpgrade({ ...modifierGroup.modifierGroupUpgrade, modifierGroupId: id })
+      } else {
+        await updateModifierGroupUpgrade(modifierGroup.modifierGroupUpgrade, modifierGroup.modifierGroupUpgrade.id)
+      }
+      console.log('----------------- update-----------------')
+    }
     response.setResponse(savedModifierGroup, ['ModifierGroup updated successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)

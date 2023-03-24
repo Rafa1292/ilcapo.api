@@ -14,6 +14,6 @@ export const updateModifierGroupUpgrade = async (modifierGroupUpgrade: Partial<M
   await ModifierGroupUpgradeModel.update(modifierGroupUpgrade, { where: { id } })
 }
 
-export const deleteModifierGroupUpgrade = async (id: number): Promise<void> => {
-  await ModifierGroupUpgradeModel.destroy({ where: { id } })
+export const deleteModifierGroupUpgradeByModifierGroupId = async (modifierGroupId: number): Promise<void> => {
+  await ModifierGroupUpgradeModel.destroy({ where: { modifierGroupId } })
 }

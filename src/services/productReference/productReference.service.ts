@@ -16,6 +16,6 @@ export const updateProductReference = async (productReference: Partial<ProductRe
   await ProductReferenceModel.update(productReference, { where: { id } })
 }
 
-export const deleteProductReference = async (id: number): Promise<void> => {
-  await ProductReferenceModel.destroy({ where: { id } })
+export const deleteProductReference = async (modifierElementId: number): Promise<void> => {
+  await ProductReferenceModel.destroy({ where: { modifierElementId } })
 }

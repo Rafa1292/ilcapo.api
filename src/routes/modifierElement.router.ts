@@ -75,7 +75,7 @@ router.patch('/:id/:modifierGroupId', async (req: Request, res: Response) => {
     const modifierElement = await modifierElementFactory.toNewModifierElement(req.body, modifierGroupId)
     const savedModifierElement = await modifierElementService.updateModifierElement(modifierElement, elementId)
     if (modifierElement.productReference !== undefined) {
-      if (modifierElement.productReference.id === 0) {
+      if (modifierElement.productReference?.id === 0) {
         const { id, ...createProductReference } = modifierElement.productReference
         const productReference: NewProductReference = {
           ...createProductReference,
@@ -83,8 +83,11 @@ router.patch('/:id/:modifierGroupId', async (req: Request, res: Response) => {
         }
         await productReferenceService.saveProductReference(productReference)
       } else {
-        await productReferenceService.updateProductReference(modifierElement.productReference, modifierElement.productReference.id)
+        await productReferenceService.updateProductReference(modifierElement.productReference, modifierElement.productReference?.id)
       }
+    } else {
+      // delete prduct reference by modifierElementId
+      await productReferenceService.deleteProductReference(elementId)
     }
     response.setResponse(savedModifierElement, ['ModifierElement updated successfully'], false)
   } catch (error) {
