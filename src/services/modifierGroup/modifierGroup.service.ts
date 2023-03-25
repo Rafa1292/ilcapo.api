@@ -17,13 +17,13 @@ export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
               include: [
                 {
                   association: 'productReference'
+                },
+                {
+                  association: 'modifierElementUpgrade'
                 }
               ]
             }
           ]
-        },
-        {
-          association: 'modifierGroupUpgrade'
         }
       ]
     }

@@ -8,6 +8,7 @@ import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
 import { NewGroupElement } from '../services/groupElement/groupElement.types'
 import { NewProductReference, ProductReference } from '../services/productReference/productReference.types'
+import { deleteModifierElementUpgradeByModifierElementId, saveModifierElementUpgrade, updateModifierElementUpgrade } from '../services/modifierElementUpgrade/modifierElementUpgrade.service'
 
 const router = express.Router()
 
@@ -43,6 +44,7 @@ router.post('/:modifierGroupId', async (req: Request, res: Response) => {
     const modifierGroupId = parseInt(req.params.modifierGroupId)
     const { id, ...createModifierElement } = await modifierElementFactory.toNewModifierElement(req.body, modifierGroupId)
     const savedModifierElement = await modifierElementService.saveModifierElement(createModifierElement)
+    await saveModifierElementUpgrade({ ...createModifierElement.modifierElementUpgrade, modifierElementId: savedModifierElement.id })
     const newGroupElement: NewGroupElement = {
       modifierGroupId,
       modifierElementId: savedModifierElement.id,
@@ -74,6 +76,18 @@ router.patch('/:id/:modifierGroupId', async (req: Request, res: Response) => {
     const elementId = parseInt(req.params.id)
     const modifierElement = await modifierElementFactory.toNewModifierElement(req.body, modifierGroupId)
     const savedModifierElement = await modifierElementService.updateModifierElement(modifierElement, elementId)
+    if (modifierElement.modifierElementUpgrade.id === undefined) {
+      console.log('delete-------------------------')
+      await deleteModifierElementUpgradeByModifierElementId(elementId)
+    } else {
+      if (modifierElement.modifierElementUpgrade.id === 0) {
+        console.log('save-------------------------')
+        await saveModifierElementUpgrade({ ...modifierElement.modifierElementUpgrade, modifierElementId: elementId })
+      } else {
+        console.log('update-------------------------')
+        await updateModifierElementUpgrade(modifierElement.modifierElementUpgrade, modifierElement.modifierElementUpgrade.id)
+      }
+    }
     if (modifierElement.productReference !== undefined) {
       if (modifierElement.productReference?.id === 0) {
         const { id, ...createProductReference } = modifierElement.productReference

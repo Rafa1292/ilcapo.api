@@ -1,5 +1,4 @@
 import { GroupElement } from '../groupElement/groupElement.types'
-import { ModifierGroupUpgrade } from '../modifierGroupUpgrade/modifierGroupUpgrade.types'
 
 export interface ModifierGroupAttributes {
   id: number
@@ -10,7 +9,6 @@ export interface ModifierGroupAttributes {
   label: string
   delete: boolean
   elements?: GroupElement[]
-  modifierGroupUpgrade?: ModifierGroupUpgrade
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

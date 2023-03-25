@@ -11,7 +11,7 @@ import { MagnitudeModel, magnitudeSchema } from './magnitude.model'
 import { MeasureModel, measureSchema } from './measure.model'
 import { ModifierElementModel, modifierElementSchema } from './modifierElement.model'
 import { ModifierGroupModel, modifierGroupSchema } from './modifierGroup.model'
-import { ModifierGroupUpgradeModel, modifierGroupUpgradeSchema } from './modifierGroupUpgrade.model'
+import { ModifierElementUpgradeModel, modifierElementUpgradeSchema } from './modifierElementUpgrade.model'
 import { PreparationStepModel, preparationStepSchema } from './preparationStep.model'
 import { PreparationStepInputModel, preparationStepInputSchema } from './preparationStepInput.Model'
 import { ProductModel, productSchema } from './product.model'
@@ -49,7 +49,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   SaleItemProductModel.init(saleItemProductSchema, SaleItemProductModel.config(sequelize))
   ProductModifierModel.init(productModifierSchema, ProductModifierModel.config(sequelize))
   ModifierGroupModel.init(modifierGroupSchema, ModifierGroupModel.config(sequelize))
-  ModifierGroupUpgradeModel.init(modifierGroupUpgradeSchema, ModifierGroupUpgradeModel.config(sequelize))
+  ModifierElementUpgradeModel.init(modifierElementUpgradeSchema, ModifierElementUpgradeModel.config(sequelize))
   ModifierElementModel.init(modifierElementSchema, ModifierElementModel.config(sequelize))
   GroupElementModel.init(groupElementSchema, GroupElementModel.config(sequelize))
   BrandModel.init(brandSchema, BrandModel.config(sequelize))
@@ -108,5 +108,5 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   await ProductModifierModel.sync()
   await ProductRecipeModel.sync()
   await ProductReferenceModel.sync()
-  await ModifierGroupUpgradeModel.sync()
+  await ModifierElementUpgradeModel.sync()
 }

@@ -1,7 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { GroupElement } from '../../services/groupElement/groupElement.types'
 import { ModifierGroupAttributes } from '../../services/modifierGroup/modifierGroup.types'
-import { ModifierGroupUpgrade } from '../../services/modifierGroupUpgrade/modifierGroupUpgrade.types'
+import { ModifierElementUpgrade } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
 
 export class ModifierGroupModel extends Model implements ModifierGroupAttributes {
   public id!: number
@@ -11,7 +11,7 @@ export class ModifierGroupModel extends Model implements ModifierGroupAttributes
   public isRequired!: boolean
   public label!: string
   public elements!: GroupElement[]
-  public modifierGroupUpgrade!: ModifierGroupUpgrade
+  public modifierGroupUpgrade!: ModifierElementUpgrade
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -23,10 +23,6 @@ export class ModifierGroupModel extends Model implements ModifierGroupAttributes
     ModifierGroupModel.hasMany(models.groupElement, {
       foreignKey: 'modifierGroupId',
       as: 'elements'
-    })
-    ModifierGroupModel.hasOne(models.modifierGroupUpgrade, {
-      foreignKey: 'modifierGroupId',
-      as: 'modifierGroupUpgrade'
     })
   }
 

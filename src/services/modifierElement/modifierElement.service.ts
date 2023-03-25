@@ -8,7 +8,12 @@ export const getModifierElements = async (): Promise<ModifierElement[]> => {
     {
       where: {
         delete: false
-      }
+      },
+      include: [
+        {
+          association: 'modifierElementUpgrade'
+        }
+      ]
     }
   )
 }
@@ -21,7 +26,14 @@ export const getModifierElementsWithDeletedItems = async (modifierGroupId: numbe
 }
 
 export const getModifierElementById = async (id: number): Promise<ModifierElement> => {
-  const response = await ModifierElementModel.findByPk(id)
+  const response = await ModifierElementModel.findByPk(id, {
+    include: [
+      {
+        association: 'modifierElementUpgrade'
+      }
+    ]
+  }
+  )
   if (response === null) throw new Error('ModifierElement not found')
   return await toNewModifierElement(response, 0)
 }

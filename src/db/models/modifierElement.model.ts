@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ModifierElementAttributes } from '../../services/modifierElement/modifierElement.types'
+import { ModifierElementUpgrade } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
 
 export class ModifierElementModel extends Model implements ModifierElementAttributes {
   public id!: number
@@ -10,6 +11,7 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   public combinable!: boolean
   public numberOfParts!: number
   public combinableModifierGroupId!: number
+  public modifierElementUpgrade!: ModifierElementUpgrade
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -27,6 +29,11 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
     this.hasOne(models.productReference, {
       foreignKey: 'modifierElementId',
       as: 'productReference'
+    })
+
+    this.hasOne(models.modifierElementUpgrade, {
+      foreignKey: 'modifierElementId',
+      as: 'modifierElementUpgrade'
     })
   }
 

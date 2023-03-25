@@ -1,3 +1,4 @@
+import { ModifierElementUpgrade } from '../modifierElementUpgrade/modifierElementUpgrade.types'
 import { ProductReference } from '../productReference/productReference.types'
 
 export interface ModifierElementAttributes {
@@ -10,6 +11,7 @@ export interface ModifierElementAttributes {
   combinable: boolean
   numberOfParts: number
   combinableModifierGroupId: number
+  modifierElementUpgrade: ModifierElementUpgrade
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

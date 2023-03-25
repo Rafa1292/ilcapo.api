@@ -1,13 +1,13 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { ModifierGroupUpgradeAttributes } from '../../services/modifierGroupUpgrade/modifierGroupUpgrade.types'
+import { ModifierElementUpgradeAttributes } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
 
-export class ModifierGroupUpgradeModel extends Model implements ModifierGroupUpgradeAttributes {
+export class ModifierElementUpgradeModel extends Model implements ModifierElementUpgradeAttributes {
   public id!: number
   public label!: string
   public price!: number
   public createdBy!: number
   public updatedBy!: number
-  public modifierGroupId!: number
+  public modifierElementId!: number
   public newModifierGroupId!: number
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
@@ -15,14 +15,14 @@ export class ModifierGroupUpgradeModel extends Model implements ModifierGroupUpg
   static config (sequelize: Sequelize): any {
     return {
       sequelize,
-      tableName: 'modifierGroupUpgrades',
-      modelName: 'modifierGroupUpgrade',
+      tableName: 'modifierElementUpgrades',
+      modelName: 'modifierElementUpgrade',
       timestamps: true
     }
   }
 }
 
-export const modifierGroupUpgradeSchema = {
+export const modifierElementUpgradeSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -33,7 +33,7 @@ export const modifierGroupUpgradeSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  modifierGroupId: {
+  modifierElementId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
