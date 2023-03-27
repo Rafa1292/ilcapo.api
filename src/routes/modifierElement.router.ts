@@ -77,29 +77,31 @@ router.patch('/:id/:modifierGroupId', async (req: Request, res: Response) => {
     const modifierElement = await modifierElementFactory.toNewModifierElement(req.body, modifierGroupId)
     const savedModifierElement = await modifierElementService.updateModifierElement(modifierElement, elementId)
     if (modifierElement.modifierElementUpgrade.id === undefined) {
-      console.log('delete-------------------------')
       await deleteModifierElementUpgradeByModifierElementId(elementId)
     } else {
       if (modifierElement.modifierElementUpgrade.id === 0) {
-        console.log('save-------------------------')
         await saveModifierElementUpgrade({ ...modifierElement.modifierElementUpgrade, modifierElementId: elementId })
       } else {
-        console.log('update-------------------------')
         await updateModifierElementUpgrade(modifierElement.modifierElementUpgrade, modifierElement.modifierElementUpgrade.id)
       }
     }
+
     if (modifierElement.productReference !== undefined) {
+      console.log('---------------inProductReference----------------------------')
       if (modifierElement.productReference?.id === 0) {
         const { id, ...createProductReference } = modifierElement.productReference
         const productReference: NewProductReference = {
           ...createProductReference,
           modifierElementId: elementId
         }
+        console.log('---------------saveProductReference----------------------------')
         await productReferenceService.saveProductReference(productReference)
       } else {
+        console.log('---------------updateProductReference----------------------------')
         await productReferenceService.updateProductReference(modifierElement.productReference, modifierElement.productReference?.id)
       }
     } else {
+      console.log('---------------deleteProductReference----------------------------')
       // delete prduct reference by modifierElementId
       await productReferenceService.deleteProductReference(elementId)
     }

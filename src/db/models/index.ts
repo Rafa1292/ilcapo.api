@@ -80,7 +80,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   GroupElementModel.associate(sequelize.models)
   ProductModifierModel.associate(sequelize.models)
   ProductRecipeModel.associate(sequelize.models)
-  ProductReferenceModel.associate(sequelize.models)
+  // ProductReferenceModel.associate(sequelize.models)
 
   await MagnitudeModel.sync()
   await MeasureModel.sync()

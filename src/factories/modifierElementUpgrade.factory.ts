@@ -1,7 +1,6 @@
 import { ModifierElementUpgrade } from '../services/modifierElementUpgrade/modifierElementUpgrade.types'
 
 export const toNewModifierElementUpgrade = async (modifierElement: any): Promise<ModifierElementUpgrade> => {
-  console.log('modifierElement', modifierElement)
   return {
     id: modifierElement.id,
     modifierElementId: modifierElement.modifierGroupId,

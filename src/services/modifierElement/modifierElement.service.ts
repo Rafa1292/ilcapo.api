@@ -28,9 +28,7 @@ export const getModifierElementsWithDeletedItems = async (modifierGroupId: numbe
 export const getModifierElementById = async (id: number): Promise<ModifierElement> => {
   const response = await ModifierElementModel.findByPk(id, {
     include: [
-      {
-        association: 'modifierElementUpgrade'
-      }
+      'modifierElementUpgrade', 'productReference'
     ]
   }
   )

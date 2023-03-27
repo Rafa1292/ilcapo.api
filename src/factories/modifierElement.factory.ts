@@ -5,7 +5,7 @@ import { toNewModifierElementUpgrade } from './modifierElementUpgrade.factory'
 export const toNewModifierElement = async (modifierElement: any, modifierGroupId: number): Promise<ModifierElement> => {
   const id = await modifierElementValidator.newModifierElementIsValid(modifierElement, modifierGroupId)
 
-  return {
+  const newModifierElement = {
     id: id > 0 ? id : modifierElement.id,
     name: modifierElement.name,
     price: modifierElement.price,
@@ -22,6 +22,8 @@ export const toNewModifierElement = async (modifierElement: any, modifierGroupId
     updatedAt: modifierElement.updatedAt,
     delete: modifierElement.delete
   }
+
+  return newModifierElement
 }
 
 export const toNewModifierElements = async (modifierElements: any, modifierGroupId: number): Promise<ModifierElement[]> => {

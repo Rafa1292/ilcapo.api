@@ -20,6 +20,20 @@ router.post('/', async (req: Request, res: Response) => {
   res.json(response)
 })
 
+router.patch('/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+    const productRecipe = await productRecipeFactory.toNewProductRecipe(req.body)
+    const savedProductRecipe = await productRecipeService.updateProductRecipe(productRecipe, id)
+    response.setResponse(savedProductRecipe, ['ProductRecipe updated successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {

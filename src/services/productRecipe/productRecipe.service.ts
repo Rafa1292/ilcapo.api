@@ -5,6 +5,10 @@ export const saveProductRecipe = async (productRecipe: NewProductRecipe): Promis
   return await ProductRecipeModel.create(productRecipe)
 }
 
+export const updateProductRecipe = async (productRecipe: Partial<ProductRecipe>, id: number): Promise<void> => {
+  await ProductRecipeModel.update(productRecipe, { where: { id } })
+}
+
 export const deleteProductRecipe = async (id: number): Promise<void> => {
   await ProductRecipeModel.destroy({ where: { id } })
 }

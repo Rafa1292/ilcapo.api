@@ -2,11 +2,12 @@ import { GroupElement } from '../services/groupElement/groupElement.types'
 import { getModifierElementById } from '../services/modifierElement/modifierElement.service'
 
 export const toNewGroupElement = async (groupElement: any): Promise<GroupElement> => {
+  const modifierElement = groupElement.modifierElement === undefined || groupElement.modifierElement === null ? groupElement.modifierElement : await getModifierElementById(groupElement.modifierElementId)
   return {
     id: groupElement.id,
     modifierGroupId: groupElement.modifierGroupId,
     modifierElementId: groupElement.modifierElementId,
-    modifierElement: groupElement.modifierElement === undefined || groupElement.modifierElement === null ? groupElement.modifierElement : await getModifierElementById(groupElement.modifierElementId),
+    modifierElement,
     createdBy: groupElement.createdBy,
     updatedBy: groupElement.updatedBy,
     createdAt: groupElement.createdAt,

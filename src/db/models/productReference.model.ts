@@ -11,12 +11,12 @@ export class ProductReferenceModel extends Model implements ProductReferenceAttr
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
-  static associate (models: any): void {
-    this.belongsTo(models.modifierElement, {
-      foreignKey: 'modifierElementId',
-      as: 'productReference'
-    })
-  }
+  // static associate (models: any): void {
+  //   this.belongsTo(models.modifierElement, {
+  //     foreignKey: 'modifierElementId',
+  //     as: 'productReference'
+  //   })
+  // }
 
   static config (sequelize: Sequelize): any {
     return {

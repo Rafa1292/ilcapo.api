@@ -3,7 +3,7 @@ import { ProductReferenceModel } from '../../db/models/productReference.model'
 import { toNewProductReference } from '../../factories/productReference.factory'
 
 export const getProductReferenceByModifierElementId = async (id: number): Promise<ProductReference> => {
-  const response = await ProductReferenceModel.findByPk(id)
+  const response = await ProductReferenceModel.findOne({ where: { modifierElementId: id } })
   if (response === null) throw new Error('ProductReference not found')
   return await toNewProductReference(response)
 }
