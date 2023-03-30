@@ -2,15 +2,11 @@
 export const newModifierElementUpgradeIsValid = async (modifierElementUpgrade: any): Promise<boolean> => {
   let isValid = true
 
-  if (modifierElementUpgrade.modifierGroupId === undefined) {
+  if (modifierElementUpgrade.newModifierGroupId === undefined) {
     isValid = false
   }
 
-  if (modifierElementUpgrade.modifierGroupUpgradeId === undefined) {
-    isValid = false
-  }
-
-  if (typeof modifierElementUpgrade.label !== 'string' || !(modifierElementUpgrade.label instanceof String)) {
+  if (typeof modifierElementUpgrade.label !== 'string') {
     isValid = false
   }
 
@@ -18,5 +14,8 @@ export const newModifierElementUpgradeIsValid = async (modifierElementUpgrade: a
     isValid = false
   }
 
+  if (modifierElementUpgrade.modifierElementId === undefined) {
+    isValid = false
+  }
   return isValid
 }

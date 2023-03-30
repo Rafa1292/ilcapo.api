@@ -1,4 +1,4 @@
-import { GroupElement } from '../groupElement/groupElement.types'
+import { ModifierElement } from '../modifierElement/modifierElement.types'
 
 export interface ModifierGroupAttributes {
   id: number
@@ -8,7 +8,7 @@ export interface ModifierGroupAttributes {
   isRequired: boolean
   label: string
   delete: boolean
-  elements?: GroupElement[]
+  elements?: ModifierElement[]
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

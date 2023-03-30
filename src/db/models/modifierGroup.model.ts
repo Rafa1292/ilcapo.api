@@ -1,7 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { GroupElement } from '../../services/groupElement/groupElement.types'
 import { ModifierGroupAttributes } from '../../services/modifierGroup/modifierGroup.types'
 import { ModifierElementUpgrade } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
+import { ModifierElement } from '../../services/modifierElement/modifierElement.types'
 
 export class ModifierGroupModel extends Model implements ModifierGroupAttributes {
   public id!: number
@@ -10,7 +10,7 @@ export class ModifierGroupModel extends Model implements ModifierGroupAttributes
   public maxSelectable!: number
   public isRequired!: boolean
   public label!: string
-  public elements!: GroupElement[]
+  public elements!: ModifierElement[]
   public modifierGroupUpgrade!: ModifierElementUpgrade
   public delete!: boolean
   public createdBy!: number
@@ -20,7 +20,7 @@ export class ModifierGroupModel extends Model implements ModifierGroupAttributes
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    ModifierGroupModel.hasMany(models.groupElement, {
+    ModifierGroupModel.hasMany(models.modifierElement, {
       foreignKey: 'modifierGroupId',
       as: 'elements'
     })

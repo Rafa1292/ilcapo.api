@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express, { Request, Response } from 'express'
 import * as modifierElementService from '../services/modifierElement/modifierElement.service'
-import * as groupElementService from '../services/groupElement/groupElement.service'
 import * as productReferenceService from '../services/productReference/productReference.service'
 import * as modifierElementFactory from '../factories/modifierElement.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
-import { NewGroupElement } from '../services/groupElement/groupElement.types'
 import { NewProductReference, ProductReference } from '../services/productReference/productReference.types'
 import { deleteModifierElementUpgradeByModifierElementId, saveModifierElementUpgrade, updateModifierElementUpgrade } from '../services/modifierElementUpgrade/modifierElementUpgrade.service'
 
@@ -41,27 +39,22 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/:modifierGroupId', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const modifierGroupId = parseInt(req.params.modifierGroupId)
-    const { id, ...createModifierElement } = await modifierElementFactory.toNewModifierElement(req.body, modifierGroupId)
-    const savedModifierElement = await modifierElementService.saveModifierElement(createModifierElement)
-    await saveModifierElementUpgrade({ ...createModifierElement.modifierElementUpgrade, modifierElementId: savedModifierElement.id })
-    const newGroupElement: NewGroupElement = {
-      modifierGroupId,
-      modifierElementId: savedModifierElement.id,
-      delete: false,
-      createdBy: 0,
-      updatedBy: 0
-    }
-    await groupElementService.saveGroupElement(newGroupElement)
-    if (createModifierElement.productReference !== undefined) {
-      const productReference: ProductReference = {
-        ...createModifierElement.productReference,
-        modifierElementId: savedModifierElement.id
+    const { id, ...createModifierElement } = await modifierElementFactory.toNewModifierElement(req.body)
+    if (id > 0) {
+      response.setResponse(undefined, ['ModifierElement already exists and was recovery'], false)
+    } else {
+      const savedModifierElement = await modifierElementService.saveModifierElement(createModifierElement)
+      await saveModifierElementUpgrade({ ...createModifierElement.modifierElementUpgrade, modifierElementId: savedModifierElement.id })
+      if (createModifierElement.productReference !== undefined && createModifierElement.productReference.id === 0) {
+        const productReference: ProductReference = {
+          ...createModifierElement.productReference,
+          modifierElementId: savedModifierElement.id
+        }
+        const { id, ...newProductReference } = productReference
+        await productReferenceService.saveProductReference(newProductReference)
       }
-      const { id, ...newProductReference } = productReference
-      await productReferenceService.saveProductReference(newProductReference)
+      response.setResponse(savedModifierElement, ['ModifierElement saved successfully'], false)
     }
-    response.setResponse(savedModifierElement, ['ModifierElement saved successfully'], false)
   } catch (error: any) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -72,16 +65,22 @@ router.post('/:modifierGroupId', async (req: Request, res: Response) => {
 router.patch('/:id/:modifierGroupId', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const modifierGroupId = parseInt(req.params.modifierGroupId)
     const elementId = parseInt(req.params.id)
-    const modifierElement = await modifierElementFactory.toNewModifierElement(req.body, modifierGroupId)
+    console.log('elementId', elementId)
+    const modifierElement = await modifierElementFactory.toNewModifierElement(req.body)
     const savedModifierElement = await modifierElementService.updateModifierElement(modifierElement, elementId)
+    console.log('modifierElement.modifierElementUpgrade.id', modifierElement.modifierElementUpgrade.id)
     if (modifierElement.modifierElementUpgrade.id === undefined) {
+      console.log('---------------deleteModifierElementUpgradeByModifierElementId----------------------------')
       await deleteModifierElementUpgradeByModifierElementId(elementId)
     } else {
+      console.log('---------------inModifierElementUpgrade----------------------------')
       if (modifierElement.modifierElementUpgrade.id === 0) {
+        console.log('---------------saveModifierElementUpgrade----------------------------')
+        console.log('modifierElement.modifierElementUpgrade', modifierElement.modifierElementUpgrade)
         await saveModifierElementUpgrade({ ...modifierElement.modifierElementUpgrade, modifierElementId: elementId })
       } else {
+        console.log('---------------updateModifierElementUpgrade----------------------------')
         await updateModifierElementUpgrade(modifierElement.modifierElementUpgrade, modifierElement.modifierElementUpgrade.id)
       }
     }

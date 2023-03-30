@@ -4,7 +4,7 @@ import { newModifierElementUpgradeIsValid } from '../../validations/modifierElem
 
 export const saveModifierElementUpgrade = async (modifierElementUpgrade: ModifierElementUpgrade): Promise<void> => {
   const isValid = await newModifierElementUpgradeIsValid(modifierElementUpgrade)
-  if (!isValid) {
+  if (isValid) {
     const { id, ...newModifierElementUpgrade } = modifierElementUpgrade
     await ModifierElementUpgradeModel.create(newModifierElementUpgrade)
   }

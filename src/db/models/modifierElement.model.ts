@@ -12,6 +12,7 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   public numberOfParts!: number
   public combinableModifierGroupId!: number
   public modifierElementUpgrade!: ModifierElementUpgrade
+  public modifierGroupId!: number
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -20,10 +21,9 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
-    this.belongsToMany(models.modifierGroup, {
-      through: models.groupElement,
-      foreignKey: 'modifierElementId',
-      as: 'modifierGroups'
+    this.belongsTo(models.modifierGroup, {
+      foreignKey: 'modifierGroupId',
+      as: 'modifierGroup'
     })
 
     this.hasOne(models.productReference, {
@@ -75,6 +75,10 @@ export const modifierElementSchema = {
     type: DataTypes.INTEGER
   },
   combinableModifierGroupId: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  modifierGroupId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },

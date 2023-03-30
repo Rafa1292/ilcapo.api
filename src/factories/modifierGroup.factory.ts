@@ -1,12 +1,11 @@
-import { GroupElement } from '../services/groupElement/groupElement.types'
+import { ModifierElement } from '../services/modifierElement/modifierElement.types'
 import { ModifierGroup } from '../services/modifierGroup/modifierGroup.types'
 import * as modifierGroupValidator from '../validations/modifierGroup.validator'
-import { toNewGroupElements } from './groupElement.factory'
 
 export const toNewModifierGroup = async (modifierGroup: any): Promise<ModifierGroup> => {
   await modifierGroupValidator.newModifierGroupIsValid(modifierGroup)
 
-  const tempGroupElements = modifierGroup.elements.filter((element: GroupElement) => !element.modifierElement.delete)
+  const tempGroupElements = modifierGroup.elements.filter((element: ModifierElement) => !element.delete)
   return {
     id: modifierGroup.id,
     name: modifierGroup.name,
@@ -14,7 +13,7 @@ export const toNewModifierGroup = async (modifierGroup: any): Promise<ModifierGr
     maxSelectable: modifierGroup.maxSelectable,
     isRequired: modifierGroup.isRequired,
     label: modifierGroup.label,
-    elements: await toNewGroupElements(tempGroupElements),
+    elements: tempGroupElements,
     createdBy: modifierGroup.createdBy,
     updatedBy: modifierGroup.updatedBy,
     createdAt: modifierGroup.createdAt,

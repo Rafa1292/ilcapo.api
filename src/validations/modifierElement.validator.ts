@@ -23,9 +23,9 @@ const validateUniqueName = async (name: string, id: number, modifierGroupId: num
   return undefined
 }
 
-export const newModifierElementIsValid = async (modifierElement: any, modifierGroupId: number): Promise<number> => {
+export const newModifierElementIsValid = async (modifierElement: any): Promise<number> => {
   parseName(modifierElement?.name)
-  const id = await validateUniqueName(modifierElement?.name, modifierElement?.id, modifierGroupId)
+  const id = await validateUniqueName(modifierElement?.name, modifierElement?.id, modifierElement.modifierGroupId)
   if (id === undefined) return 0
   return id
 }

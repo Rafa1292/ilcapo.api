@@ -1,7 +1,6 @@
 import { ModifierElement, NewModifierElement } from './modifierElement.types'
 import { ModifierElementModel } from '../../db/models/modifierElement.model'
 import { toNewModifierElement } from '../../factories/modifierElement.factory'
-import { getElementsByModifierGroupId } from '../groupElement/groupElement.service'
 
 export const getModifierElements = async (): Promise<ModifierElement[]> => {
   return await ModifierElementModel.findAll(
@@ -19,10 +18,8 @@ export const getModifierElements = async (): Promise<ModifierElement[]> => {
 }
 
 export const getModifierElementsWithDeletedItems = async (modifierGroupId: number): Promise<ModifierElement[]> => {
-  const groupElements = await getElementsByModifierGroupId(modifierGroupId)
-  const elements = await ModifierElementModel.findAll()
-
-  return elements.filter(element => groupElements.some(groupElement => groupElement.modifierElementId === element.id))
+  const modifierelements = await ModifierElementModel.findAll()
+  return modifierelements.filter((modifierElement) => modifierElement.modifierGroupId === modifierGroupId)
 }
 
 export const getModifierElementById = async (id: number): Promise<ModifierElement> => {
@@ -33,7 +30,7 @@ export const getModifierElementById = async (id: number): Promise<ModifierElemen
   }
   )
   if (response === null) throw new Error('ModifierElement not found')
-  return await toNewModifierElement(response, 0)
+  return await toNewModifierElement(response)
 }
 
 export const saveModifierElement = async (modifierElement: NewModifierElement): Promise<ModifierElement> => {
@@ -45,9 +42,7 @@ export const updateModifierElement = async (modifierElement: Partial<ModifierEle
 }
 
 export const deleteModifierElement = async (id: number): Promise<void> => {
-  const modifierElement = await getModifierElementById(id)
-  modifierElement.delete = true
-  await updateModifierElement(modifierElement, id)
+  await updateModifierElement({ delete: true }, id)
 }
 
 export const recoveryModifierElement = async (id: number): Promise<void> => {

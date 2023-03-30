@@ -2,12 +2,13 @@ import { ModifierElement } from '../services/modifierElement/modifierElement.typ
 import * as modifierElementValidator from '../validations/modifierElement.validator'
 import { toNewModifierElementUpgrade } from './modifierElementUpgrade.factory'
 
-export const toNewModifierElement = async (modifierElement: any, modifierGroupId: number): Promise<ModifierElement> => {
-  const id = await modifierElementValidator.newModifierElementIsValid(modifierElement, modifierGroupId)
+export const toNewModifierElement = async (modifierElement: any): Promise<ModifierElement> => {
+  const id = await modifierElementValidator.newModifierElementIsValid(modifierElement)
 
   const newModifierElement = {
     id: id > 0 ? id : modifierElement.id,
     name: modifierElement.name,
+    modifierGroupId: modifierElement.modifierGroupId,
     price: modifierElement.price,
     quantity: modifierElement.quantity,
     defaultRecipeId: modifierElement.defaultRecipeId,
@@ -22,15 +23,14 @@ export const toNewModifierElement = async (modifierElement: any, modifierGroupId
     updatedAt: modifierElement.updatedAt,
     delete: modifierElement.delete
   }
-
   return newModifierElement
 }
 
-export const toNewModifierElements = async (modifierElements: any, modifierGroupId: number): Promise<ModifierElement[]> => {
+export const toNewModifierElements = async (modifierElements: any): Promise<ModifierElement[]> => {
   const modifierElementsArray: ModifierElement[] = []
 
   for (const modifierElement of modifierElements) {
-    modifierElementsArray.push(await toNewModifierElement(modifierElement, modifierGroupId))
+    modifierElementsArray.push(await toNewModifierElement(modifierElement))
   }
 
   return modifierElementsArray

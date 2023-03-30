@@ -21,7 +21,6 @@ import recipeStepRouter from './routes/recipeStep.router'
 import recipeStepIngredientRouter from './routes/recipeStepIngredient.router'
 import modifierGroupRouter from './routes/modifierGroup.router'
 import modifierElementRouter from './routes/modifierElement.router'
-import groupElementRouter from './routes/groupElement.router'
 import productModifierRouter from './routes/productModifier.router'
 import saleItemProductRouter from './routes/saleItemProduct.router'
 import productRecipeRouter from './routes/productRecipe.router'
@@ -56,7 +55,6 @@ app.use('/api/v1/recipeStepIngredients', recipeStepIngredientRouter)
 app.use('/api/v1/modifierGroups', modifierGroupRouter)
 app.use('/api/v1/modifierElementUpgrades', modifierElementUpgradeRouter)
 app.use('/api/v1/modifierElements', modifierElementRouter)
-app.use('/api/v1/groupElements', groupElementRouter)
 app.use('/api/v1/productModifiers', productModifierRouter)
 app.use('/api/v1/productRecipes', productRecipeRouter)
 app.use('/api/v1/productReferences', productReferenceRouter)
