@@ -1,9 +1,9 @@
 import { Magnitude, NewMagnitude } from './magnitude.types'
 import { MagnitudeModel } from '../../db/models/magnitude.model'
-import { toNewMagnitude } from '../../factories/magnitude.factory'
+import { toNewMagnitude, toNewMagnitudes } from '../../factories/magnitude.factory'
 
 export const getMagnitudes = async (): Promise<Magnitude[]> => {
-  return await MagnitudeModel.findAll(
+  const magnitudes = await MagnitudeModel.findAll(
     {
       where: {
         delete: false
@@ -15,6 +15,8 @@ export const getMagnitudes = async (): Promise<Magnitude[]> => {
       ]
     }
   )
+
+  return await toNewMagnitudes(magnitudes)
 }
 
 export const getMagnitudeById = async (id: number): Promise<Magnitude> => {
@@ -25,7 +27,8 @@ export const getMagnitudeById = async (id: number): Promise<Magnitude> => {
 }
 
 export const saveMagnitude = async (magnitude: NewMagnitude): Promise<Magnitude> => {
-  return await MagnitudeModel.create(magnitude)
+  const savedMagnitude = await MagnitudeModel.create(magnitude)
+  return await toNewMagnitude(savedMagnitude)
 }
 
 export const updateMagnitude = async (magnitude: Partial<Magnitude>, id: number): Promise<void> => {
@@ -38,8 +41,9 @@ export const deleteMagnitude = async (id: number): Promise<void> => {
   await updateMagnitude(magnitude, id)
 }
 
-export const getMagnitudesWithDeletedItems = async (): Promise<Magnitude[]> => {
-  return await MagnitudeModel.findAll()
+export const getMagnitudesWithDeletedItems = async (): Promise<MagnitudeModel[]> => {
+  const magnitudes = await MagnitudeModel.findAll()
+  return magnitudes
 }
 
 export const recoveryMagnitude = async (id: number): Promise<void> => {

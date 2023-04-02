@@ -1,6 +1,9 @@
+import { Measure } from '../measure/measure.types'
+
 export interface MagnitudeAttributes {
   id: number
   name: string
+  measures?: Measure[]
   delete: boolean
   createdAt?: Date
   updatedAt?: Date
