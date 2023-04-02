@@ -12,6 +12,7 @@ export const toNewIngredient = async (ingredient: any): Promise<Ingredient> => {
     cost: ingredient.cost,
     presentation: ingredient.presentation,
     price: ingredient.price,
+    measure: ingredient.measure,
     preparationSteps: ingredient.preparationSteps.filter((preparationStep: PreparationStep) => !preparationStep.delete),
     createdBy: ingredient.createdBy,
     updatedBy: ingredient.updatedBy,

@@ -1,3 +1,4 @@
+import { Measure } from '../measure/measure.types'
 import { PreparationStep } from '../preparationStep/preparationStep.types'
 
 export interface IngredientAttributes {
@@ -9,6 +10,7 @@ export interface IngredientAttributes {
   price: number
   ingredientCategoryId: number
   preparationSteps?: PreparationStep[]
+  measure?: Measure
   delete: boolean
   createdAt?: Date
   updatedAt?: Date

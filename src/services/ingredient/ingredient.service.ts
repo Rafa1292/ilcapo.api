@@ -24,7 +24,8 @@ export const getIngredients = async (): Promise<Ingredient[]> => {
               ]
             }
           ]
-        }
+        },
+        'measure'
       ]
     }
   )

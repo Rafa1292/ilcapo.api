@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { IngredientAttributes } from '../../services/ingredient/ingredient.types'
+import { Measure } from '../../services/measure/measure.types'
 import { PreparationStep } from '../../services/preparationStep/preparationStep.types'
 
 export class IngredientModel extends Model implements IngredientAttributes {
@@ -11,6 +12,7 @@ export class IngredientModel extends Model implements IngredientAttributes {
   public presentation!: number
   public price!: number
   public preparationSteps!: PreparationStep[]
+  public measure!: Measure
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -20,6 +22,7 @@ export class IngredientModel extends Model implements IngredientAttributes {
 
   static associate (models: any): void {
     this.hasMany(models.preparationStep, { foreignKey: 'ingredientId', as: 'preparationSteps' })
+    this.belongsTo(models.measure, { foreignKey: 'measureId' })
   }
 
   static config (sequelize: Sequelize): any {
