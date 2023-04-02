@@ -6,6 +6,7 @@ export const toNewModifierGroup = async (modifierGroup: any): Promise<ModifierGr
   await modifierGroupValidator.newModifierGroupIsValid(modifierGroup)
 
   const tempGroupElements = modifierGroup.elements.filter((element: ModifierElement) => !element.delete)
+
   return {
     id: modifierGroup.id,
     name: modifierGroup.name,

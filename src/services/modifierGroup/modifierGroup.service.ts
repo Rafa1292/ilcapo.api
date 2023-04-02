@@ -18,7 +18,6 @@ export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
       ]
     }
   )
-
   return await toNewModifierGroups(modifierGroups)
 }
 

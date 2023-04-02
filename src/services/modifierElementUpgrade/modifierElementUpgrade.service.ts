@@ -17,3 +17,9 @@ export const updateModifierElementUpgrade = async (modifierElementUpgrade: Parti
 export const deleteModifierElementUpgradeByModifierElementId = async (modifierElementId: number): Promise<void> => {
   await ModifierElementUpgradeModel.destroy({ where: { modifierElementId } })
 }
+
+export const getModifierElementUpgradeByModiifierElementId = async (modifierElementId: number): Promise<ModifierElementUpgrade | null> => {
+  const response = await ModifierElementUpgradeModel.findOne({ where: { modifierElementId } })
+
+  return response
+}

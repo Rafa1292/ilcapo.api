@@ -10,7 +10,8 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await productService.getProducts(), ['Products retrieved successfully'], false)
+    const products = await productService.getProducts()
+    response.setResponse(products, ['Products retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
