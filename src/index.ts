@@ -32,7 +32,7 @@ app.use(express.json())
 const PORT = 3001
 
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: ['http://localhost:3008', 'http://localhost:3000']
 }))
 app.use('/api/v1/providers', providersRouter)
 app.use('/api/v1/magnitudes', magnitudesRouter)
