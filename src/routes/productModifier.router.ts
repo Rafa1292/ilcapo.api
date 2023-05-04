@@ -20,6 +20,18 @@ router.post('/', async (req: Request, res: Response) => {
   res.json(response)
 })
 
+router.get('/byProductId/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const productModifiers = await productModifierService.getProductModifiersByProductId(parseInt(req.params.id))
+    response.setResponse(productModifiers, ['Product modifier retrieved successfully'], false)
+  } catch (error: any) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {

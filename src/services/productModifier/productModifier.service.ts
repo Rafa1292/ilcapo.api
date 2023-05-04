@@ -19,3 +19,27 @@ export const saveProductModifiers = async (productModifiers: ProductModifier[], 
     await saveProductModifier({ ...rest, modifierGroupId: modifierGroupId })
   }
 }
+
+export const getProductModifiersByProductId = async (productId: number): Promise<ProductModifier[]> => {
+  return await ProductModifierModel.findAll(
+    {
+      where: {
+        productId
+      },
+      include: [
+        {
+          association: 'modifierGroup',
+          include: [
+            {
+              association: 'elements',
+              include: [
+                {
+                  association: 'modifierUpgrade'
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    })
+}

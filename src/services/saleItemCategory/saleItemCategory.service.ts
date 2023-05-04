@@ -10,7 +10,17 @@ export const getSaleItemCategories = async (): Promise<SaleItemCategory[]> => {
       },
       include: [
         {
-          association: 'saleItems'
+          association: 'saleItems',
+          include: [
+            {
+              association: 'saleItemProducts',
+              include: [
+                {
+                  association: 'product'
+                }
+              ]
+            }
+          ]
         }
       ]
     }

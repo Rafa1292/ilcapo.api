@@ -12,7 +12,7 @@ export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
         {
           association: 'elements',
           include: [
-            'modifierElementUpgrade', 'productReference'
+            'modifierUpgrade', 'productReference'
           ]
         }
       ]
@@ -26,7 +26,19 @@ export const getModifierGroupsWithDeletedItems = async (): Promise<ModifierGroup
 }
 
 export const getModifierGroupById = async (id: number): Promise<ModifierGroup> => {
-  const response = await ModifierGroupModel.findByPk(id)
+  const response = await ModifierGroupModel.findByPk(id,
+    {
+      include: [
+        {
+          association: 'elements',
+          include: [
+            {
+              association: 'modifierUpgrade'
+            }
+          ]
+        }
+      ]
+    })
   if (response === null) throw new Error('ModifierGroup not found')
   if (response.delete) throw new Error('ModifierGroup deleted')
   return await toNewModifierGroup(response)

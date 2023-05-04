@@ -18,7 +18,7 @@ export const getProducts = async (): Promise<Product[]> => {
                 {
                   association: 'elements',
                   include: [
-                    'modifierElementUpgrade'
+                    'modifierUpgrade'
                   ]
                 }
               ]

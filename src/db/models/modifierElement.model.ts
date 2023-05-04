@@ -33,7 +33,7 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
 
     this.hasOne(models.modifierElementUpgrade, {
       foreignKey: 'modifierElementId',
-      as: 'modifierElementUpgrade'
+      as: 'modifierUpgrade'
     })
   }
 

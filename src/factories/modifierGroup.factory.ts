@@ -5,7 +5,7 @@ import * as modifierGroupValidator from '../validations/modifierGroup.validator'
 export const toNewModifierGroup = async (modifierGroup: any): Promise<ModifierGroup> => {
   await modifierGroupValidator.newModifierGroupIsValid(modifierGroup)
 
-  const tempGroupElements = modifierGroup.elements.filter((element: ModifierElement) => !element.delete)
+  const tempGroupElements = modifierGroup?.elements?.filter((element: ModifierElement) => !element.delete)
 
   return {
     id: modifierGroup.id,
