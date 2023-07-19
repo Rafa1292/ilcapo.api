@@ -26,6 +26,9 @@ import { SaleItemModel, saleItemSchema } from './saleItem.model'
 import { SaleItemCategoryModel, saleItemCategorySchema } from './saleItemCategory.model'
 import { SaleItemProductModel, saleItemProductSchema } from './saleItemProduct.model'
 import { MenuModel, menuSchema } from './menu.model'
+import { ItemPriceModel, itemPriceSchema } from './itemPrice.model'
+import { UpgradeElementPriceModel, upgradeElementPriceSchema } from './upgradeElementPrice.model'
+import { ElementPriceModel, elementPriceSchema } from './elementPrice.model'
 
 export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   InputCategoryModel.init(ingredientCategorySchema, InputCategoryModel.config(sequelize))
@@ -55,6 +58,9 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   ProductRecipeModel.init(productRecipeSchema, ProductRecipeModel.config(sequelize))
   ProductReferenceModel.init(productReferenceSchema, ProductReferenceModel.config(sequelize))
   MenuModel.init(menuSchema, MenuModel.config(sequelize))
+  ItemPriceModel.init(itemPriceSchema, ItemPriceModel.config(sequelize))
+  UpgradeElementPriceModel.init(upgradeElementPriceSchema, UpgradeElementPriceModel.config(sequelize))
+  ElementPriceModel.init(elementPriceSchema, ElementPriceModel.config(sequelize))
 
   InputCategoryModel.associate(sequelize.models)
   IngredientCategoryModel.associate(sequelize.models)
