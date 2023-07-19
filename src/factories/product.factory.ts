@@ -8,7 +8,6 @@ export const toNewProduct = async (product: any): Promise<Product> => {
   return {
     id: product.id,
     name: product.name,
-    price: product.price,
     allowsModify: product.allowsModify,
     description: product.description,
     pictureUrl: product.pictureUrl,
