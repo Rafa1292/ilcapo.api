@@ -26,6 +26,7 @@ import saleItemProductRouter from './routes/saleItemProduct.router'
 import productRecipeRouter from './routes/productRecipe.router'
 import productReferenceRouter from './routes/productReference.router'
 import modifierElementUpgradeRouter from './routes/modifierElementUpgrade.router'
+import menuRouter from './routes/menu.router'
 
 const app = express()
 app.use(express.json())
@@ -58,6 +59,7 @@ app.use('/api/v1/modifierElements', modifierElementRouter)
 app.use('/api/v1/productModifiers', productModifierRouter)
 app.use('/api/v1/productRecipes', productRecipeRouter)
 app.use('/api/v1/productReferences', productReferenceRouter)
+app.use('/api/v1/menus', menuRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running again on port ${PORT}`)

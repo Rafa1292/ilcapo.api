@@ -25,6 +25,7 @@ import { RecipeStepIngredientModel, recipeStepIngredientSchema } from './recipeS
 import { SaleItemModel, saleItemSchema } from './saleItem.model'
 import { SaleItemCategoryModel, saleItemCategorySchema } from './saleItemCategory.model'
 import { SaleItemProductModel, saleItemProductSchema } from './saleItemProduct.model'
+import { MenuModel, menuSchema } from './menu.model'
 
 export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   InputCategoryModel.init(ingredientCategorySchema, InputCategoryModel.config(sequelize))
@@ -53,6 +54,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   BrandModel.init(brandSchema, BrandModel.config(sequelize))
   ProductRecipeModel.init(productRecipeSchema, ProductRecipeModel.config(sequelize))
   ProductReferenceModel.init(productReferenceSchema, ProductReferenceModel.config(sequelize))
+  MenuModel.init(menuSchema, MenuModel.config(sequelize))
 
   InputCategoryModel.associate(sequelize.models)
   IngredientCategoryModel.associate(sequelize.models)
