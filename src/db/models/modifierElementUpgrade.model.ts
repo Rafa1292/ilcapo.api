@@ -4,7 +4,6 @@ import { ModifierElementUpgradeAttributes } from '../../services/modifierElement
 export class ModifierElementUpgradeModel extends Model implements ModifierElementUpgradeAttributes {
   public id!: number
   public label!: string
-  public price!: number
   public createdBy!: number
   public updatedBy!: number
   public modifierElementId!: number
@@ -38,10 +37,6 @@ export const modifierElementUpgradeSchema = {
     type: DataTypes.INTEGER
   },
   newModifierGroupId: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
-  price: {
     allowNull: false,
     type: DataTypes.INTEGER
   },

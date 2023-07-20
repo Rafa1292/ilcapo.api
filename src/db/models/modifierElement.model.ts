@@ -5,7 +5,6 @@ import { ModifierElementUpgrade } from '../../services/modifierElementUpgrade/mo
 export class ModifierElementModel extends Model implements ModifierElementAttributes {
   public id!: number
   public name!: string
-  public price!: number
   public quantity!: number
   public defaultRecipeId!: number
   public combinable!: boolean
@@ -57,10 +56,6 @@ export const modifierElementSchema = {
   name: {
     allowNull: false,
     type: DataTypes.STRING
-  },
-  price: {
-    allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
   },
   quantity: {
     allowNull: false,

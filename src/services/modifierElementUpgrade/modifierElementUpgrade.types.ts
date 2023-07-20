@@ -4,7 +4,6 @@ export interface ModifierElementUpgradeAttributes {
   label: string
   modifierElementId: number
   newModifierGroupId: number
-  price: number
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

@@ -5,7 +5,6 @@ export class SaleItemModel extends Model implements SaleItemAttributes {
   public id!: number
   public name!: string
   public description!: string
-  public price!: number
   public saleItemCategoryId!: number
   public pictureUrl!: string
   public delete!: boolean
@@ -44,10 +43,6 @@ export const saleItemSchema = {
   description: {
     allowNull: false,
     type: DataTypes.STRING
-  },
-  price: {
-    allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
   },
   saleItemCategoryId: {
     allowNull: false,

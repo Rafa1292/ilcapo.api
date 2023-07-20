@@ -1,7 +1,6 @@
 export interface SaleItemAttributes {
   id: number
   name: string
-  price: number
   saleItemCategoryId: number
   description: string
   pictureUrl: string

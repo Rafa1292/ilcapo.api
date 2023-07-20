@@ -4,7 +4,6 @@ import { ProductReference } from '../productReference/productReference.types'
 export interface ModifierElementAttributes {
   id: number
   name: string
-  price: number
   quantity: number
   delete: boolean
   defaultRecipeId: number
