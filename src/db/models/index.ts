@@ -85,6 +85,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   RecipeStepIngredientModel.associate(sequelize.models)
   ProductModifierModel.associate(sequelize.models)
   ProductRecipeModel.associate(sequelize.models)
+  ModifierElementUpgradeModel.associate(sequelize.models)
   // ProductReferenceModel.associate(sequelize.models)
 
   await MagnitudeModel.sync()
@@ -113,4 +114,5 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   await ProductRecipeModel.sync()
   await ProductReferenceModel.sync()
   await ModifierElementUpgradeModel.sync()
+  await MenuModel.sync()
 }

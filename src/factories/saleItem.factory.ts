@@ -7,7 +7,6 @@ export const toNewSaleItem = async (saleItem: any): Promise<SaleItem> => {
   return {
     id: saleItem.id,
     name: saleItem.name,
-    price: saleItem.price,
     saleItemCategoryId: saleItem.saleItemCategoryId,
     description: saleItem.description,
     pictureUrl: saleItem.pictureUrl,

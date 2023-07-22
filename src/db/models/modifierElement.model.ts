@@ -20,6 +20,7 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   public readonly updatedAt!: Date
 
   static associate (models: any): void {
+    this.hasMany(models.elementPrice, { foreignKey: 'elementId', as: 'prices' })
     this.belongsTo(models.modifierGroup, {
       foreignKey: 'modifierGroupId',
       as: 'modifierGroup'

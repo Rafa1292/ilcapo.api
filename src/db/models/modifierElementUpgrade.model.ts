@@ -11,6 +11,10 @@ export class ModifierElementUpgradeModel extends Model implements ModifierElemen
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
+  static associate (models: any): void {
+    this.hasMany(models.upgradePrice, { foreignKey: 'upgradeId', as: 'prices' })
+  }
+
   static config (sequelize: Sequelize): any {
     return {
       sequelize,
