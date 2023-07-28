@@ -4,6 +4,9 @@ import * as saleItemService from '../services/saleItem/saleItem.service'
 import * as saleItemFactory from '../factories/saleItem.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
+import { SaleItem } from '../services/saleItem/saleItem.types'
+import { ItemPrice } from '../services/itemPrice/itemPrice.types'
+import { validatePrices } from '../validations/saleItem.validator'
 
 const router = express.Router()
 
@@ -50,7 +53,9 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const saleItem = await saleItemFactory.toNewSaleItem(req.body)
+    const prices = req.body.prices as ItemPrice[]
+    validatePrices(prices)
+    const saleItem = await saleItemFactory.toNewSaleItem({...req.body, prices} as SaleItem)
     const savedSaleItem = await saleItemService.updateSaleItem(saleItem, id)
     response.setResponse(savedSaleItem, ['SaleItem updated successfully'], false)
   } catch (error) {

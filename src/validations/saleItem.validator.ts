@@ -1,5 +1,5 @@
+import { ItemPrice } from '../services/itemPrice/itemPrice.types'
 import { getSaleItemsWithDeletedItems } from '../services/saleItem/saleItem.service'
-import { SaleItem } from '../services/saleItem/saleItem.types'
 import * as validator from '../utils/genericValidators/validator.util'
 
 const parseName = (name: any): string => {
@@ -25,16 +25,15 @@ const validateUniqueName = async (name: string, id: number): Promise<void> => {
 export const newSaleItemIsValid = async (saleItem: any): Promise<boolean> => {
   parseName(saleItem?.name)
   await validateUniqueName(saleItem?.name, saleItem?.id)
-  validatePrices(saleItem)
   return true
 }
 
-const validatePrices = (saleItem: SaleItem): void => {
-if(saleItem.prices === undefined || saleItem.prices === null){
+export const validatePrices = (prices: ItemPrice[]): void => {
+if(prices === undefined || prices === null){
     throw new Error('Debe haber al menos un precio')
   }
 
-  if(saleItem.prices.length === 0){
+  if(prices.length === 0){
     throw new Error('Debe haber al menos un precio')
   }
 }

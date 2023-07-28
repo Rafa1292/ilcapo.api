@@ -1,7 +1,7 @@
 import { SaleItem } from '../services/saleItem/saleItem.types'
 import * as saleItemValidator from '../validations/saleItem.validator'
 
-export const toNewSaleItem = async (saleItem: any): Promise<SaleItem> => {
+export const toNewSaleItem = async (saleItem: SaleItem): Promise<SaleItem> => {
   await saleItemValidator.newSaleItemIsValid(saleItem)
 
   return {
