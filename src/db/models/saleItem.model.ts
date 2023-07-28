@@ -1,11 +1,13 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { SaleItemAttributes } from '../../services/saleItem/saleItem.types'
+import { ItemPrice } from '../../services/itemPrice/itemPrice.types'
 
 export class SaleItemModel extends Model implements SaleItemAttributes {
   public id!: number
   public name!: string
   public description!: string
   public saleItemCategoryId!: number
+  public prices!: ItemPrice[]
   public pictureUrl!: string
   public delete!: boolean
   public createdBy!: number

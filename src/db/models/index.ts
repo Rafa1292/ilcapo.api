@@ -115,4 +115,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   await ProductReferenceModel.sync()
   await ModifierElementUpgradeModel.sync()
   await MenuModel.sync()
+  await ItemPriceModel.sync()
+  await UpgradeElementPriceModel.sync()
+  await ElementPriceModel.sync()
 }

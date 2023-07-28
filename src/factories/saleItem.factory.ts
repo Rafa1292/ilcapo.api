@@ -11,6 +11,7 @@ export const toNewSaleItem = async (saleItem: any): Promise<SaleItem> => {
     description: saleItem.description,
     pictureUrl: saleItem.pictureUrl,
     createdBy: saleItem.createdBy,
+    prices: saleItem.prices,
     updatedBy: saleItem.updatedBy,
     createdAt: saleItem.createdAt,
     updatedAt: saleItem.updatedAt,
