@@ -1,11 +1,13 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ModifierElementUpgradeAttributes } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
+import { UpgradeElementPrice } from '../../services/upgradeElementPrice/upgradeElementPrice.types'
 
 export class ModifierElementUpgradeModel extends Model implements ModifierElementUpgradeAttributes {
   public id!: number
   public label!: string
   public createdBy!: number
   public updatedBy!: number
+  public prices!: UpgradeElementPrice[]
   public modifierElementId!: number
   public newModifierGroupId!: number
   public readonly createdAt!: Date

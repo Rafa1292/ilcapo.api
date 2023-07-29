@@ -13,7 +13,6 @@ export const saveItemPrice = async (
 };
 
 export const updateItemPrice = async ( itemPrice: ItemPrice, id: number, transaction: Transaction): Promise<ItemPrice | null> => {
-console.log('-------update-------------')
   const updatedItemPrice = await ItemPriceModel.update(itemPrice, {
     where: {
       id: id,

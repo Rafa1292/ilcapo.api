@@ -12,7 +12,7 @@ export interface ModifierElementAttributes {
   numberOfParts: number
   prices: ElementPrice[]
   combinableModifierGroupId: number
-  modifierElementUpgrade: ModifierElementUpgrade
+  modifierUpgrade: ModifierElementUpgrade
   modifierGroupId: number
   createdAt?: Date
   updatedAt?: Date

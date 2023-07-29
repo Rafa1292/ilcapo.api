@@ -10,12 +10,9 @@ export const newModifierElementUpgradeIsValid = async (modifierElementUpgrade: a
     isValid = false
   }
 
-  if (modifierElementUpgrade.price === undefined || modifierElementUpgrade.price <= 0) {
-    isValid = false
-  }
-
   if (modifierElementUpgrade.modifierElementId === undefined) {
     isValid = false
   }
+  console.log(1, '------is valid-------', isValid)
   return isValid
 }

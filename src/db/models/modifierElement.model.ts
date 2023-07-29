@@ -12,7 +12,7 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   public numberOfParts!: number
   public prices!: ElementPrice[]
   public combinableModifierGroupId!: number
-  public modifierElementUpgrade!: ModifierElementUpgrade
+  public modifierUpgrade!: ModifierElementUpgrade
   public modifierGroupId!: number
   public delete!: boolean
   public createdBy!: number

@@ -7,18 +7,18 @@ import { errorHandler } from '../utils/errorHandler'
 
 const router = express.Router()
 
-router.post('/', async (req: Request, res: Response) => {
-  const response = responseFactory.toNewCustomResponse()
-  try {
-    const createModifierElementUpgrade = await modifierElementUpgradeFactory.toNewModifierElementUpgrade(req.body)
-    const savedModifierElementUpgrade = await modifierElementUpgradeService.saveModifierElementUpgrade(createModifierElementUpgrade)
-    response.setResponse(savedModifierElementUpgrade, ['ModifierElementUpgrade saved successfully'], false)
-  } catch (error: any) {
-    const errors = errorHandler(error)
-    response.setResponse(undefined, errors, true)
-  }
-  res.json(response)
-})
+// router.post('/', async (req: Request, res: Response) => {
+//   const response = responseFactory.toNewCustomResponse()
+//   try {
+//     const createModifierElementUpgrade = await modifierElementUpgradeFactory.toNewModifierElementUpgrade(req.body)
+//     const savedModifierElementUpgrade = await modifierElementUpgradeService.saveModifierElementUpgrade(createModifierElementUpgrade)
+//     response.setResponse(savedModifierElementUpgrade, ['ModifierElementUpgrade saved successfully'], false)
+//   } catch (error: any) {
+//     const errors = errorHandler(error)
+//     response.setResponse(undefined, errors, true)
+//   }
+//   res.json(response)
+// })
 
 router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()

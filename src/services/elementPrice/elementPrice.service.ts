@@ -1,14 +1,15 @@
 import { Transaction } from "sequelize";
 import { ElementPriceModel } from "../../db/models/elementPrice.model";
 import { toNewElementPrice } from "../../factories/elementPrice.factory";
-import { NewElementPrice, ElementPrice } from "./elementPrice.types";
+import { ElementPrice } from "./elementPrice.types";
 
 export const saveElementPrice = async (
-  elementPrice: NewElementPrice,
+  elementPrice: ElementPrice,
   transaction: Transaction
 ): Promise<ElementPrice> => {
-  const newElementPrice = await ElementPriceModel.create(elementPrice, { transaction });
-  return toNewElementPrice(newElementPrice);
+  const { id, ...rest } = elementPrice;
+  const currentElementPrice = await ElementPriceModel.create(rest, { transaction });
+  return toNewElementPrice(currentElementPrice);
 };
 
 export const updateElementPrice = async (
@@ -26,5 +27,6 @@ export const updateElementPrice = async (
 };
 
 export const deleteElementPrice = async (id: number, transaction: Transaction): Promise<void> => {
+  console.log('-----destroy--------')
   await ElementPriceModel.destroy({ where: { id }, transaction });
 }

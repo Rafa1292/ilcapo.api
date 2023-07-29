@@ -14,7 +14,7 @@ export const toNewModifierElement = async (modifierElement: any): Promise<Modifi
     defaultRecipeId: modifierElement.defaultRecipeId,
     combinable: modifierElement.combinable,
     numberOfParts: modifierElement.numberOfParts,
-    modifierElementUpgrade: modifierElement.modifierElementUpgrade === null || modifierElement.modifierElementUpgrade === undefined ? modifierElement.modifierElementUpgrade : await toNewModifierElementUpgrade(modifierElement.modifierElementUpgrade),
+    modifierUpgrade: modifierElement.modifierUpgrade === null || modifierElement.modifierUpgrade === undefined ? modifierElement.modifierUpgrade : await toNewModifierElementUpgrade(modifierElement.modifierUpgrade),
     combinableModifierGroupId: modifierElement.combinableModifierGroupId,
     productReference: modifierElement.productReference,
     createdBy: modifierElement.createdBy,

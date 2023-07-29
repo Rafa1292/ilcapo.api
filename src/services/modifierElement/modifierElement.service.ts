@@ -7,6 +7,12 @@ import {
   saveElementPrice,
   updateElementPrice,
 } from '../elementPrice/elementPrice.service'
+import {
+  deleteModifierElementUpgradeByModifierElementId,
+  saveModifierElementUpgrade,
+  updateModifierElementUpgrade,
+} from '../modifierElementUpgrade/modifierElementUpgrade.service'
+import { ModifierElementUpgrade } from '../modifierElementUpgrade/modifierElementUpgrade.types'
 
 export const getModifierElements = async (): Promise<ModifierElement[]> => {
   return await ModifierElementModel.findAll({
@@ -34,7 +40,7 @@ export const getModifierElementById = async (
   id: number
 ): Promise<ModifierElement> => {
   const response = await ModifierElementModel.findByPk(id, {
-    include: ['modifierUpgrade', 'productReference'],
+    include: ['modifierUpgrade', 'productReference', 'prices'],
   })
   if (response === null) throw new Error('ModifierElement not found')
   return await toNewModifierElement(response)
@@ -50,6 +56,14 @@ export const saveModifierElement = async (
       modifierElement,
       { transaction }
     )
+    await saveModifierElementUpgrade(
+      {
+        ...modifierElement.modifierUpgrade,
+        modifierElementId: newModifierElement.id,
+      },
+      transaction
+    )
+
     await savePrices(
       {
         id: newModifierElement.id,
@@ -76,6 +90,10 @@ export const updateModifierElement = async (
     const { prices, ...currentModifierElement } = await getModifierElementById(
       id
     )
+
+    if(modifierElement.modifierUpgrade)
+      await saveUpgrade(modifierElement.modifierUpgrade, id, transaction)
+
     const pricesToUpdate =
       modifierElement.prices?.filter((price) =>
         prices?.some((p) => p.id === price.id)
@@ -105,6 +123,35 @@ export const updateModifierElement = async (
   } catch (error) {
     await transaction.rollback()
     throw error
+  }
+}
+
+const saveUpgrade = async (
+  modifierElementUpgrade: ModifierElementUpgrade,
+  id: number,
+  transaction: Transaction
+): Promise<void> => {
+  console.log(1, '------saving upgrade-------')
+  if (modifierElementUpgrade.id === undefined) {
+    console.log(2, '------deleting upgrade-------')
+    await deleteModifierElementUpgradeByModifierElementId(id)
+  } else {
+    console.log(3, '------creating upgrade-------')
+    if (modifierElementUpgrade.id === 0) {
+      await saveModifierElementUpgrade(
+        {
+          ...modifierElementUpgrade,
+          modifierElementId: id,
+        },
+        transaction
+      )
+    } else {
+      console.log(4, '------updating upgrade-------')
+      await updateModifierElementUpgrade(
+        modifierElementUpgrade,
+        modifierElementUpgrade.id
+      )
+    }
   }
 }
 

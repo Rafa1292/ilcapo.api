@@ -1,7 +1,9 @@
+import { UpgradeElementPrice } from "../upgradeElementPrice/upgradeElementPrice.types"
 
 export interface ModifierElementUpgradeAttributes {
   id: number
   label: string
+  prices: UpgradeElementPrice[]
   modifierElementId: number
   newModifierGroupId: number
   createdAt?: Date

@@ -6,6 +6,7 @@ export const toNewModifierElementUpgrade = async (modifierElement: any): Promise
     modifierElementId: modifierElement.modifierGroupId,
     newModifierGroupId: modifierElement.newModifierGroupId,
     label: modifierElement.label,
+    prices: modifierElement.prices,
     createdBy: modifierElement.createdBy,
     updatedBy: modifierElement.updatedBy,
     createdAt: modifierElement.createdAt,
