@@ -53,12 +53,9 @@ export const updateSaleItem = async (saleItem: Partial<SaleItem>, id: number ): 
   try {
     await SaleItemModel.update(saleItem, { where: { id }, transaction })
     const { prices, ...currentSaleItem } = await getSaleItemById(id)
-    console.log(saleItem.prices, 'prices')
-
     const pricesToUpdate = saleItem.prices?.filter(
       (price) => prices?.some((p) => p.id === price.id)
     ) || []
-    console.log(pricesToUpdate, 'pricesToUpdate')
     const pricesToRemove = prices.filter(
       (price) => !saleItem.prices?.some((p) => p.id === price.id)
     )

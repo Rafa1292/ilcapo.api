@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ModifierElementAttributes } from '../../services/modifierElement/modifierElement.types'
 import { ModifierElementUpgrade } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
+import { ElementPrice } from '../../services/elementPrice/elementPrice.types'
 
 export class ModifierElementModel extends Model implements ModifierElementAttributes {
   public id!: number
@@ -9,6 +10,7 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   public defaultRecipeId!: number
   public combinable!: boolean
   public numberOfParts!: number
+  public prices!: ElementPrice[]
   public combinableModifierGroupId!: number
   public modifierElementUpgrade!: ModifierElementUpgrade
   public modifierGroupId!: number

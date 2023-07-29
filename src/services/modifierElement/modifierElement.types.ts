@@ -1,3 +1,4 @@
+import { ElementPrice } from '../elementPrice/elementPrice.types'
 import { ModifierElementUpgrade } from '../modifierElementUpgrade/modifierElementUpgrade.types'
 import { ProductReference } from '../productReference/productReference.types'
 
@@ -9,6 +10,7 @@ export interface ModifierElementAttributes {
   defaultRecipeId: number
   combinable: boolean
   numberOfParts: number
+  prices: ElementPrice[]
   combinableModifierGroupId: number
   modifierElementUpgrade: ModifierElementUpgrade
   modifierGroupId: number

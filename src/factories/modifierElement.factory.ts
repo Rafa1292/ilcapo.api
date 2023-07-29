@@ -9,7 +9,7 @@ export const toNewModifierElement = async (modifierElement: any): Promise<Modifi
     id: id > 0 ? id : modifierElement.id,
     name: modifierElement.name,
     modifierGroupId: modifierElement.modifierGroupId,
-    price: modifierElement.price,
+    prices: modifierElement.prices,
     quantity: modifierElement.quantity,
     defaultRecipeId: modifierElement.defaultRecipeId,
     combinable: modifierElement.combinable,
