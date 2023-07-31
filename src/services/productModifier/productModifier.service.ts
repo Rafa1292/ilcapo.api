@@ -34,10 +34,14 @@ export const getProductModifiersByProductId = async (productId: number): Promise
               association: 'elements',
               include: [
                 {
-                  association: 'modifierUpgrade'
+                  association: 'modifierUpgrade',
+                  include: [ 'prices']
                 },
                 {
                   association: 'productReference'
+                },
+                {
+                  association: 'prices',
                 }
               ]
             }

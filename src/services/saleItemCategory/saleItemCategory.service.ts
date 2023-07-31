@@ -19,7 +19,8 @@ export const getSaleItemCategories = async (): Promise<SaleItemCategory[]> => {
                   association: 'product'
                 }
               ]
-            }
+            },
+            'prices'
           ]
         }
       ]

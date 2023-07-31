@@ -20,6 +20,6 @@ export interface ModifierElementAttributes {
   updatedBy?: number
 }
 
-export interface ModifierElement extends Required<ModifierElementAttributes> { productReference?: ProductReference }
+export interface ModifierElement extends Required<ModifierElementAttributes> { productReference?: ProductReference, price?: number }
 
 export interface NewModifierElement extends Omit<ModifierElementAttributes, 'id'> { }
