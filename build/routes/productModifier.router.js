@@ -70,7 +70,6 @@ router.get('/byProductId/:id', (req, res) => __awaiter(void 0, void 0, void 0, f
     const response = responseFactory.toNewCustomResponse();
     try {
         const productModifiers = yield productModifierService.getProductModifiersByProductId(parseInt(req.params.id));
-        console.log(productModifiers[0].modifierGroup.elements[0]);
         response.setResponse(productModifiers, ['Product modifier retrieved successfully'], false);
     }
     catch (error) {

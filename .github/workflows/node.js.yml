@@ -24,5 +24,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
+    - run: ./config.cmd --url https://github.com/Rafa1292/ilcapo.api --token AKJBG76CFLWCTRNV6TJXD53E2OWTY
     - run: npm run build --if-present
+    - run: remove-item ilcapo.api -recurse -force

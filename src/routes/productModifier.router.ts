@@ -24,7 +24,6 @@ router.get('/byProductId/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const productModifiers = await productModifierService.getProductModifiersByProductId(parseInt(req.params.id))
-    console.log(productModifiers[0].modifierGroup.elements[0])
     response.setResponse(productModifiers, ['Product modifier retrieved successfully'], false)
   } catch (error: any) {
     const errors = errorHandler(error)
