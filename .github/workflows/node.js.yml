@@ -25,5 +25,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: git clone https://github.com/Rafa1292/ilcapo.api.git
-    - run: npm run build --if-present
+    - run: npm run tsc --if-present
     - run: remove-item ilcapo.api -recurse -force
