@@ -16,7 +16,7 @@ const toNewModifierElementUpgrade = (modifierElement) => __awaiter(void 0, void 
         modifierElementId: modifierElement.modifierGroupId,
         newModifierGroupId: modifierElement.newModifierGroupId,
         label: modifierElement.label,
-        price: modifierElement.price,
+        prices: modifierElement.prices,
         createdBy: modifierElement.createdBy,
         updatedBy: modifierElement.updatedBy,
         createdAt: modifierElement.createdAt,

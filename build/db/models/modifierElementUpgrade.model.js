@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.modifierElementUpgradeSchema = exports.ModifierElementUpgradeModel = void 0;
 const sequelize_1 = require("sequelize");
 class ModifierElementUpgradeModel extends sequelize_1.Model {
+    static associate(models) {
+        this.hasMany(models.upgradePrice, { foreignKey: 'upgradeId', as: 'prices' });
+    }
     static config(sequelize) {
         return {
             sequelize,
@@ -29,10 +32,6 @@ exports.modifierElementUpgradeSchema = {
         type: sequelize_1.DataTypes.INTEGER
     },
     newModifierGroupId: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.INTEGER
-    },
-    price: {
         allowNull: false,
         type: sequelize_1.DataTypes.INTEGER
     },

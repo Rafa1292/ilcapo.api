@@ -48,62 +48,71 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/no-misused-promises */
 const express_1 = __importDefault(require("express"));
-const productModifierService = __importStar(require("../services/productModifier/productModifier.service"));
-const productModifierFactory = __importStar(require("../factories/productModifier.factory"));
+const menuService = __importStar(require("../services/menu/menu.service"));
+const menuFactory = __importStar(require("../factories/menu.factory"));
 const responseFactory = __importStar(require("../factories/response.factory"));
 const errorHandler_1 = require("../utils/errorHandler");
 const router = express_1.default.Router();
-router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = responseFactory.toNewCustomResponse();
     try {
-        const _a = yield productModifierFactory.toNewProductModifier(req.body), { id } = _a, createProductModifier = __rest(_a, ["id"]);
-        const savedProductModifiercreateProductModifier = yield productModifierService.saveProductModifier(createProductModifier);
-        response.setResponse(savedProductModifiercreateProductModifier, ['ProductModifier saved successfully'], false);
+        response.setResponse(yield menuService.getMenus(), ["Menus retrieved successfully"], false);
     }
     catch (error) {
         const errors = (0, errorHandler_1.errorHandler)(error);
-        response.setResponse(undefined, errors, true);
+        response.setResponse([], errors, true);
     }
-    res.json(response);
+    res.send(response);
 }));
-router.get('/byProductId/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = responseFactory.toNewCustomResponse();
-    try {
-        const productModifiers = yield productModifierService.getProductModifiersByProductId(parseInt(req.params.id));
-        console.log(productModifiers[0].modifierGroup.elements[0]);
-        response.setResponse(productModifiers, ['Product modifier retrieved successfully'], false);
-    }
-    catch (error) {
-        const errors = (0, errorHandler_1.errorHandler)(error);
-        response.setResponse(undefined, errors, true);
-    }
-    res.json(response);
-}));
-router.patch('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = responseFactory.toNewCustomResponse();
     try {
         const id = parseInt(req.params.id);
-        const productModifier = yield productModifierFactory.toNewProductModifier(req.body);
-        const savedProductModifier = yield productModifierService.updateProductModifier(productModifier, id);
-        response.setResponse(savedProductModifier, ['ProductModifier updated successfully'], false);
+        response.setResponse(yield menuService.getMenuById(id), ["Menu retrieved successfully"], false);
     }
     catch (error) {
         const errors = (0, errorHandler_1.errorHandler)(error);
-        response.setResponse(undefined, errors, true);
+        response.setResponse([], errors, true);
     }
-    res.json(response);
+    res.send(response);
 }));
-router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = responseFactory.toNewCustomResponse();
+    try {
+        const _a = yield menuFactory.toNewMenu(req.body), { id } = _a, createMenu = __rest(_a, ["id"]);
+        const savedMenu = yield menuService.saveMenu(createMenu);
+        response.setResponse(savedMenu, ["Menu saved successfully"], false);
+    }
+    catch (error) {
+        const errors = (0, errorHandler_1.errorHandler)(error);
+        response.setResponse([], errors, true);
+    }
+    res.send(response);
+}));
+router.put("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = responseFactory.toNewCustomResponse();
+    try {
+        const updateMenu = yield menuFactory.toNewMenu(req.body);
+        const updatedMenu = yield menuService.updateMenu(updateMenu);
+        response.setResponse(updatedMenu, ["Menu updated successfully"], false);
+    }
+    catch (error) {
+        const errors = (0, errorHandler_1.errorHandler)(error);
+        response.setResponse([], errors, true);
+    }
+    res.send(response);
+}));
+router.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = responseFactory.toNewCustomResponse();
     try {
         const id = parseInt(req.params.id);
-        yield productModifierService.deleteProductModifier(id);
-        response.setResponse({}, ['ProductModifier deleted successfully'], false);
+        const deletedMenu = yield menuService.deleteMenu(id);
+        response.setResponse(deletedMenu, ["Menu deleted successfully"], false);
     }
     catch (error) {
         const errors = (0, errorHandler_1.errorHandler)(error);
-        response.setResponse(undefined, errors, true);
+        response.setResponse([], errors, true);
     }
-    res.json(response);
+    res.send(response);
 }));
 exports.default = router;

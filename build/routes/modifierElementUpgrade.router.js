@@ -42,19 +42,18 @@ const modifierElementUpgradeFactory = __importStar(require("../factories/modifie
 const responseFactory = __importStar(require("../factories/response.factory"));
 const errorHandler_1 = require("../utils/errorHandler");
 const router = express_1.default.Router();
-router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = responseFactory.toNewCustomResponse();
-    try {
-        const createModifierElementUpgrade = yield modifierElementUpgradeFactory.toNewModifierElementUpgrade(req.body);
-        const savedModifierElementUpgrade = yield modifierElementUpgradeService.saveModifierElementUpgrade(createModifierElementUpgrade);
-        response.setResponse(savedModifierElementUpgrade, ['ModifierElementUpgrade saved successfully'], false);
-    }
-    catch (error) {
-        const errors = (0, errorHandler_1.errorHandler)(error);
-        response.setResponse(undefined, errors, true);
-    }
-    res.json(response);
-}));
+// router.post('/', async (req: Request, res: Response) => {
+//   const response = responseFactory.toNewCustomResponse()
+//   try {
+//     const createModifierElementUpgrade = await modifierElementUpgradeFactory.toNewModifierElementUpgrade(req.body)
+//     const savedModifierElementUpgrade = await modifierElementUpgradeService.saveModifierElementUpgrade(createModifierElementUpgrade)
+//     response.setResponse(savedModifierElementUpgrade, ['ModifierElementUpgrade saved successfully'], false)
+//   } catch (error: any) {
+//     const errors = errorHandler(error)
+//     response.setResponse(undefined, errors, true)
+//   }
+//   res.json(response)
+// })
 router.patch('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = responseFactory.toNewCustomResponse();
     try {

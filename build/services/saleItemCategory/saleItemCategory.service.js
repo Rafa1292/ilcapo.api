@@ -28,7 +28,8 @@ const getSaleItemCategories = () => __awaiter(void 0, void 0, void 0, function* 
                                 association: 'product'
                             }
                         ]
-                    }
+                    },
+                    'prices'
                 ]
             }
         ]

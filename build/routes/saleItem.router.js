@@ -52,6 +52,7 @@ const saleItemService = __importStar(require("../services/saleItem/saleItem.serv
 const saleItemFactory = __importStar(require("../factories/saleItem.factory"));
 const responseFactory = __importStar(require("../factories/response.factory"));
 const errorHandler_1 = require("../utils/errorHandler");
+const saleItem_validator_1 = require("../validations/saleItem.validator");
 const router = express_1.default.Router();
 router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = responseFactory.toNewCustomResponse();
@@ -96,7 +97,9 @@ router.patch('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const response = responseFactory.toNewCustomResponse();
     try {
         const id = parseInt(req.params.id);
-        const saleItem = yield saleItemFactory.toNewSaleItem(req.body);
+        const prices = req.body.prices;
+        (0, saleItem_validator_1.validatePrices)(prices);
+        const saleItem = yield saleItemFactory.toNewSaleItem(Object.assign(Object.assign({}, req.body), { prices }));
         const savedSaleItem = yield saleItemService.updateSaleItem(saleItem, id);
         response.setResponse(savedSaleItem, ['SaleItem updated successfully'], false);
     }

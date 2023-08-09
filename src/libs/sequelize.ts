@@ -1,19 +1,12 @@
-import { Options, Sequelize } from 'sequelize'
-import { config } from '../config/config'
-
-const options: Options = {
-  dialect: 'postgres',
-  logging: !config.isProd,
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000
-  }
-}
+import { Sequelize } from 'sequelize'
 
 // if (config.dbUrl === undefined) {
 //   throw new Error('DB_URL is undefined')
 // }
-const sequelize = new Sequelize('postgres://postgres:rafavilla2013@localhost:5432/ilcapo_db', options)
+const sequelize = new Sequelize('postgres://postgres:rafavilla2013@localhost:6432/ilcapo_db', {
+  host: 'ilcapo_postgres',
+  port: 5432,
+  dialect: 'postgres'
+})
 
 export default sequelize

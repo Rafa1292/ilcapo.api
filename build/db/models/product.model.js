@@ -28,10 +28,6 @@ exports.productSchema = {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING
     },
-    price: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.DECIMAL
-    },
     description: {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING

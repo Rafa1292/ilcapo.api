@@ -54,10 +54,14 @@ const getProductModifiersByProductId = (productId) => __awaiter(void 0, void 0, 
                         association: 'elements',
                         include: [
                             {
-                                association: 'modifierUpgrade'
+                                association: 'modifierUpgrade',
+                                include: ['prices']
                             },
                             {
                                 association: 'productReference'
+                            },
+                            {
+                                association: 'prices',
                             }
                         ]
                     }

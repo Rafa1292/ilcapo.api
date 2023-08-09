@@ -40,7 +40,6 @@ const toNewProduct = (product) => __awaiter(void 0, void 0, void 0, function* ()
     return {
         id: product.id,
         name: product.name,
-        price: product.price,
         allowsModify: product.allowsModify,
         description: product.description,
         pictureUrl: product.pictureUrl,

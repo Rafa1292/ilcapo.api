@@ -21,7 +21,13 @@ const getModifierGroups = () => __awaiter(void 0, void 0, void 0, function* () {
             {
                 association: 'elements',
                 include: [
-                    'modifierUpgrade', 'productReference'
+                    'productReference', 'prices',
+                    {
+                        association: 'modifierUpgrade',
+                        include: [
+                            'prices'
+                        ]
+                    }
                 ]
             }
         ]

@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newSaleItemIsValid = void 0;
+exports.validatePrices = exports.newSaleItemIsValid = void 0;
 const saleItem_service_1 = require("../services/saleItem/saleItem.service");
 const validator = __importStar(require("../utils/genericValidators/validator.util"));
 const parseName = (name) => {
@@ -59,3 +59,12 @@ const newSaleItemIsValid = (saleItem) => __awaiter(void 0, void 0, void 0, funct
     return true;
 });
 exports.newSaleItemIsValid = newSaleItemIsValid;
+const validatePrices = (prices) => {
+    if (prices === undefined || prices === null) {
+        throw new Error('Debe haber al menos un precio');
+    }
+    if (prices.length === 0) {
+        throw new Error('Debe haber al menos un precio');
+    }
+};
+exports.validatePrices = validatePrices;

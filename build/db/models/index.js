@@ -36,6 +36,10 @@ const recipeStepIngredient_model_1 = require("./recipeStepIngredient.model");
 const saleItem_model_1 = require("./saleItem.model");
 const saleItemCategory_model_1 = require("./saleItemCategory.model");
 const saleItemProduct_model_1 = require("./saleItemProduct.model");
+const menu_model_1 = require("./menu.model");
+const itemPrice_model_1 = require("./itemPrice.model");
+const upgradeElementPrice_model_1 = require("./upgradeElementPrice.model");
+const elementPrice_model_1 = require("./elementPrice.model");
 const setUpModels = (sequelize) => __awaiter(void 0, void 0, void 0, function* () {
     inputCategory_model_1.InputCategoryModel.init(ingredientCategory_model_1.ingredientCategorySchema, inputCategory_model_1.InputCategoryModel.config(sequelize));
     ingredientCategory_model_1.IngredientCategoryModel.init(inputCategory_model_1.inputCategorySchema, ingredientCategory_model_1.IngredientCategoryModel.config(sequelize));
@@ -63,6 +67,10 @@ const setUpModels = (sequelize) => __awaiter(void 0, void 0, void 0, function* (
     brand_model_1.BrandModel.init(brand_model_1.brandSchema, brand_model_1.BrandModel.config(sequelize));
     productRecipe_model_1.ProductRecipeModel.init(productRecipe_model_1.productRecipeSchema, productRecipe_model_1.ProductRecipeModel.config(sequelize));
     productReference_model_1.ProductReferenceModel.init(productReference_model_1.productReferenceSchema, productReference_model_1.ProductReferenceModel.config(sequelize));
+    menu_model_1.MenuModel.init(menu_model_1.menuSchema, menu_model_1.MenuModel.config(sequelize));
+    itemPrice_model_1.ItemPriceModel.init(itemPrice_model_1.itemPriceSchema, itemPrice_model_1.ItemPriceModel.config(sequelize));
+    upgradeElementPrice_model_1.UpgradeElementPriceModel.init(upgradeElementPrice_model_1.upgradeElementPriceSchema, upgradeElementPrice_model_1.UpgradeElementPriceModel.config(sequelize));
+    elementPrice_model_1.ElementPriceModel.init(elementPrice_model_1.elementPriceSchema, elementPrice_model_1.ElementPriceModel.config(sequelize));
     inputCategory_model_1.InputCategoryModel.associate(sequelize.models);
     ingredientCategory_model_1.IngredientCategoryModel.associate(sequelize.models);
     ingredient_model_1.IngredientModel.associate(sequelize.models);
@@ -86,6 +94,7 @@ const setUpModels = (sequelize) => __awaiter(void 0, void 0, void 0, function* (
     recipeStepIngredient_model_1.RecipeStepIngredientModel.associate(sequelize.models);
     productModifier_model_1.ProductModifierModel.associate(sequelize.models);
     productRecipe_model_1.ProductRecipeModel.associate(sequelize.models);
+    modifierElementUpgrade_model_1.ModifierElementUpgradeModel.associate(sequelize.models);
     // ProductReferenceModel.associate(sequelize.models)
     yield magnitude_model_1.MagnitudeModel.sync();
     yield measure_model_1.MeasureModel.sync();
@@ -113,5 +122,9 @@ const setUpModels = (sequelize) => __awaiter(void 0, void 0, void 0, function* (
     yield productRecipe_model_1.ProductRecipeModel.sync();
     yield productReference_model_1.ProductReferenceModel.sync();
     yield modifierElementUpgrade_model_1.ModifierElementUpgradeModel.sync();
+    yield menu_model_1.MenuModel.sync();
+    yield itemPrice_model_1.ItemPriceModel.sync();
+    yield upgradeElementPrice_model_1.UpgradeElementPriceModel.sync();
+    yield elementPrice_model_1.ElementPriceModel.sync();
 });
 exports.setUpModels = setUpModels;

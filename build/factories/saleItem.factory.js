@@ -39,11 +39,11 @@ const toNewSaleItem = (saleItem) => __awaiter(void 0, void 0, void 0, function* 
     return {
         id: saleItem.id,
         name: saleItem.name,
-        price: saleItem.price,
         saleItemCategoryId: saleItem.saleItemCategoryId,
         description: saleItem.description,
         pictureUrl: saleItem.pictureUrl,
         createdBy: saleItem.createdBy,
+        prices: saleItem.prices,
         updatedBy: saleItem.updatedBy,
         createdAt: saleItem.createdAt,
         updatedAt: saleItem.updatedAt,

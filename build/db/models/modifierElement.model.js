@@ -4,6 +4,7 @@ exports.modifierElementSchema = exports.ModifierElementModel = void 0;
 const sequelize_1 = require("sequelize");
 class ModifierElementModel extends sequelize_1.Model {
     static associate(models) {
+        this.hasMany(models.elementPrice, { foreignKey: 'elementId', as: 'prices' });
         this.belongsTo(models.modifierGroup, {
             foreignKey: 'modifierGroupId',
             as: 'modifierGroup'
@@ -37,10 +38,6 @@ exports.modifierElementSchema = {
     name: {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING
-    },
-    price: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.DECIMAL(10, 2)
     },
     quantity: {
         allowNull: false,

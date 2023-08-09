@@ -4,6 +4,7 @@ exports.saleItemSchema = exports.SaleItemModel = void 0;
 const sequelize_1 = require("sequelize");
 class SaleItemModel extends sequelize_1.Model {
     static associate(models) {
+        this.hasMany(models.itemPrice, { foreignKey: 'itemId', as: 'prices' });
         this.hasMany(models.saleItemProduct, { foreignKey: 'saleItemId', as: 'saleItemProducts' });
         this.belongsTo(models.saleItemCategory, { foreignKey: 'saleItemCategoryId' });
     }
@@ -31,10 +32,6 @@ exports.saleItemSchema = {
     description: {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING
-    },
-    price: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.DECIMAL(10, 2)
     },
     saleItemCategoryId: {
         allowNull: false,

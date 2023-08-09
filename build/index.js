@@ -31,11 +31,15 @@ const saleItemProduct_router_1 = __importDefault(require("./routes/saleItemProdu
 const productRecipe_router_1 = __importDefault(require("./routes/productRecipe.router"));
 const productReference_router_1 = __importDefault(require("./routes/productReference.router"));
 const modifierElementUpgrade_router_1 = __importDefault(require("./routes/modifierElementUpgrade.router"));
+const menu_router_1 = __importDefault(require("./routes/menu.router"));
+const itemPrice_router_1 = __importDefault(require("./routes/itemPrice.router"));
+const upgradeElementPrice_router_1 = __importDefault(require("./routes/upgradeElementPrice.router"));
+const elementPrice_router_1 = require("./routes/elementPrice.router");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-const PORT = 3001;
+const PORT = 4008;
 app.use((0, cors_1.default)({
-    origin: ['http://localhost:3008', 'http://localhost:3000']
+    origin: ['http://localhost:3008', 'http://localhost:3001']
 }));
 app.use('/api/v1/providers', provider_route_1.default);
 app.use('/api/v1/magnitudes', magnitude_router_1.default);
@@ -61,6 +65,10 @@ app.use('/api/v1/modifierElements', modifierElement_router_1.default);
 app.use('/api/v1/productModifiers', productModifier_router_1.default);
 app.use('/api/v1/productRecipes', productRecipe_router_1.default);
 app.use('/api/v1/productReferences', productReference_router_1.default);
+app.use('/api/v1/menus', menu_router_1.default);
+app.use('/api/v1/itemPrices', itemPrice_router_1.default);
+app.use('/api/v1/upgradePrices', upgradeElementPrice_router_1.default);
+app.use('/api/v1/elementPrices', elementPrice_router_1.elementPriceRouter);
 app.listen(PORT, () => {
     console.log(`Server running again on port ${PORT}`);
 });

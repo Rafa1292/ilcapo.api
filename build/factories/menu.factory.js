@@ -9,19 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newModifierElementUpgradeIsValid = void 0;
-const newModifierElementUpgradeIsValid = (modifierElementUpgrade) => __awaiter(void 0, void 0, void 0, function* () {
-    let isValid = true;
-    if (modifierElementUpgrade.newModifierGroupId === undefined) {
-        isValid = false;
-    }
-    if (typeof modifierElementUpgrade.label !== 'string') {
-        isValid = false;
-    }
-    if (modifierElementUpgrade.modifierElementId === undefined) {
-        isValid = false;
-    }
-    console.log(1, '------is valid-------', isValid);
-    return isValid;
+exports.toNewMenus = exports.toNewMenu = void 0;
+const toNewMenu = (menu) => __awaiter(void 0, void 0, void 0, function* () {
+    return {
+        id: menu.id,
+        name: menu.name,
+        comissionPercentage: menu.comissionPercentage,
+        createdBy: menu.createdBy,
+        updatedBy: menu.updatedBy,
+        createdAt: menu.createdAt,
+        updatedAt: menu.updatedAt,
+        delete: menu.delete
+    };
 });
-exports.newModifierElementUpgradeIsValid = newModifierElementUpgradeIsValid;
+exports.toNewMenu = toNewMenu;
+const toNewMenus = (menus) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield Promise.all(menus.map((menu) => __awaiter(void 0, void 0, void 0, function* () {
+        return yield (0, exports.toNewMenu)(menu);
+    })));
+});
+exports.toNewMenus = toNewMenus;
