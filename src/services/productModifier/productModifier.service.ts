@@ -24,14 +24,19 @@ export const getProductModifiersByProductId = async (productId: number): Promise
   return await ProductModifierModel.findAll(
     {
       where: {
-        productId
+        productId,
+        delete: false
       },
       include: [
         {
           association: 'modifierGroup',
+          where: { delete : false },
           include: [
             {
               association: 'elements',
+              where: {
+                delete: false
+              },
               include: [
                 {
                   association: 'modifierUpgrade',
