@@ -8,6 +8,7 @@ export class ProductModel extends Model implements ProductAttributes {
   public description!: string
   public pictureUrl!: string
   public allowsModify!: boolean
+  public needsCommand!: boolean
   public productModifiers!: ProductModifier[]
   public delete!: boolean
   public createdBy!: number
@@ -49,6 +50,10 @@ export const productSchema = {
   pictureUrl: {
     allowNull: false,
     type: DataTypes.STRING
+  },
+  needsCommand: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN
   },
   allowsModify: {
     allowNull: false,

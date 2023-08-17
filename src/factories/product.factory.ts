@@ -11,6 +11,7 @@ export const toNewProduct = async (product: any): Promise<Product> => {
     allowsModify: product.allowsModify,
     description: product.description,
     pictureUrl: product.pictureUrl,
+    needsCommand: product.needsCommand,
     productModifiers: await toNewProductModifiers(product.productModifiers),
     createdBy: product.createdBy,
     updatedBy: product.updatedBy,

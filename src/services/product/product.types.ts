@@ -7,6 +7,7 @@ export interface ProductAttributes {
   pictureUrl: string
   allowsModify: boolean
   productModifiers: ProductModifier[]
+  needsCommand: boolean
   delete: boolean
   createdAt?: Date
   updatedAt?: Date
