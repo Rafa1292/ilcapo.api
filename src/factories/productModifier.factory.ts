@@ -6,6 +6,7 @@ export const toNewProductModifier = async (productModifier: any): Promise<Produc
     id: productModifier.id,
     productId: productModifier.productId,
     modifierGroupId: productModifier.modifierGroupId,
+    order: productModifier.order,
     modifierGroup: (productModifier.modifierGroup === undefined) || (productModifier.modifierGroup === null) ? productModifier.modifierGroup : await toNewModifierGroup(productModifier.modifierGroup),
     createdBy: productModifier.createdBy,
     updatedBy: productModifier.updatedBy,

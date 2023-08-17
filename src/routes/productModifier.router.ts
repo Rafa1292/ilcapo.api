@@ -59,4 +59,30 @@ router.delete('/:id', async (req: Request, res: Response) => {
   res.json(response)
 })
 
+router.get('/upProductModifierOrder/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+    await productModifierService.upProductModifierOrder(id)
+    response.setResponse({}, ['ProductModifier order updated successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
+router.get('/downProductModifierOrder/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+    await productModifierService.downProductModifierOrder(id)
+    response.setResponse({}, ['ProductModifier order updated successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 export default router

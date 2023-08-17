@@ -4,6 +4,7 @@ export interface ProductModifierAttributes {
   id: number
   productId: number
   modifierGroupId: number
+  order: number
   modifierGroup: ModifierGroup
   delete: boolean
   createdAt?: Date

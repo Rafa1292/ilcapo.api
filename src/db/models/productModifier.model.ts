@@ -6,6 +6,7 @@ export class ProductModifierModel extends Model implements ProductModifierAttrib
   public id!: number
   public productId!: number
   public modifierGroupId!: number
+  public order!: number
   public modifierGroup!: ModifierGroup
   public delete!: boolean
   public createdBy!: number
@@ -43,6 +44,10 @@ export const productModifierSchema = {
     type: DataTypes.INTEGER
   },
   modifierGroupId: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  order: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
