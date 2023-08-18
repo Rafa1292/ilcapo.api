@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { SaleItemProductAttributes } from '../../services/saleItemProduct/saleItemProduct.types'
+import { Product } from '../../services/product/product.types'
 
 export class SaleItemProductModel extends Model implements SaleItemProductAttributes {
   public id!: number
@@ -7,6 +8,7 @@ export class SaleItemProductModel extends Model implements SaleItemProductAttrib
   public productId!: number
   public quantity!: number
   public discount!: number
+  public product!: Product
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number

@@ -1,10 +1,12 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { SaleItemCategoryAttributes } from '../../services/saleItemCategory/saleItemCategory.types'
+import { SaleItem } from '../../services/saleItem/saleItem.types'
 
 export class SaleItemCategoryModel extends Model implements SaleItemCategoryAttributes {
   public id!: number
   public name!: string
   public delete!: boolean
+  public saleItems!: SaleItem[]
   public createdBy!: number
   public updatedBy!: number
 

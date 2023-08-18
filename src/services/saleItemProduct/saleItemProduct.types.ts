@@ -1,9 +1,12 @@
+import { Product } from "../product/product.types"
+
 export interface SaleItemProductAttributes {
   id: number
   saleItemId: number
   productId: number
   quantity: number
   discount: number
+  product?: Product
   delete: boolean
   createdAt?: Date
   updatedAt?: Date

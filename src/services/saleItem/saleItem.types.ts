@@ -1,4 +1,5 @@
 import { ItemPrice } from "../itemPrice/itemPrice.types"
+import { SaleItemProduct } from "../saleItemProduct/saleItemProduct.types"
 
 export interface SaleItemAttributes {
   id: number
@@ -8,6 +9,7 @@ export interface SaleItemAttributes {
   pictureUrl: string
   prices: ItemPrice[]
   delete: boolean
+  saleItemProducts?: SaleItemProduct[]
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

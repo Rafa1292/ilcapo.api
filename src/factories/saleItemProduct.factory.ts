@@ -10,6 +10,7 @@ export const toNewSaleItemProduct = async (saleItemProduct: any): Promise<SaleIt
     productId: saleItemProduct.productId,
     quantity: saleItemProduct.quantity,
     discount: saleItemProduct.discount,
+    product: saleItemProduct.product,
     createdBy: saleItemProduct.createdBy,
     updatedBy: saleItemProduct.updatedBy,
     createdAt: saleItemProduct.createdAt,

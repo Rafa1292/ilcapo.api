@@ -1,14 +1,16 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { SaleItemAttributes } from '../../services/saleItem/saleItem.types'
 import { ItemPrice } from '../../services/itemPrice/itemPrice.types'
+import { SaleItemProduct } from '../../services/saleItemProduct/saleItemProduct.types'
 
 export class SaleItemModel extends Model implements SaleItemAttributes {
   public id!: number
   public name!: string
-  public description!: string
   public saleItemCategoryId!: number
-  public prices!: ItemPrice[]
+  public description!: string
   public pictureUrl!: string
+  public prices!: ItemPrice[]
+  public saleItemProducts!: SaleItemProduct[]
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
@@ -16,18 +18,23 @@ export class SaleItemModel extends Model implements SaleItemAttributes {
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
-  static associate (models: any): void {
+  static associate(models: any): void {
     this.hasMany(models.itemPrice, { foreignKey: 'itemId', as: 'prices' })
-    this.hasMany(models.saleItemProduct, { foreignKey: 'saleItemId', as: 'saleItemProducts' })
-    this.belongsTo(models.saleItemCategory, { foreignKey: 'saleItemCategoryId' })
+    this.hasMany(models.saleItemProduct, {
+      foreignKey: 'saleItemId',
+      as: 'saleItemProducts',
+    })
+    this.belongsTo(models.saleItemCategory, {
+      foreignKey: 'saleItemCategoryId',
+    })
   }
 
-  static config (sequelize: Sequelize): any {
+  static config(sequelize: Sequelize): any {
     return {
       sequelize,
       tableName: 'saleItems',
       modelName: 'saleItem',
-      timestamps: true
+      timestamps: true,
     }
   }
 }
@@ -37,34 +44,34 @@ export const saleItemSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   name: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   description: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   saleItemCategoryId: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   pictureUrl: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   delete: {
     type: DataTypes.BOOLEAN,
-    allowNull: false
+    allowNull: false,
   },
   createdBy: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   updatedBy: {
     allowNull: false,
-    type: DataTypes.INTEGER
-  }
+    type: DataTypes.INTEGER,
+  },
 }

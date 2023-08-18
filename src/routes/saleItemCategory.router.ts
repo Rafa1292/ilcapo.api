@@ -18,6 +18,17 @@ router.get('/', async (_req: Request, res: Response) => {
   res.send(response)
 })
 
+router.get('/activeProducts', async (_req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    response.setResponse(await saleItemCategoryService.getSaleItemCategoriesWithActiveProducts(), ['SaleItem categories retrieved successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse([], errors, true)
+  }
+  res.send(response)
+})
+
 router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {

@@ -7,6 +7,7 @@ export const toNewSaleItemCategory = async (saleItemCategory: any): Promise<Sale
   return {
     id: saleItemCategory.id,
     name: saleItemCategory.name,
+    saleItems: saleItemCategory.saleItems,
     createdBy: saleItemCategory.createdBy,
     updatedBy: saleItemCategory.updatedBy,
     createdAt: saleItemCategory.createdAt,

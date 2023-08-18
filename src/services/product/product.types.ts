@@ -8,6 +8,7 @@ export interface ProductAttributes {
   allowsModify: boolean
   productModifiers: ProductModifier[]
   needsCommand: boolean
+  active: boolean
   delete: boolean
   createdAt?: Date
   updatedAt?: Date
