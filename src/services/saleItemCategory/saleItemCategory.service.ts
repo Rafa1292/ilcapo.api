@@ -1,6 +1,7 @@
 import { SaleItemCategory, NewSaleItemCategory } from './saleItemCategory.types'
 import { SaleItemCategoryModel } from '../../db/models/saleItemCategory.model'
 import { toNewSaleItemCategory } from '../../factories/saleItemCategory.factory'
+import { getNow } from '../../utils/timeManager'
 
 export const getSaleItemCategories = async (): Promise<SaleItemCategory[]> => {
   return await SaleItemCategoryModel.findAll(
@@ -40,10 +41,15 @@ export const getSaleItemCategoryById = async (id: number): Promise<SaleItemCateg
 }
 
 export const saveSaleItemCategory = async (saleItemCategory: NewSaleItemCategory): Promise<SaleItemCategory> => {
+  const now = getNow()
+  saleItemCategory.createdAt = now
+  saleItemCategory.updatedAt = now
   return await SaleItemCategoryModel.create(saleItemCategory)
 }
 
 export const updateSaleItemCategory = async (saleItemCategory: Partial<SaleItemCategory>, id: number): Promise<void> => {
+  const now = getNow()
+  saleItemCategory.updatedAt = now
   await SaleItemCategoryModel.update(saleItemCategory, { where: { id } })
 }
 

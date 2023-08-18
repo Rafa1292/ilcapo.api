@@ -7,6 +7,7 @@ import {
   saveUpgradeElementPrice,
   updateUpgradeElementPrice,
 } from '../upgradeElementPrice/upgradeElementPrice.service'
+import { getNow } from '../../utils/timeManager'
 
 export const saveModifierElementUpgrade = async (
   modifierElementUpgrade: ModifierElementUpgrade,
@@ -16,6 +17,9 @@ export const saveModifierElementUpgrade = async (
   if (isValid) {
     console.log(1, '-------is valid-----')
     const { id, ...rest } = modifierElementUpgrade
+    const now = getNow()
+    rest.createdAt = now
+    rest.updatedAt = now
     const newModifierElementUpgrade = await ModifierElementUpgradeModel.create(
       rest,
       { transaction }
@@ -48,6 +52,8 @@ export const updateModifierElementUpgrade = async (
   const transaction = await ModifierElementUpgradeModel.sequelize?.transaction()
   if (!transaction) throw new Error('Transaction not found')
   try {
+    const now = getNow()
+    modifierElementUpgrade.updatedAt = now
     await ModifierElementUpgradeModel.update(modifierElementUpgrade, {
       where: { id },
     })

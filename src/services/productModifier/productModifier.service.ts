@@ -1,9 +1,13 @@
 import { ProductModifierModel } from '../../db/models/productModifier.model'
+import { getNow } from '../../utils/timeManager'
 import { ProductModifier, NewProductModifier } from './productModifier.types'
 
 export const saveProductModifier = async (
   productModifier: NewProductModifier
 ): Promise<ProductModifier> => {
+  const now = getNow()
+  productModifier.createdAt = now
+  productModifier.updatedAt = now
   return await ProductModifierModel.create(productModifier)
 }
 
@@ -11,6 +15,8 @@ export const updateProductModifier = async (
   productModifier: Partial<ProductModifier>,
   id: number
 ): Promise<void> => {
+  const now = getNow()
+  productModifier.updatedAt = now
   await ProductModifierModel.update(productModifier, { where: { id } })
 }
 
@@ -76,9 +82,7 @@ export const upProductModifierOrder = async (id: number): Promise<void> => {
   })
 
   const modifiersCount = productModifiers.length
-  console.log(modifiersCount, 'modifiersCount------------------')
   const order = productModifier.order === null ? 0 : productModifier.order
-  console.log(order, 'order------------------')
   if (order < modifiersCount)
   {
     await productModifier.update({ order: (order + 1) }, { where: { id: productModifier.id } })

@@ -3,6 +3,7 @@ import { SaleItemModel } from '../../db/models/saleItem.model'
 import { toNewSaleItem } from '../../factories/saleItem.factory'
 import { Transaction } from 'sequelize'
 import { deleteItemPrice, saveItemPrice, updateItemPrice } from '../itemPrice/itemPrice.service'
+import { getNow } from '../../utils/timeManager'
 
 export const getSaleItems = async (): Promise<SaleItem[]> => {
   return await SaleItemModel.findAll({
@@ -38,6 +39,9 @@ export const saveSaleItem = async (saleItem: NewSaleItem): Promise<void> => {
   const transaction = await SaleItemModel.sequelize?.transaction()
   if (!transaction) throw new Error('Transaction not found')
   try {
+    const now = getNow()
+    saleItem.createdAt = now
+    saleItem.updatedAt = now
     const newSaleItem = await SaleItemModel.create(saleItem, { transaction })
     await savePrices({ id: newSaleItem.id, prices: saleItem.prices } as SaleItem, transaction)
     await transaction?.commit()
@@ -51,6 +55,8 @@ export const updateSaleItem = async (saleItem: Partial<SaleItem>, id: number ): 
   const transaction = await SaleItemModel.sequelize?.transaction()
   if (!transaction) throw new Error('Transaction not found')
   try {
+    const now = getNow()
+    saleItem.updatedAt = now
     await SaleItemModel.update(saleItem, { where: { id }, transaction })
     const { prices, ...currentSaleItem } = await getSaleItemById(id)
     const pricesToUpdate = saleItem.prices?.filter(
@@ -84,7 +90,6 @@ const savePrices = async (saleItem: SaleItem, transaction: Transaction): Promise
 }
 
 const updatePrices = async (saleItem: SaleItem, transaction: Transaction): Promise<void> => {
-  console.log('-------update-------------')
   for (const price of saleItem.prices) {
     await updateItemPrice({...price, itemId: saleItem.id}, price.id, transaction)
   }

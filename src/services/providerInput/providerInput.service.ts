@@ -2,6 +2,7 @@ import { ProviderInput, NewProviderInput } from './providerInput.types'
 import { ProviderInputModel } from '../../db/models/providerInput.model'
 import { toNewProviderInput, toNewProviderInputs } from '../../factories/providerInput.factory'
 import { newProviderInputIsValid } from '../../validations/providerInput.validator'
+import { getNow } from '../../utils/timeManager'
 
 export const getProviderInputById = async (id: number): Promise<ProviderInput> => {
   const response = await ProviderInputModel.findByPk(id)
@@ -11,11 +12,16 @@ export const getProviderInputById = async (id: number): Promise<ProviderInput> =
 
 export const saveProviderInput = async (providerInput: NewProviderInput): Promise<ProviderInput> => {
   await newProviderInputIsValid(providerInput)
+  const now = getNow()
+  providerInput.createdAt = now
+  providerInput.updatedAt = now
   return await ProviderInputModel.create(providerInput)
 }
 
 export const updateProviderInput = async (providerInput: Partial<ProviderInput>, id: number): Promise<ProviderInput> => {
   await newProviderInputIsValid({ ...providerInput, id })
+  const now = getNow()
+  providerInput.updatedAt = now
   await ProviderInputModel.update(providerInput, { where: { id } })
   return await getProviderInputById(id)
 }

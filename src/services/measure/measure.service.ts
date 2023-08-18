@@ -1,6 +1,7 @@
 import { Measure, NewMeasure } from './measure.types'
 import { MeasureModel } from '../../db/models/measure.model'
 import { toNewMeasure } from '../../factories/measure.factory'
+import { getNow } from '../../utils/timeManager'
 
 export const getMeasures = async (): Promise<Measure[]> => {
   return await MeasureModel.findAll(
@@ -29,12 +30,17 @@ export const getMeasureById = async (id: number): Promise<Measure> => {
 }
 
 export const saveMeasure = async (measure: NewMeasure): Promise<Measure> => {
+  const now = getNow()
+  measure.createdAt = now
+  measure.updatedAt = now
   const savedMeasure = await MeasureModel.create(measure)
   if (savedMeasure.principalMeasure) await updatePrincipalMeasure(savedMeasure.id, savedMeasure.magnitudeId)
   return await toNewMeasure(savedMeasure)
 }
 
 export const updateMeasure = async (measure: Partial<Measure>, id: number): Promise<void> => {
+  const now = getNow()
+  measure.updatedAt = now
   await MeasureModel.update(measure, { where: { id } })
   if (measure.principalMeasure !== undefined && measure.principalMeasure) {
     if (measure.magnitudeId === undefined) {
@@ -48,12 +54,16 @@ export const updateMeasure = async (measure: Partial<Measure>, id: number): Prom
 
 export const deleteMeasure = async (id: number): Promise<void> => {
   const measure = await getMeasureById(id)
+  const now = getNow()
+  measure.updatedAt = now
   measure.delete = true
   await updateMeasure(measure, id)
 }
 
 export const recoveryMeasure = async (id: number): Promise<void> => {
   const measure = await getMeasureById(id)
+  const now = getNow()
+  measure.updatedAt = now
   measure.delete = false
   await updateMeasure(measure, id)
 }

@@ -1,6 +1,7 @@
 import { Recipe, NewRecipe } from './recipe.types'
 import { RecipeModel } from '../../db/models/recipe.model'
 import { toNewRecipe, toNewRecipes } from '../../factories/recipe.factory'
+import { getNow } from '../../utils/timeManager'
 
 export const getRecipes = async (): Promise<Recipe[]> => {
   const recipes = await RecipeModel.findAll(
@@ -65,10 +66,15 @@ export const getRecipeById = async (id: number): Promise<Recipe> => {
 }
 
 export const saveRecipe = async (recipe: NewRecipe): Promise<Recipe> => {
+  const now = getNow()
+  recipe.createdAt = now
+  recipe.updatedAt = now
   return await RecipeModel.create(recipe)
 }
 
 export const updateRecipe = async (recipe: Partial<Recipe>, id: number): Promise<void> => {
+  const now = getNow()
+  recipe.updatedAt = now
   await RecipeModel.update(recipe, { where: { id } })
 }
 

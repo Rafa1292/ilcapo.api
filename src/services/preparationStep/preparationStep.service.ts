@@ -1,6 +1,7 @@
 import { PreparationStep, NewPreparationStep } from './preparationStep.types'
 import { PreparationStepModel } from '../../db/models/preparationStep.model'
 import { toNewPreparationStep } from '../../factories/preparationStep.factory'
+import { getNow } from '../../utils/timeManager'
 
 export const getPreparationStepsWithDeletedItems = async (): Promise<PreparationStep[]> => {
   return await PreparationStepModel.findAll()
@@ -20,6 +21,9 @@ export const getPreparationStepById = async (id: number): Promise<PreparationSte
 }
 
 export const savePreparationStep = async (preparationStep: NewPreparationStep): Promise<PreparationStep> => {
+  const now = getNow()
+  preparationStep.createdAt = now
+  preparationStep.updatedAt = now
   const savedPreparationStep = await PreparationStepModel.create(preparationStep)
   await sortStepsAfterInsert(savedPreparationStep)
   return savedPreparationStep
@@ -27,12 +31,15 @@ export const savePreparationStep = async (preparationStep: NewPreparationStep): 
 
 export const updatePreparationStep = async (preparationStep: Partial<PreparationStep>, id: number): Promise<void> => {
   await sortStepsAfterUpdate(preparationStep)
+  const now = getNow()
+  preparationStep.updatedAt = now
   await PreparationStepModel.update(preparationStep, { where: { id } })
 }
 
 export const deletePreparationStep = async (id: number): Promise<void> => {
   const preparationStep = await getPreparationStepById(id)
-  await PreparationStepModel.update({ delete: true }, { where: { id } })
+  const now = getNow()
+  await PreparationStepModel.update({ delete: true, updatedAt: now }, { where: { id } })
   await sortStepsAfterDelete(preparationStep)
 }
 
@@ -58,11 +65,12 @@ const sortStepsAfterInsert = async (preparationStep: Partial<PreparationStep>): 
   if (preparationStep.ingredientId === undefined) throw new Error('Ingredient id is undefined')
   const preparationSteps = await getPreparationStepsByIngredientId(preparationStep.ingredientId)
   const repeatPreparationStep = preparationSteps.find((step) => step.stepNumber === preparationStep.stepNumber && step.id !== preparationStep.id)
+  const now = getNow()
   if (repeatPreparationStep !== undefined) {
     for (const step of preparationSteps) {
       if (step.stepNumber >= preparationStep.stepNumber && step.id !== preparationStep.id) {
         const stepNumber = step.stepNumber + 1
-        await PreparationStepModel.update({ stepNumber }, { where: { id: step.id } })
+        await PreparationStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } })
       }
     }
   }
@@ -72,10 +80,11 @@ const sortStepsAfterDelete = async (preparationStep: Partial<PreparationStep>): 
   if (preparationStep.stepNumber === undefined) throw new Error('Step number is undefined')
   if (preparationStep.ingredientId === undefined) throw new Error('Ingredient id is undefined')
   const preparationSteps = await getPreparationStepsByIngredientId(preparationStep.ingredientId)
+  const now = getNow()
   for (const step of preparationSteps) {
     if (step.stepNumber > preparationStep.stepNumber) {
       const stepNumber = step.stepNumber - 1
-      await PreparationStepModel.update({ stepNumber }, { where: { id: step.id } })
+      await PreparationStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } })
     }
   }
 }
@@ -91,11 +100,12 @@ const sortStepsAfterUpdate = async (preparationStep: Partial<PreparationStep>): 
   const modifier = diference > 0 ? 1 : -1
   const index = diference > 0 ? preparationStep.stepNumber : updatePreparationStep.stepNumber
   const length = diference > 0 ? updatePreparationStep.stepNumber : preparationStep.stepNumber
+  const now = getNow()
 
   for (const step of preparationSteps) {
     if (step.stepNumber >= index && step.stepNumber <= length && step.id !== preparationStep.id) {
       const stepNumber = step.stepNumber + modifier
-      await PreparationStepModel.update({ stepNumber }, { where: { id: step.id } })
+      await PreparationStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } })
     }
   }
 }

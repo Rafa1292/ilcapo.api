@@ -1,6 +1,7 @@
 import { Product, NewProduct } from './product.types'
 import { ProductModel } from '../../db/models/product.model'
 import { toNewProduct, toNewProducts } from '../../factories/product.factory'
+import { getNow } from '../../utils/timeManager'
 
 export const getProducts = async (): Promise<Product[]> => {
   const products = await ProductModel.findAll(
@@ -44,15 +45,20 @@ export const getProductById = async (id: number): Promise<Product> => {
 }
 
 export const saveProduct = async (product: NewProduct): Promise<Product> => {
+  const now = getNow()
+  product.createdAt = now
+  product.updatedAt = now
   return await ProductModel.create(product)
 }
 
 export const updateProduct = async (product: Partial<Product>, id: number): Promise<void> => {
+  const now = getNow()
+  product.updatedAt = now
   await ProductModel.update(product, { where: { id } })
 }
 
 export const deleteProduct = async (id: number): Promise<void> => {
-  const product = await getProductById(id)
+  const product = await getProductById(id)  
   product.delete = true
   await updateProduct(product, id)
 }

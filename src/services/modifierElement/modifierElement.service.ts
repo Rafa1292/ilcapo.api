@@ -13,6 +13,7 @@ import {
   updateModifierElementUpgrade,
 } from '../modifierElementUpgrade/modifierElementUpgrade.service'
 import { ModifierElementUpgrade } from '../modifierElementUpgrade/modifierElementUpgrade.types'
+import { getNow } from '../../utils/timeManager'
 
 export const getModifierElements = async (): Promise<ModifierElement[]> => {
   return await ModifierElementModel.findAll({
@@ -52,6 +53,9 @@ export const saveModifierElement = async (
   const transaction = await ModifierElementModel.sequelize?.transaction()
   if (!transaction) throw new Error('Transaction not found')
   try {
+    const now = getNow()
+    modifierElement.createdAt = now
+    modifierElement.updatedAt = now
     const newModifierElement = await ModifierElementModel.create(
       modifierElement,
       { transaction }
@@ -86,6 +90,8 @@ export const updateModifierElement = async (
   const transaction = await ModifierElementModel.sequelize?.transaction()
   if (!transaction) throw new Error('Transaction not found')
   try {
+    const now = getNow()
+    modifierElement.updatedAt = now
     await ModifierElementModel.update(modifierElement, { where: { id } })
     const { prices, ...currentModifierElement } = await getModifierElementById(
       id
@@ -131,12 +137,9 @@ const saveUpgrade = async (
   id: number,
   transaction: Transaction
 ): Promise<void> => {
-  console.log(1, '------saving upgrade-------')
   if (modifierElementUpgrade.id === undefined) {
-    console.log(2, '------deleting upgrade-------')
     await deleteModifierElementUpgradeByModifierElementId(id)
   } else {
-    console.log(3, '------creating upgrade-------')
     if (modifierElementUpgrade.id === 0) {
       await saveModifierElementUpgrade(
         {
@@ -146,7 +149,6 @@ const saveUpgrade = async (
         transaction
       )
     } else {
-      console.log(4, '------updating upgrade-------')
       await updateModifierElementUpgrade(
         modifierElementUpgrade,
         modifierElementUpgrade.id

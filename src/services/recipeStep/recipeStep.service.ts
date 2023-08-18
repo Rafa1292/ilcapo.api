@@ -1,6 +1,7 @@
 import { RecipeStep, NewRecipeStep } from './recipeStep.types'
 import { toNewRecipeStep } from '../../factories/recipeStep.factory'
 import { RecipeStepModel } from '../../db/models/recipeStep.model'
+import { getNow } from '../../utils/timeManager'
 
 export const getRecipeStepsWithDeletedItems = async (): Promise<RecipeStep[]> => {
   return await RecipeStepModel.findAll()
@@ -20,6 +21,9 @@ export const getRecipeStepById = async (id: number): Promise<RecipeStep> => {
 }
 
 export const saveRecipeStep = async (recipeStep: NewRecipeStep): Promise<RecipeStep> => {
+  const now = getNow()
+  recipeStep.createdAt = now
+  recipeStep.updatedAt = now
   const savedRecipeStep = await RecipeStepModel.create(recipeStep)
   await sortStepsAfterInsert(savedRecipeStep)
   return savedRecipeStep
@@ -27,6 +31,8 @@ export const saveRecipeStep = async (recipeStep: NewRecipeStep): Promise<RecipeS
 
 export const updateRecipeStep = async (recipeStep: Partial<RecipeStep>, id: number): Promise<void> => {
   await sortStepsAfterUpdate(recipeStep)
+  const now = getNow()
+  recipeStep.updatedAt = now
   await RecipeStepModel.update(recipeStep, { where: { id } })
 }
 
@@ -58,11 +64,12 @@ const sortStepsAfterInsert = async (recipeStep: Partial<RecipeStep>): Promise<vo
   if (recipeStep.recipeId === undefined) throw new Error('Recipe id is undefined')
   const recipeSteps = await getRecipeStepsByRecipeId(recipeStep.recipeId)
   const repeatRecipeStep = recipeSteps.find((step) => step.stepNumber === recipeStep.stepNumber && step.id !== recipeStep.id)
+  const now = getNow()
   if (repeatRecipeStep !== undefined) {
     for (const step of recipeSteps) {
       if (step.stepNumber >= recipeStep.stepNumber && step.id !== recipeStep.id) {
         const stepNumber = step.stepNumber + 1
-        await RecipeStepModel.update({ stepNumber }, { where: { id: step.id } })
+        await RecipeStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } })
       }
     }
   }
@@ -72,10 +79,11 @@ const sortStepsAfterDelete = async (recipeStep: Partial<RecipeStep>): Promise<vo
   if (recipeStep.stepNumber === undefined) throw new Error('Step number is undefined')
   if (recipeStep.recipeId === undefined) throw new Error('Recipe id is undefined')
   const recipeSteps = await getRecipeStepsByRecipeId(recipeStep.recipeId)
+  const now = getNow()
   for (const step of recipeSteps) {
     if (step.stepNumber > recipeStep.stepNumber) {
       const stepNumber = step.stepNumber - 1
-      await RecipeStepModel.update({ stepNumber }, { where: { id: step.id } })
+      await RecipeStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } })
     }
   }
 }
@@ -91,11 +99,12 @@ const sortStepsAfterUpdate = async (recipeStep: Partial<RecipeStep>): Promise<vo
   const modifier = diference > 0 ? 1 : -1
   const index = diference > 0 ? recipeStep.stepNumber : updateRecipeStep.stepNumber
   const length = diference > 0 ? updateRecipeStep.stepNumber : recipeStep.stepNumber
+  const now = getNow()
 
   for (const step of recipeSteps) {
     if (step.stepNumber >= index && step.stepNumber <= length && step.id !== recipeStep.id) {
       const stepNumber = step.stepNumber + modifier
-      await RecipeStepModel.update({ stepNumber }, { where: { id: step.id } })
+      await RecipeStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } })
     }
   }
 }

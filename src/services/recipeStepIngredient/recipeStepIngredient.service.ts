@@ -1,11 +1,17 @@
 import { RecipeStepIngredientModel } from '../../db/models/recipeStepIngredient.model'
+import { getNow } from '../../utils/timeManager'
 import { NewRecipeStepIngredient, RecipeStepIngredient } from './recipeStepIngredient.type'
 
 export const saveRecipeStepIngredient = async (recipeStepIngredient: NewRecipeStepIngredient): Promise<RecipeStepIngredient> => {
+  const now = getNow()
+  recipeStepIngredient.createdAt = now
+  recipeStepIngredient.updatedAt = now
   return await RecipeStepIngredientModel.create(recipeStepIngredient)
 }
 
 export const updateRecipeStepIngredient = async (recipeStepIngredient: Partial<RecipeStepIngredient>, id: number): Promise<void> => {
+  const now = getNow()
+  recipeStepIngredient.updatedAt = now
   await RecipeStepIngredientModel.update(recipeStepIngredient, { where: { id } })
 }
 

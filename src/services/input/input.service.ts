@@ -1,6 +1,7 @@
 import { Input, NewInput } from './input.types'
 import { InputModel } from '../../db/models/input.model'
 import { toNewInput } from '../../factories/input.factory'
+import { getNow } from '../../utils/timeManager'
 
 export const getInputs = async (): Promise<Input[]> => {
   return await InputModel.findAll(
@@ -29,21 +30,30 @@ export const getInputById = async (id: number): Promise<Input> => {
 }
 
 export const saveInput = async (input: NewInput): Promise<Input> => {
+  const now = getNow()
+  input.createdAt = now
+  input.updatedAt = now
   return await InputModel.create(input)
 }
 
 export const updateInput = async (input: Partial<Input>, id: number): Promise<void> => {
+  const now = getNow()
+  input.updatedAt = now
   await InputModel.update(input, { where: { id } })
 }
 
 export const deleteInput = async (id: number): Promise<void> => {
   const input = await getInputById(id)
+  const now = getNow()
+  input.updatedAt = now
   input.delete = true
   await updateInput(input, id)
 }
 
 export const recoveryInput = async (id: number): Promise<void> => {
   const input = await getInputById(id)
+  const now = getNow()
+  input.updatedAt = now
   input.delete = false
   await updateInput(input, id)
 }

@@ -1,6 +1,7 @@
 import { Provider, NewProvider } from './provider.types'
 import { ProviderModel } from '../../db/models/provider.model'
 import { toNewProvider } from '../../factories/provider.factory'
+import { getNow } from '../../utils/timeManager'
 
 export const getProviders = async (): Promise<Provider[]> => {
   return await ProviderModel.findAll(
@@ -24,10 +25,15 @@ export const getProviderById = async (id: number): Promise<Provider> => {
 }
 
 export const saveProvider = async (provider: NewProvider): Promise<void> => {
+  const now = getNow()
+  provider.createdAt = now
+  provider.updatedAt = now
   await ProviderModel.create(provider)
 }
 
 export const updateProvider = async (provider: Partial<Provider>, id: number): Promise<void> => {
+  const now = getNow()
+  provider.updatedAt = now
   await ProviderModel.update(provider, { where: { id } })
 }
 
