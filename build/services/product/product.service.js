@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryProduct = exports.deleteProduct = exports.updateProduct = exports.saveProduct = exports.getProductById = exports.getProductsWithDeletedItems = exports.getProducts = void 0;
 const product_model_1 = require("../../db/models/product.model");
 const product_factory_1 = require("../../factories/product.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getProducts = () => __awaiter(void 0, void 0, void 0, function* () {
     const products = yield product_model_1.ProductModel.findAll({
         where: {
@@ -53,10 +54,15 @@ const getProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getProductById = getProductById;
 const saveProduct = (product) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    product.createdAt = now;
+    product.updatedAt = now;
     return yield product_model_1.ProductModel.create(product);
 });
 exports.saveProduct = saveProduct;
 const updateProduct = (product, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    product.updatedAt = now;
     yield product_model_1.ProductModel.update(product, { where: { id } });
 });
 exports.updateProduct = updateProduct;

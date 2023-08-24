@@ -42,6 +42,7 @@ const toNewSaleItemProduct = (saleItemProduct) => __awaiter(void 0, void 0, void
         productId: saleItemProduct.productId,
         quantity: saleItemProduct.quantity,
         discount: saleItemProduct.discount,
+        product: saleItemProduct.product,
         createdBy: saleItemProduct.createdBy,
         updatedBy: saleItemProduct.updatedBy,
         createdAt: saleItemProduct.createdAt,

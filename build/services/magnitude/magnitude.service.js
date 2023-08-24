@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryMagnitude = exports.getMagnitudesWithDeletedItems = exports.deleteMagnitude = exports.updateMagnitude = exports.saveMagnitude = exports.getMagnitudeById = exports.getMagnitudes = void 0;
 const magnitude_model_1 = require("../../db/models/magnitude.model");
 const magnitude_factory_1 = require("../../factories/magnitude.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getMagnitudes = () => __awaiter(void 0, void 0, void 0, function* () {
     const magnitudes = yield magnitude_model_1.MagnitudeModel.findAll({
         where: {
@@ -36,16 +37,23 @@ const getMagnitudeById = (id) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getMagnitudeById = getMagnitudeById;
 const saveMagnitude = (magnitude) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    magnitude.createdAt = now;
+    magnitude.updatedAt = now;
     const savedMagnitude = yield magnitude_model_1.MagnitudeModel.create(magnitude);
     return yield (0, magnitude_factory_1.toNewMagnitude)(savedMagnitude);
 });
 exports.saveMagnitude = saveMagnitude;
 const updateMagnitude = (magnitude, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    magnitude.updatedAt = now;
     yield magnitude_model_1.MagnitudeModel.update(magnitude, { where: { id } });
 });
 exports.updateMagnitude = updateMagnitude;
 const deleteMagnitude = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const magnitude = yield (0, exports.getMagnitudeById)(id);
+    const now = (0, timeManager_1.getNow)();
+    magnitude.updatedAt = now;
     magnitude.delete = true;
     yield (0, exports.updateMagnitude)(magnitude, id);
 });
@@ -57,6 +65,8 @@ const getMagnitudesWithDeletedItems = () => __awaiter(void 0, void 0, void 0, fu
 exports.getMagnitudesWithDeletedItems = getMagnitudesWithDeletedItems;
 const recoveryMagnitude = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const magnitude = yield (0, exports.getMagnitudeById)(id);
+    const now = (0, timeManager_1.getNow)();
+    magnitude.updatedAt = now;
     magnitude.delete = false;
     yield (0, exports.updateMagnitude)(magnitude, id);
 });

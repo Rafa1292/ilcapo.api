@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.stepDown = exports.stepUp = exports.recoveryRecipeStep = exports.deleteRecipeStep = exports.updateRecipeStep = exports.saveRecipeStep = exports.getRecipeStepById = exports.getRecipeStepsWithDeletedItems = void 0;
 const recipeStep_factory_1 = require("../../factories/recipeStep.factory");
 const recipeStep_model_1 = require("../../db/models/recipeStep.model");
+const timeManager_1 = require("../../utils/timeManager");
 const getRecipeStepsWithDeletedItems = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield recipeStep_model_1.RecipeStepModel.findAll();
 });
@@ -29,6 +30,9 @@ const getRecipeStepById = (id) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getRecipeStepById = getRecipeStepById;
 const saveRecipeStep = (recipeStep) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    recipeStep.createdAt = now;
+    recipeStep.updatedAt = now;
     const savedRecipeStep = yield recipeStep_model_1.RecipeStepModel.create(recipeStep);
     yield sortStepsAfterInsert(savedRecipeStep);
     return savedRecipeStep;
@@ -36,6 +40,8 @@ const saveRecipeStep = (recipeStep) => __awaiter(void 0, void 0, void 0, functio
 exports.saveRecipeStep = saveRecipeStep;
 const updateRecipeStep = (recipeStep, id) => __awaiter(void 0, void 0, void 0, function* () {
     yield sortStepsAfterUpdate(recipeStep);
+    const now = (0, timeManager_1.getNow)();
+    recipeStep.updatedAt = now;
     yield recipeStep_model_1.RecipeStepModel.update(recipeStep, { where: { id } });
 });
 exports.updateRecipeStep = updateRecipeStep;
@@ -71,11 +77,12 @@ const sortStepsAfterInsert = (recipeStep) => __awaiter(void 0, void 0, void 0, f
         throw new Error('Recipe id is undefined');
     const recipeSteps = yield getRecipeStepsByRecipeId(recipeStep.recipeId);
     const repeatRecipeStep = recipeSteps.find((step) => step.stepNumber === recipeStep.stepNumber && step.id !== recipeStep.id);
+    const now = (0, timeManager_1.getNow)();
     if (repeatRecipeStep !== undefined) {
         for (const step of recipeSteps) {
             if (step.stepNumber >= recipeStep.stepNumber && step.id !== recipeStep.id) {
                 const stepNumber = step.stepNumber + 1;
-                yield recipeStep_model_1.RecipeStepModel.update({ stepNumber }, { where: { id: step.id } });
+                yield recipeStep_model_1.RecipeStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } });
             }
         }
     }
@@ -86,10 +93,11 @@ const sortStepsAfterDelete = (recipeStep) => __awaiter(void 0, void 0, void 0, f
     if (recipeStep.recipeId === undefined)
         throw new Error('Recipe id is undefined');
     const recipeSteps = yield getRecipeStepsByRecipeId(recipeStep.recipeId);
+    const now = (0, timeManager_1.getNow)();
     for (const step of recipeSteps) {
         if (step.stepNumber > recipeStep.stepNumber) {
             const stepNumber = step.stepNumber - 1;
-            yield recipeStep_model_1.RecipeStepModel.update({ stepNumber }, { where: { id: step.id } });
+            yield recipeStep_model_1.RecipeStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } });
         }
     }
 });
@@ -108,10 +116,11 @@ const sortStepsAfterUpdate = (recipeStep) => __awaiter(void 0, void 0, void 0, f
     const modifier = diference > 0 ? 1 : -1;
     const index = diference > 0 ? recipeStep.stepNumber : updateRecipeStep.stepNumber;
     const length = diference > 0 ? updateRecipeStep.stepNumber : recipeStep.stepNumber;
+    const now = (0, timeManager_1.getNow)();
     for (const step of recipeSteps) {
         if (step.stepNumber >= index && step.stepNumber <= length && step.id !== recipeStep.id) {
             const stepNumber = step.stepNumber + modifier;
-            yield recipeStep_model_1.RecipeStepModel.update({ stepNumber }, { where: { id: step.id } });
+            yield recipeStep_model_1.RecipeStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } });
         }
     }
 });

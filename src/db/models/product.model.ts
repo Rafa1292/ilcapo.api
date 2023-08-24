@@ -52,14 +52,6 @@ export const productSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  needsCommand: {
-    allowNull: false,
-    type: DataTypes.BOOLEAN
-  },
-  active: {
-    allowNull: false,
-    type: DataTypes.BOOLEAN
-  },
   allowsModify: {
     allowNull: false,
     type: DataTypes.BOOLEAN

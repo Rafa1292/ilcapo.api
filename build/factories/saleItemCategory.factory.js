@@ -39,6 +39,7 @@ const toNewSaleItemCategory = (saleItemCategory) => __awaiter(void 0, void 0, vo
     return {
         id: saleItemCategory.id,
         name: saleItemCategory.name,
+        saleItems: saleItemCategory.saleItems,
         createdBy: saleItemCategory.createdBy,
         updatedBy: saleItemCategory.updatedBy,
         createdAt: saleItemCategory.createdAt,

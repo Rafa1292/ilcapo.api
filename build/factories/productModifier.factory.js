@@ -16,6 +16,7 @@ const toNewProductModifier = (productModifier) => __awaiter(void 0, void 0, void
         id: productModifier.id,
         productId: productModifier.productId,
         modifierGroupId: productModifier.modifierGroupId,
+        order: productModifier.order,
         modifierGroup: (productModifier.modifierGroup === undefined) || (productModifier.modifierGroup === null) ? productModifier.modifierGroup : yield (0, modifierGroup_factory_1.toNewModifierGroup)(productModifier.modifierGroup),
         createdBy: productModifier.createdBy,
         updatedBy: productModifier.updatedBy,

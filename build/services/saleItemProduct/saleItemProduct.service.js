@@ -11,11 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteSaleItemProduct = exports.updateSaleItemProduct = exports.saveSaleItemProduct = void 0;
 const saleItemProduct_model_1 = require("../../db/models/saleItemProduct.model");
+const timeManager_1 = require("../../utils/timeManager");
 const saveSaleItemProduct = (saleItemProduct) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    saleItemProduct.createdAt = now;
+    saleItemProduct.updatedAt = now;
     return yield saleItemProduct_model_1.SaleItemProductModel.create(saleItemProduct);
 });
 exports.saveSaleItemProduct = saveSaleItemProduct;
 const updateSaleItemProduct = (saleItemProduct, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    saleItemProduct.updatedAt = now;
     yield saleItemProduct_model_1.SaleItemProductModel.update(saleItemProduct, { where: { id } });
 });
 exports.updateSaleItemProduct = updateSaleItemProduct;

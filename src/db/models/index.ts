@@ -1,66 +1,154 @@
 import { Sequelize } from 'sequelize'
 import { BrandModel, brandSchema } from './brand.model'
 import { IngredientModel, ingredientSchema } from './ingredient.model'
-import { IngredientCategoryModel, ingredientCategorySchema } from './ingredientCategory.model'
+import {
+  IngredientCategoryModel,
+  ingredientCategorySchema,
+} from './ingredientCategory.model'
 import { InputModel, inputSchema } from './input.model'
 import { InputCategoryModel, inputCategorySchema } from './inputCategory.model'
 import { InventoryModel, inventorySchema } from './inventory.model'
-import { InventoryInputModel, inventoryInputSchema } from './inventoryInput.model'
+import {
+  InventoryInputModel,
+  inventoryInputSchema,
+} from './inventoryInput.model'
 import { MagnitudeModel, magnitudeSchema } from './magnitude.model'
 import { MeasureModel, measureSchema } from './measure.model'
-import { ModifierElementModel, modifierElementSchema } from './modifierElement.model'
+import {
+  ModifierElementModel,
+  modifierElementSchema,
+} from './modifierElement.model'
 import { ModifierGroupModel, modifierGroupSchema } from './modifierGroup.model'
-import { ModifierElementUpgradeModel, modifierElementUpgradeSchema } from './modifierElementUpgrade.model'
-import { PreparationStepModel, preparationStepSchema } from './preparationStep.model'
-import { PreparationStepInputModel, preparationStepInputSchema } from './preparationStepInput.Model'
+import {
+  ModifierElementUpgradeModel,
+  modifierElementUpgradeSchema,
+} from './modifierElementUpgrade.model'
+import {
+  PreparationStepModel,
+  preparationStepSchema,
+} from './preparationStep.model'
+import {
+  PreparationStepInputModel,
+  preparationStepInputSchema,
+} from './preparationStepInput.Model'
 import { ProductModel, productSchema } from './product.model'
-import { ProductModifierModel, productModifierSchema } from './productModifier.model'
+import {
+  ProductModifierModel,
+  productModifierSchema,
+} from './productModifier.model'
 import { ProductRecipeModel, productRecipeSchema } from './productRecipe.model'
-import { ProductReferenceModel, productReferenceSchema } from './productReference.model'
+import {
+  ProductReferenceModel,
+  productReferenceSchema,
+} from './productReference.model'
 import { ProviderModel, providerSchema } from './provider.model'
 import { ProviderInputModel, providerInputSchema } from './providerInput.model'
 import { RecipeModel, recipeSchema } from './recipe.model'
 import { RecipeStepModel, recipeStepSchema } from './recipeStep.model'
-import { RecipeStepIngredientModel, recipeStepIngredientSchema } from './recipeStepIngredient.model'
+import {
+  RecipeStepIngredientModel,
+  recipeStepIngredientSchema,
+} from './recipeStepIngredient.model'
 import { SaleItemModel, saleItemSchema } from './saleItem.model'
-import { SaleItemCategoryModel, saleItemCategorySchema } from './saleItemCategory.model'
-import { SaleItemProductModel, saleItemProductSchema } from './saleItemProduct.model'
+import {
+  SaleItemCategoryModel,
+  saleItemCategorySchema,
+} from './saleItemCategory.model'
+import {
+  SaleItemProductModel,
+  saleItemProductSchema,
+} from './saleItemProduct.model'
 import { MenuModel, menuSchema } from './menu.model'
 import { ItemPriceModel, itemPriceSchema } from './itemPrice.model'
-import { UpgradeElementPriceModel, upgradeElementPriceSchema } from './upgradeElementPrice.model'
+import {
+  UpgradeElementPriceModel,
+  upgradeElementPriceSchema,
+} from './upgradeElementPrice.model'
 import { ElementPriceModel, elementPriceSchema } from './elementPrice.model'
+import { SequelizeStorage, Umzug } from 'umzug'
 
 export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
-  InputCategoryModel.init(ingredientCategorySchema, InputCategoryModel.config(sequelize))
-  IngredientCategoryModel.init(inputCategorySchema, IngredientCategoryModel.config(sequelize))
+  InputCategoryModel.init(
+    ingredientCategorySchema,
+    InputCategoryModel.config(sequelize)
+  )
+  IngredientCategoryModel.init(
+    inputCategorySchema,
+    IngredientCategoryModel.config(sequelize)
+  )
   IngredientModel.init(ingredientSchema, IngredientModel.config(sequelize))
   ProviderModel.init(providerSchema, ProviderModel.config(sequelize))
   InputModel.init(inputSchema, InputModel.config(sequelize))
-  ProviderInputModel.init(providerInputSchema, ProviderInputModel.config(sequelize))
+  ProviderInputModel.init(
+    providerInputSchema,
+    ProviderInputModel.config(sequelize)
+  )
   MeasureModel.init(measureSchema, MeasureModel.config(sequelize))
   MagnitudeModel.init(magnitudeSchema, MagnitudeModel.config(sequelize))
   InventoryModel.init(inventorySchema, InventoryModel.config(sequelize))
-  InventoryInputModel.init(inventoryInputSchema, InventoryInputModel.config(sequelize))
-  PreparationStepModel.init(preparationStepSchema, PreparationStepModel.config(sequelize))
-  PreparationStepInputModel.init(preparationStepInputSchema, PreparationStepInputModel.config(sequelize))
+  InventoryInputModel.init(
+    inventoryInputSchema,
+    InventoryInputModel.config(sequelize)
+  )
+  PreparationStepModel.init(
+    preparationStepSchema,
+    PreparationStepModel.config(sequelize)
+  )
+  PreparationStepInputModel.init(
+    preparationStepInputSchema,
+    PreparationStepInputModel.config(sequelize)
+  )
   RecipeModel.init(recipeSchema, RecipeModel.config(sequelize))
   RecipeStepModel.init(recipeStepSchema, RecipeStepModel.config(sequelize))
-  RecipeStepIngredientModel.init(recipeStepIngredientSchema, RecipeStepIngredientModel.config(sequelize))
+  RecipeStepIngredientModel.init(
+    recipeStepIngredientSchema,
+    RecipeStepIngredientModel.config(sequelize)
+  )
   ProductModel.init(productSchema, ProductModel.config(sequelize))
-  SaleItemCategoryModel.init(saleItemCategorySchema, SaleItemCategoryModel.config(sequelize))
+  SaleItemCategoryModel.init(
+    saleItemCategorySchema,
+    SaleItemCategoryModel.config(sequelize)
+  )
   SaleItemModel.init(saleItemSchema, SaleItemModel.config(sequelize))
-  SaleItemProductModel.init(saleItemProductSchema, SaleItemProductModel.config(sequelize))
-  ProductModifierModel.init(productModifierSchema, ProductModifierModel.config(sequelize))
-  ModifierGroupModel.init(modifierGroupSchema, ModifierGroupModel.config(sequelize))
-  ModifierElementUpgradeModel.init(modifierElementUpgradeSchema, ModifierElementUpgradeModel.config(sequelize))
-  ModifierElementModel.init(modifierElementSchema, ModifierElementModel.config(sequelize))
+  SaleItemProductModel.init(
+    saleItemProductSchema,
+    SaleItemProductModel.config(sequelize)
+  )
+  ProductModifierModel.init(
+    productModifierSchema,
+    ProductModifierModel.config(sequelize)
+  )
+  ModifierGroupModel.init(
+    modifierGroupSchema,
+    ModifierGroupModel.config(sequelize)
+  )
+  ModifierElementUpgradeModel.init(
+    modifierElementUpgradeSchema,
+    ModifierElementUpgradeModel.config(sequelize)
+  )
+  ModifierElementModel.init(
+    modifierElementSchema,
+    ModifierElementModel.config(sequelize)
+  )
   BrandModel.init(brandSchema, BrandModel.config(sequelize))
-  ProductRecipeModel.init(productRecipeSchema, ProductRecipeModel.config(sequelize))
-  ProductReferenceModel.init(productReferenceSchema, ProductReferenceModel.config(sequelize))
+  ProductRecipeModel.init(
+    productRecipeSchema,
+    ProductRecipeModel.config(sequelize)
+  )
+  ProductReferenceModel.init(
+    productReferenceSchema,
+    ProductReferenceModel.config(sequelize)
+  )
   MenuModel.init(menuSchema, MenuModel.config(sequelize))
   ItemPriceModel.init(itemPriceSchema, ItemPriceModel.config(sequelize))
-  UpgradeElementPriceModel.init(upgradeElementPriceSchema, UpgradeElementPriceModel.config(sequelize))
-  ElementPriceModel.init(elementPriceSchema, ElementPriceModel.config(sequelize))
+  UpgradeElementPriceModel.init(
+    upgradeElementPriceSchema,
+    UpgradeElementPriceModel.config(sequelize)
+  )
+  ElementPriceModel.init(
+    elementPriceSchema,
+    ElementPriceModel.config(sequelize)
+  )
 
   InputCategoryModel.associate(sequelize.models)
   IngredientCategoryModel.associate(sequelize.models)
@@ -118,4 +206,26 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   await ItemPriceModel.sync()
   await UpgradeElementPriceModel.sync()
   await ElementPriceModel.sync()
+
+  async function runMigrations() {
+    const umzug = new Umzug({
+      migrations: { glob: 'migrations/*.js' },
+      context: sequelize.getQueryInterface(),
+      storage: new SequelizeStorage({ sequelize }),
+      logger: console,
+    })
+    const migrations = await umzug.pending();
+    console.log('Pending migrations:', migrations)
+    // Ejecuta las migraciones
+    umzug
+      .up()
+      .then((result: any) => {
+        console.log('Migrations executed successfully.', result)
+      })
+      .catch((error: Error) => {
+        console.error('Error executing migrations:', error)
+      })
+  }
+
+  runMigrations()
 }

@@ -47,10 +47,10 @@ export const productModifierSchema = {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  order: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
+  // order: {
+  //   allowNull: false,
+  //   type: DataTypes.INTEGER
+  // },
   delete: {
     type: DataTypes.BOOLEAN,
     allowNull: false

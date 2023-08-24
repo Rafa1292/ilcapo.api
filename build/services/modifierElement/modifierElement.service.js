@@ -25,6 +25,7 @@ const modifierElement_model_1 = require("../../db/models/modifierElement.model")
 const modifierElement_factory_1 = require("../../factories/modifierElement.factory");
 const elementPrice_service_1 = require("../elementPrice/elementPrice.service");
 const modifierElementUpgrade_service_1 = require("../modifierElementUpgrade/modifierElementUpgrade.service");
+const timeManager_1 = require("../../utils/timeManager");
 const getModifierElements = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield modifierElement_model_1.ModifierElementModel.findAll({
         where: {
@@ -58,6 +59,9 @@ const saveModifierElement = (modifierElement) => __awaiter(void 0, void 0, void 
     if (!transaction)
         throw new Error('Transaction not found');
     try {
+        const now = (0, timeManager_1.getNow)();
+        modifierElement.createdAt = now;
+        modifierElement.updatedAt = now;
         const newModifierElement = yield modifierElement_model_1.ModifierElementModel.create(modifierElement, { transaction });
         yield (0, modifierElementUpgrade_service_1.saveModifierElementUpgrade)(Object.assign(Object.assign({}, modifierElement.modifierUpgrade), { modifierElementId: newModifierElement.id }), transaction);
         yield savePrices({
@@ -79,6 +83,8 @@ const updateModifierElement = (modifierElement, id) => __awaiter(void 0, void 0,
     if (!transaction)
         throw new Error('Transaction not found');
     try {
+        const now = (0, timeManager_1.getNow)();
+        modifierElement.updatedAt = now;
         yield modifierElement_model_1.ModifierElementModel.update(modifierElement, { where: { id } });
         const _e = yield (0, exports.getModifierElementById)(id), { prices } = _e, currentModifierElement = __rest(_e, ["prices"]);
         if (modifierElement.modifierUpgrade)
@@ -101,18 +107,14 @@ const updateModifierElement = (modifierElement, id) => __awaiter(void 0, void 0,
 });
 exports.updateModifierElement = updateModifierElement;
 const saveUpgrade = (modifierElementUpgrade, id, transaction) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(1, '------saving upgrade-------');
     if (modifierElementUpgrade.id === undefined) {
-        console.log(2, '------deleting upgrade-------');
         yield (0, modifierElementUpgrade_service_1.deleteModifierElementUpgradeByModifierElementId)(id);
     }
     else {
-        console.log(3, '------creating upgrade-------');
         if (modifierElementUpgrade.id === 0) {
             yield (0, modifierElementUpgrade_service_1.saveModifierElementUpgrade)(Object.assign(Object.assign({}, modifierElementUpgrade), { modifierElementId: id }), transaction);
         }
         else {
-            console.log(4, '------updating upgrade-------');
             yield (0, modifierElementUpgrade_service_1.updateModifierElementUpgrade)(modifierElementUpgrade, modifierElementUpgrade.id);
         }
     }

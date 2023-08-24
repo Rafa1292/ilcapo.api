@@ -22,11 +22,17 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.savePreparationStepInputs = exports.deletePreparationStepInput = exports.updatePreparationStepInput = exports.savePreparationStepInput = void 0;
 const preparationStepInput_Model_1 = require("../../db/models/preparationStepInput.Model");
+const timeManager_1 = require("../../utils/timeManager");
 const savePreparationStepInput = (preparationStepInput) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    preparationStepInput.createdAt = now;
+    preparationStepInput.updatedAt = now;
     return yield preparationStepInput_Model_1.PreparationStepInputModel.create(preparationStepInput);
 });
 exports.savePreparationStepInput = savePreparationStepInput;
 const updatePreparationStepInput = (preparationStepInput, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    preparationStepInput.updatedAt = now;
     yield preparationStepInput_Model_1.PreparationStepInputModel.update(preparationStepInput, { where: { id } });
 });
 exports.updatePreparationStepInput = updatePreparationStepInput;

@@ -43,6 +43,7 @@ const toNewSaleItem = (saleItem) => __awaiter(void 0, void 0, void 0, function* 
         description: saleItem.description,
         pictureUrl: saleItem.pictureUrl,
         createdBy: saleItem.createdBy,
+        saleItemProducts: saleItem.saleItemProducts,
         prices: saleItem.prices,
         updatedBy: saleItem.updatedBy,
         createdAt: saleItem.createdAt,

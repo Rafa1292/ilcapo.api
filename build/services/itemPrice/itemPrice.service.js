@@ -23,13 +23,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteItemPrice = exports.updateItemPrice = exports.saveItemPrice = void 0;
 const itemPrice_model_1 = require("../../db/models/itemPrice.model");
 const itemPrice_factory_1 = require("../../factories/itemPrice.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const saveItemPrice = (itemPrice, transaction) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = itemPrice, newItemPrice = __rest(itemPrice, ["id"]);
+    const now = (0, timeManager_1.getNow)();
+    newItemPrice.createdAt = now;
+    newItemPrice.updatedAt = now;
     const currentItemPrice = yield itemPrice_model_1.ItemPriceModel.create(newItemPrice, { transaction });
     return (0, itemPrice_factory_1.toNewItemPrice)(currentItemPrice);
 });
 exports.saveItemPrice = saveItemPrice;
 const updateItemPrice = (itemPrice, id, transaction) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    itemPrice.updatedAt = now;
     const updatedItemPrice = yield itemPrice_model_1.ItemPriceModel.update(itemPrice, {
         where: {
             id: id,

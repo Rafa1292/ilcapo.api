@@ -105,4 +105,30 @@ router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     res.json(response);
 }));
+router.get('/upProductModifierOrder/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = responseFactory.toNewCustomResponse();
+    try {
+        const id = parseInt(req.params.id);
+        yield productModifierService.upProductModifierOrder(id);
+        response.setResponse({}, ['ProductModifier order updated successfully'], false);
+    }
+    catch (error) {
+        const errors = (0, errorHandler_1.errorHandler)(error);
+        response.setResponse(undefined, errors, true);
+    }
+    res.json(response);
+}));
+router.get('/downProductModifierOrder/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = responseFactory.toNewCustomResponse();
+    try {
+        const id = parseInt(req.params.id);
+        yield productModifierService.downProductModifierOrder(id);
+        response.setResponse({}, ['ProductModifier order updated successfully'], false);
+    }
+    catch (error) {
+        const errors = (0, errorHandler_1.errorHandler)(error);
+        response.setResponse(undefined, errors, true);
+    }
+    res.json(response);
+}));
 exports.default = router;

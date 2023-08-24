@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryIngredientCategory = exports.deleteIngredientCategory = exports.updateIngredientCategory = exports.saveIngredientCategory = exports.getIngredientCategoryById = exports.getIngredientCategoriesWithDeletedItems = exports.getIngredientCategories = void 0;
 const ingredientCategory_model_1 = require("../../db/models/ingredientCategory.model");
 const ingredientCategory_factory_1 = require("../../factories/ingredientCategory.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getIngredientCategories = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield ingredientCategory_model_1.IngredientCategoryModel.findAll({
         where: {
@@ -39,21 +40,30 @@ const getIngredientCategoryById = (id) => __awaiter(void 0, void 0, void 0, func
 });
 exports.getIngredientCategoryById = getIngredientCategoryById;
 const saveIngredientCategory = (ingredientCategory) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    ingredientCategory.createdAt = now;
+    ingredientCategory.updatedAt = now;
     return yield ingredientCategory_model_1.IngredientCategoryModel.create(ingredientCategory);
 });
 exports.saveIngredientCategory = saveIngredientCategory;
 const updateIngredientCategory = (ingredientCategory, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    ingredientCategory.updatedAt = now;
     yield ingredientCategory_model_1.IngredientCategoryModel.update(ingredientCategory, { where: { id } });
 });
 exports.updateIngredientCategory = updateIngredientCategory;
 const deleteIngredientCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const ingredientCategory = yield (0, exports.getIngredientCategoryById)(id);
+    const now = (0, timeManager_1.getNow)();
+    ingredientCategory.updatedAt = now;
     ingredientCategory.delete = true;
     yield (0, exports.updateIngredientCategory)(ingredientCategory, id);
 });
 exports.deleteIngredientCategory = deleteIngredientCategory;
 const recoveryIngredientCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const ingredientCategory = yield (0, exports.getIngredientCategoryById)(id);
+    const now = (0, timeManager_1.getNow)();
+    ingredientCategory.updatedAt = now;
     ingredientCategory.delete = false;
     yield (0, exports.updateIngredientCategory)(ingredientCategory, id);
 });

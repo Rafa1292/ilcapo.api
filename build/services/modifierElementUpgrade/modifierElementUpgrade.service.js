@@ -24,11 +24,15 @@ exports.getModifierElementUpgradeByModiifierElementId = exports.deleteModifierEl
 const modifierElementUpgrade_model_1 = require("../../db/models/modifierElementUpgrade.model");
 const modifierElementUpgrade_validator_1 = require("../../validations/modifierElementUpgrade.validator");
 const upgradeElementPrice_service_1 = require("../upgradeElementPrice/upgradeElementPrice.service");
+const timeManager_1 = require("../../utils/timeManager");
 const saveModifierElementUpgrade = (modifierElementUpgrade, transaction) => __awaiter(void 0, void 0, void 0, function* () {
     const isValid = yield (0, modifierElementUpgrade_validator_1.newModifierElementUpgradeIsValid)(modifierElementUpgrade);
     if (isValid) {
         console.log(1, '-------is valid-----');
         const { id } = modifierElementUpgrade, rest = __rest(modifierElementUpgrade, ["id"]);
+        const now = (0, timeManager_1.getNow)();
+        rest.createdAt = now;
+        rest.updatedAt = now;
         const newModifierElementUpgrade = yield modifierElementUpgrade_model_1.ModifierElementUpgradeModel.create(rest, { transaction });
         yield savePrices({
             id: newModifierElementUpgrade.id,
@@ -51,6 +55,8 @@ const updateModifierElementUpgrade = (modifierElementUpgrade, id) => __awaiter(v
     if (!transaction)
         throw new Error('Transaction not found');
     try {
+        const now = (0, timeManager_1.getNow)();
+        modifierElementUpgrade.updatedAt = now;
         yield modifierElementUpgrade_model_1.ModifierElementUpgradeModel.update(modifierElementUpgrade, {
             where: { id },
         });

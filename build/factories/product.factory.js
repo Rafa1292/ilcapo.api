@@ -43,6 +43,8 @@ const toNewProduct = (product) => __awaiter(void 0, void 0, void 0, function* ()
         allowsModify: product.allowsModify,
         description: product.description,
         pictureUrl: product.pictureUrl,
+        needsCommand: product.needsCommand,
+        active: product.active,
         productModifiers: yield (0, productModifier_factory_1.toNewProductModifiers)(product.productModifiers),
         createdBy: product.createdBy,
         updatedBy: product.updatedBy,

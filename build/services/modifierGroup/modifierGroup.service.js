@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryModifierGroup = exports.deleteModifierGroup = exports.updateModifierGroup = exports.saveModifierGroup = exports.getModifierGroupById = exports.getModifierGroupsWithDeletedItems = exports.getModifierGroups = void 0;
 const modifierGroup_model_1 = require("../../db/models/modifierGroup.model");
 const modifierGroup_factory_1 = require("../../factories/modifierGroup.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getModifierGroups = () => __awaiter(void 0, void 0, void 0, function* () {
     const modifierGroups = yield modifierGroup_model_1.ModifierGroupModel.findAll({
         where: {
@@ -63,21 +64,30 @@ const getModifierGroupById = (id) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getModifierGroupById = getModifierGroupById;
 const saveModifierGroup = (modifierGroup) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    modifierGroup.createdAt = now;
+    modifierGroup.updatedAt = now;
     return yield modifierGroup_model_1.ModifierGroupModel.create(modifierGroup);
 });
 exports.saveModifierGroup = saveModifierGroup;
 const updateModifierGroup = (modifierGroup, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    modifierGroup.updatedAt = now;
     yield modifierGroup_model_1.ModifierGroupModel.update(modifierGroup, { where: { id } });
 });
 exports.updateModifierGroup = updateModifierGroup;
 const deleteModifierGroup = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const modifierGroup = yield (0, exports.getModifierGroupById)(id);
+    const now = (0, timeManager_1.getNow)();
+    modifierGroup.updatedAt = now;
     modifierGroup.delete = true;
     yield (0, exports.updateModifierGroup)(modifierGroup, id);
 });
 exports.deleteModifierGroup = deleteModifierGroup;
 const recoveryModifierGroup = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const modifierGroup = yield (0, exports.getModifierGroupById)(id);
+    const now = (0, timeManager_1.getNow)();
+    modifierGroup.updatedAt = now;
     modifierGroup.delete = false;
     yield (0, exports.updateModifierGroup)(modifierGroup, id);
 });

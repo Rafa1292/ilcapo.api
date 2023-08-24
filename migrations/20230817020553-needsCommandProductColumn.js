@@ -1,20 +1,12 @@
 'use strict';
+const { Sequelize } = require('sequelize')
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    return queryInterface.addColumn('products', 'needsCommand', {
+  async up ({ context: queryInterface}) {
+    await queryInterface.addColumn('products', 'needsCommand', {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false
     });
-  },
-
-  async down (queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
   }
 };

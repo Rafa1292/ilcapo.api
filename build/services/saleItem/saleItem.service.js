@@ -24,6 +24,7 @@ exports.recoverySaleItem = exports.deleteSaleItem = exports.updateSaleItem = exp
 const saleItem_model_1 = require("../../db/models/saleItem.model");
 const saleItem_factory_1 = require("../../factories/saleItem.factory");
 const itemPrice_service_1 = require("../itemPrice/itemPrice.service");
+const timeManager_1 = require("../../utils/timeManager");
 const getSaleItems = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield saleItem_model_1.SaleItemModel.findAll({
         where: {
@@ -62,6 +63,9 @@ const saveSaleItem = (saleItem) => __awaiter(void 0, void 0, void 0, function* (
     if (!transaction)
         throw new Error('Transaction not found');
     try {
+        const now = (0, timeManager_1.getNow)();
+        saleItem.createdAt = now;
+        saleItem.updatedAt = now;
         const newSaleItem = yield saleItem_model_1.SaleItemModel.create(saleItem, { transaction });
         yield savePrices({ id: newSaleItem.id, prices: saleItem.prices }, transaction);
         yield (transaction === null || transaction === void 0 ? void 0 : transaction.commit());
@@ -78,6 +82,8 @@ const updateSaleItem = (saleItem, id) => __awaiter(void 0, void 0, void 0, funct
     if (!transaction)
         throw new Error('Transaction not found');
     try {
+        const now = (0, timeManager_1.getNow)();
+        saleItem.updatedAt = now;
         yield saleItem_model_1.SaleItemModel.update(saleItem, { where: { id }, transaction });
         const _e = yield (0, exports.getSaleItemById)(id), { prices } = _e, currentSaleItem = __rest(_e, ["prices"]);
         const pricesToUpdate = ((_c = saleItem.prices) === null || _c === void 0 ? void 0 : _c.filter((price) => prices === null || prices === void 0 ? void 0 : prices.some((p) => p.id === price.id))) || [];
@@ -107,7 +113,6 @@ const savePrices = (saleItem, transaction) => __awaiter(void 0, void 0, void 0, 
     }
 });
 const updatePrices = (saleItem, transaction) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('-------update-------------');
     for (const price of saleItem.prices) {
         yield (0, itemPrice_service_1.updateItemPrice)(Object.assign(Object.assign({}, price), { itemId: saleItem.id }), price.id, transaction);
     }

@@ -13,6 +13,7 @@ exports.getProviderInputsByProviderId = exports.getProviderInputsByInputId = exp
 const providerInput_model_1 = require("../../db/models/providerInput.model");
 const providerInput_factory_1 = require("../../factories/providerInput.factory");
 const providerInput_validator_1 = require("../../validations/providerInput.validator");
+const timeManager_1 = require("../../utils/timeManager");
 const getProviderInputById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield providerInput_model_1.ProviderInputModel.findByPk(id);
     if (response === null)
@@ -22,11 +23,16 @@ const getProviderInputById = (id) => __awaiter(void 0, void 0, void 0, function*
 exports.getProviderInputById = getProviderInputById;
 const saveProviderInput = (providerInput) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, providerInput_validator_1.newProviderInputIsValid)(providerInput);
+    const now = (0, timeManager_1.getNow)();
+    providerInput.createdAt = now;
+    providerInput.updatedAt = now;
     return yield providerInput_model_1.ProviderInputModel.create(providerInput);
 });
 exports.saveProviderInput = saveProviderInput;
 const updateProviderInput = (providerInput, id) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, providerInput_validator_1.newProviderInputIsValid)(Object.assign(Object.assign({}, providerInput), { id }));
+    const now = (0, timeManager_1.getNow)();
+    providerInput.updatedAt = now;
     yield providerInput_model_1.ProviderInputModel.update(providerInput, { where: { id } });
     return yield (0, exports.getProviderInputById)(id);
 });

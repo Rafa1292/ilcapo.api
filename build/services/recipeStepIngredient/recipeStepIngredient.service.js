@@ -22,11 +22,17 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveRecipeStepIngredients = exports.deleteRecipeStepIngredient = exports.updateRecipeStepIngredient = exports.saveRecipeStepIngredient = void 0;
 const recipeStepIngredient_model_1 = require("../../db/models/recipeStepIngredient.model");
+const timeManager_1 = require("../../utils/timeManager");
 const saveRecipeStepIngredient = (recipeStepIngredient) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    recipeStepIngredient.createdAt = now;
+    recipeStepIngredient.updatedAt = now;
     return yield recipeStepIngredient_model_1.RecipeStepIngredientModel.create(recipeStepIngredient);
 });
 exports.saveRecipeStepIngredient = saveRecipeStepIngredient;
 const updateRecipeStepIngredient = (recipeStepIngredient, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    recipeStepIngredient.updatedAt = now;
     yield recipeStepIngredient_model_1.RecipeStepIngredientModel.update(recipeStepIngredient, { where: { id } });
 });
 exports.updateRecipeStepIngredient = updateRecipeStepIngredient;

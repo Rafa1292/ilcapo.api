@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryInput = exports.deleteInput = exports.updateInput = exports.saveInput = exports.getInputById = exports.getInputsWithDeletedItems = exports.getInputs = void 0;
 const input_model_1 = require("../../db/models/input.model");
 const input_factory_1 = require("../../factories/input.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getInputs = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield input_model_1.InputModel.findAll({
         where: {
@@ -39,21 +40,30 @@ const getInputById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getInputById = getInputById;
 const saveInput = (input) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    input.createdAt = now;
+    input.updatedAt = now;
     return yield input_model_1.InputModel.create(input);
 });
 exports.saveInput = saveInput;
 const updateInput = (input, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    input.updatedAt = now;
     yield input_model_1.InputModel.update(input, { where: { id } });
 });
 exports.updateInput = updateInput;
 const deleteInput = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const input = yield (0, exports.getInputById)(id);
+    const now = (0, timeManager_1.getNow)();
+    input.updatedAt = now;
     input.delete = true;
     yield (0, exports.updateInput)(input, id);
 });
 exports.deleteInput = deleteInput;
 const recoveryInput = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const input = yield (0, exports.getInputById)(id);
+    const now = (0, timeManager_1.getNow)();
+    input.updatedAt = now;
     input.delete = false;
     yield (0, exports.updateInput)(input, id);
 });

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteMenu = exports.updateMenu = exports.saveMenu = exports.getMenuById = exports.getMenus = void 0;
 const menu_model_1 = require("../../db/models/menu.model");
 const menu_factory_1 = require("../../factories/menu.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getMenus = () => __awaiter(void 0, void 0, void 0, function* () {
     const menus = yield menu_model_1.MenuModel.findAll({
         where: {
@@ -32,11 +33,16 @@ const getMenuById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getMenuById = getMenuById;
 const saveMenu = (menu) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    menu.createdAt = now;
+    menu.updatedAt = now;
     const newMenu = yield menu_model_1.MenuModel.create(menu);
     return (0, menu_factory_1.toNewMenu)(newMenu);
 });
 exports.saveMenu = saveMenu;
 const updateMenu = (menu) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    menu.updatedAt = now;
     const updatedMenu = yield menu_model_1.MenuModel.update(menu, {
         where: {
             id: menu.id,
@@ -46,7 +52,8 @@ const updateMenu = (menu) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.updateMenu = updateMenu;
 const deleteMenu = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const deletedMenu = yield menu_model_1.MenuModel.update({ delete: true }, {
+    const now = (0, timeManager_1.getNow)();
+    const deletedMenu = yield menu_model_1.MenuModel.update({ delete: true, updatedAt: now }, {
         where: {
             id,
         },

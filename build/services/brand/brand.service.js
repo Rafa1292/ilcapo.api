@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryInputCategory = exports.deleteInputCategory = exports.updateBrand = exports.saveBrand = exports.getBrandById = exports.getBrands = void 0;
 const brand_model_1 = require("../../db/models/brand.model");
 const inputCategory_factory_1 = require("../../factories/inputCategory.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getBrands = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield brand_model_1.BrandModel.findAll({
         where: {
@@ -30,21 +31,30 @@ const getBrandById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getBrandById = getBrandById;
 const saveBrand = (brand) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    brand.createdAt = now;
+    brand.updatedAt = now;
     return yield brand_model_1.BrandModel.create(brand);
 });
 exports.saveBrand = saveBrand;
 const updateBrand = (brand, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    brand.updatedAt = now;
     yield brand_model_1.BrandModel.update(brand, { where: { id } });
 });
 exports.updateBrand = updateBrand;
 const deleteInputCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const brand = yield (0, exports.getBrandById)(id);
+    const now = (0, timeManager_1.getNow)();
+    brand.updatedAt = now;
     brand.delete = true;
     yield (0, exports.updateBrand)(brand, id);
 });
 exports.deleteInputCategory = deleteInputCategory;
 const recoveryInputCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const brand = yield (0, exports.getBrandById)(id);
+    const now = (0, timeManager_1.getNow)();
+    brand.updatedAt = now;
     brand.delete = false;
     yield (0, exports.updateBrand)(brand, id);
 });

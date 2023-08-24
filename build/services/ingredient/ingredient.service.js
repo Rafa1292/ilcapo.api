@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryIngredient = exports.deleteIngredient = exports.updateIngredient = exports.saveIngredient = exports.getIngredientById = exports.getIngredientsWithDeletedItems = exports.getIngredients = void 0;
 const ingredient_model_1 = require("../../db/models/ingredient.model");
 const ingredient_factory_1 = require("../../factories/ingredient.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getIngredients = () => __awaiter(void 0, void 0, void 0, function* () {
     const ingredients = yield ingredient_model_1.IngredientModel.findAll({
         where: {
@@ -73,21 +74,30 @@ const getIngredientById = (id) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getIngredientById = getIngredientById;
 const saveIngredient = (ingredient) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    ingredient.createdAt = now;
+    ingredient.updatedAt = now;
     return yield ingredient_model_1.IngredientModel.create(ingredient);
 });
 exports.saveIngredient = saveIngredient;
 const updateIngredient = (ingredient, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    ingredient.updatedAt = now;
     yield ingredient_model_1.IngredientModel.update(ingredient, { where: { id } });
 });
 exports.updateIngredient = updateIngredient;
 const deleteIngredient = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const ingredient = yield (0, exports.getIngredientById)(id);
+    const now = (0, timeManager_1.getNow)();
+    ingredient.updatedAt = now;
     ingredient.delete = true;
     yield (0, exports.updateIngredient)(ingredient, id);
 });
 exports.deleteIngredient = deleteIngredient;
 const recoveryIngredient = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const ingredient = yield (0, exports.getIngredientById)(id);
+    const now = (0, timeManager_1.getNow)();
+    ingredient.updatedAt = now;
     ingredient.delete = false;
     yield (0, exports.updateIngredient)(ingredient, id);
 });

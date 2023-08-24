@@ -64,6 +64,17 @@ router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     res.send(response);
 }));
+router.get('/activeProducts', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = responseFactory.toNewCustomResponse();
+    try {
+        response.setResponse(yield saleItemCategoryService.getSaleItemCategoriesWithActiveProducts(), ['SaleItem categories retrieved successfully'], false);
+    }
+    catch (error) {
+        const errors = (0, errorHandler_1.errorHandler)(error);
+        response.setResponse([], errors, true);
+    }
+    res.send(response);
+}));
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = responseFactory.toNewCustomResponse();
     try {

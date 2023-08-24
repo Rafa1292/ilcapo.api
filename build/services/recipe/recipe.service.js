@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryRecipe = exports.deleteRecipe = exports.updateRecipe = exports.saveRecipe = exports.getRecipeById = exports.getRecipesWithDeletedItems = exports.getRecipes = void 0;
 const recipe_model_1 = require("../../db/models/recipe.model");
 const recipe_factory_1 = require("../../factories/recipe.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getRecipes = () => __awaiter(void 0, void 0, void 0, function* () {
     const recipes = yield recipe_model_1.RecipeModel.findAll({
         where: {
@@ -73,10 +74,15 @@ const getRecipeById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getRecipeById = getRecipeById;
 const saveRecipe = (recipe) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    recipe.createdAt = now;
+    recipe.updatedAt = now;
     return yield recipe_model_1.RecipeModel.create(recipe);
 });
 exports.saveRecipe = saveRecipe;
 const updateRecipe = (recipe, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    recipe.updatedAt = now;
     yield recipe_model_1.RecipeModel.update(recipe, { where: { id } });
 });
 exports.updateRecipe = updateRecipe;

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryMeasure = exports.deleteMeasure = exports.updateMeasure = exports.saveMeasure = exports.getMeasureById = exports.getMeasuresWithDeletedItems = exports.getMeasures = void 0;
 const measure_model_1 = require("../../db/models/measure.model");
 const measure_factory_1 = require("../../factories/measure.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getMeasures = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield measure_model_1.MeasureModel.findAll({
         where: {
@@ -39,6 +40,9 @@ const getMeasureById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getMeasureById = getMeasureById;
 const saveMeasure = (measure) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    measure.createdAt = now;
+    measure.updatedAt = now;
     const savedMeasure = yield measure_model_1.MeasureModel.create(measure);
     if (savedMeasure.principalMeasure)
         yield updatePrincipalMeasure(savedMeasure.id, savedMeasure.magnitudeId);
@@ -46,6 +50,8 @@ const saveMeasure = (measure) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.saveMeasure = saveMeasure;
 const updateMeasure = (measure, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    measure.updatedAt = now;
     yield measure_model_1.MeasureModel.update(measure, { where: { id } });
     if (measure.principalMeasure !== undefined && measure.principalMeasure) {
         if (measure.magnitudeId === undefined) {
@@ -60,12 +66,16 @@ const updateMeasure = (measure, id) => __awaiter(void 0, void 0, void 0, functio
 exports.updateMeasure = updateMeasure;
 const deleteMeasure = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const measure = yield (0, exports.getMeasureById)(id);
+    const now = (0, timeManager_1.getNow)();
+    measure.updatedAt = now;
     measure.delete = true;
     yield (0, exports.updateMeasure)(measure, id);
 });
 exports.deleteMeasure = deleteMeasure;
 const recoveryMeasure = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const measure = yield (0, exports.getMeasureById)(id);
+    const now = (0, timeManager_1.getNow)();
+    measure.updatedAt = now;
     measure.delete = false;
     yield (0, exports.updateMeasure)(measure, id);
 });

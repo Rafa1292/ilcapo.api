@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryProvider = exports.deleteProvider = exports.updateProvider = exports.saveProvider = exports.getProviderById = exports.getProvidersWithDeletedItems = exports.getProviders = void 0;
 const provider_model_1 = require("../../db/models/provider.model");
 const provider_factory_1 = require("../../factories/provider.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getProviders = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield provider_model_1.ProviderModel.findAll({
         where: {
@@ -34,10 +35,15 @@ const getProviderById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getProviderById = getProviderById;
 const saveProvider = (provider) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    provider.createdAt = now;
+    provider.updatedAt = now;
     yield provider_model_1.ProviderModel.create(provider);
 });
 exports.saveProvider = saveProvider;
 const updateProvider = (provider, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    provider.updatedAt = now;
     yield provider_model_1.ProviderModel.update(provider, { where: { id } });
 });
 exports.updateProvider = updateProvider;

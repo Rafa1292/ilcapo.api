@@ -23,13 +23,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUpgradeElementPrice = exports.updateUpgradeElementPrice = exports.saveUpgradeElementPrice = void 0;
 const upgradeElementPrice_model_1 = require("../../db/models/upgradeElementPrice.model");
 const upgradeElementPrice_factory_1 = require("../../factories/upgradeElementPrice.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const saveUpgradeElementPrice = (upgradeElementPrice, transaction) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = upgradeElementPrice, rest = __rest(upgradeElementPrice, ["id"]);
+    const now = (0, timeManager_1.getNow)();
+    rest.createdAt = now;
+    rest.updatedAt = now;
     const newItemPrice = yield upgradeElementPrice_model_1.UpgradeElementPriceModel.create(rest, { transaction });
     return (0, upgradeElementPrice_factory_1.toNewUpgradeElementPrice)(newItemPrice);
 });
 exports.saveUpgradeElementPrice = saveUpgradeElementPrice;
 const updateUpgradeElementPrice = (upgradeElementPrice, id, transaction) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    upgradeElementPrice.updatedAt = now;
     const updatedItemPrice = yield upgradeElementPrice_model_1.UpgradeElementPriceModel.update(upgradeElementPrice, {
         where: {
             id: id,

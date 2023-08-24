@@ -23,13 +23,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteElementPrice = exports.updateElementPrice = exports.saveElementPrice = void 0;
 const elementPrice_model_1 = require("../../db/models/elementPrice.model");
 const elementPrice_factory_1 = require("../../factories/elementPrice.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const saveElementPrice = (elementPrice, transaction) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = elementPrice, rest = __rest(elementPrice, ["id"]);
+    const now = (0, timeManager_1.getNow)();
+    rest.createdAt = now;
+    rest.updatedAt = now;
     const currentElementPrice = yield elementPrice_model_1.ElementPriceModel.create(rest, { transaction });
     return (0, elementPrice_factory_1.toNewElementPrice)(currentElementPrice);
 });
 exports.saveElementPrice = saveElementPrice;
 const updateElementPrice = (elementPrice, id, transaction) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    elementPrice.updatedAt = now;
     const updatedElementPrice = yield elementPrice_model_1.ElementPriceModel.update(elementPrice, {
         where: {
             id: id,
@@ -40,7 +46,6 @@ const updateElementPrice = (elementPrice, id, transaction) => __awaiter(void 0, 
 });
 exports.updateElementPrice = updateElementPrice;
 const deleteElementPrice = (id, transaction) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('-----destroy--------');
     yield elementPrice_model_1.ElementPriceModel.destroy({ where: { id }, transaction });
 });
 exports.deleteElementPrice = deleteElementPrice;

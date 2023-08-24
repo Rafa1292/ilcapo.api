@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recoveryInputCategory = exports.deleteInputCategory = exports.updateInputCategory = exports.saveInputCategory = exports.getInputCategoryById = exports.getInputCategoriesWithDeletedItems = exports.getInputCategories = void 0;
 const inputCategory_model_1 = require("../../db/models/inputCategory.model");
 const inputCategory_factory_1 = require("../../factories/inputCategory.factory");
+const timeManager_1 = require("../../utils/timeManager");
 const getInputCategories = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield inputCategory_model_1.InputCategoryModel.findAll({
         where: {
@@ -39,21 +40,30 @@ const getInputCategoryById = (id) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getInputCategoryById = getInputCategoryById;
 const saveInputCategory = (inputCategory) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    inputCategory.createdAt = now;
+    inputCategory.updatedAt = now;
     return yield inputCategory_model_1.InputCategoryModel.create(inputCategory);
 });
 exports.saveInputCategory = saveInputCategory;
 const updateInputCategory = (inputCategory, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const now = (0, timeManager_1.getNow)();
+    inputCategory.updatedAt = now;
     yield inputCategory_model_1.InputCategoryModel.update(inputCategory, { where: { id } });
 });
 exports.updateInputCategory = updateInputCategory;
 const deleteInputCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const inputCategory = yield (0, exports.getInputCategoryById)(id);
+    const now = (0, timeManager_1.getNow)();
+    inputCategory.updatedAt = now;
     inputCategory.delete = true;
     yield (0, exports.updateInputCategory)(inputCategory, id);
 });
 exports.deleteInputCategory = deleteInputCategory;
 const recoveryInputCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const inputCategory = yield (0, exports.getInputCategoryById)(id);
+    const now = (0, timeManager_1.getNow)();
+    inputCategory.updatedAt = now;
     inputCategory.delete = false;
     yield (0, exports.updateInputCategory)(inputCategory, id);
 });
