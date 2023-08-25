@@ -1,14 +1,11 @@
 import { Sequelize } from 'sequelize'
+import { config } from '../config/config'
 
-// if (config.dbUrl === undefined) {
-//   throw new Error('DB_URL is undefined')
-// }
-const sequelize = new Sequelize('postgres://postgres:rafavilla2013@127.0.0.1:6432/nebulosa_db', {
+
+const host = config.env === 'development' ? '127.0.0.1:6432' : 'postgres:5432'
+
+const sequelize = new Sequelize(`postgres://postgres:rafavilla2013@${host}/nebulosa_db`, {
   dialect: 'postgres'
 })
-
-// const sequelize = new Sequelize('postgres://postgres:rafavilla2013@postgres:5432/nebulosa_db', {
-//   dialect: 'postgres'
-// })
 
 export default sequelize

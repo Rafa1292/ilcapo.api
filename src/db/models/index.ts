@@ -214,17 +214,17 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
       storage: new SequelizeStorage({ sequelize }),
       logger: console,
     })
-    const migrations = await umzug.pending();
-    console.log('Pending migrations:', migrations)
-    // Ejecuta las migraciones
-    umzug
-      .up()
-      .then((result: any) => {
-        console.log('Migrations executed successfully.', result)
-      })
-      .catch((error: Error) => {
-        console.error('Error executing migrations:', error)
-      })
+    const migrations = await umzug.pending()
+    if (migrations.length > 0) {
+      umzug
+        .up()
+        .then((result: any) => {
+          console.log('Migrations executed successfully.', result)
+        })
+        .catch((error: Error) => {
+          console.error('Error executing migrations:', error)
+        })
+    }
   }
 
   runMigrations()
