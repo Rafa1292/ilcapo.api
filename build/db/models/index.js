@@ -40,6 +40,7 @@ const menu_model_1 = require("./menu.model");
 const itemPrice_model_1 = require("./itemPrice.model");
 const upgradeElementPrice_model_1 = require("./upgradeElementPrice.model");
 const elementPrice_model_1 = require("./elementPrice.model");
+const umzug_1 = require("umzug");
 const setUpModels = (sequelize) => __awaiter(void 0, void 0, void 0, function* () {
     inputCategory_model_1.InputCategoryModel.init(ingredientCategory_model_1.ingredientCategorySchema, inputCategory_model_1.InputCategoryModel.config(sequelize));
     ingredientCategory_model_1.IngredientCategoryModel.init(inputCategory_model_1.inputCategorySchema, ingredientCategory_model_1.IngredientCategoryModel.config(sequelize));
@@ -126,5 +127,27 @@ const setUpModels = (sequelize) => __awaiter(void 0, void 0, void 0, function* (
     yield itemPrice_model_1.ItemPriceModel.sync();
     yield upgradeElementPrice_model_1.UpgradeElementPriceModel.sync();
     yield elementPrice_model_1.ElementPriceModel.sync();
+    function runMigrations() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const umzug = new umzug_1.Umzug({
+                migrations: { glob: 'migrations/*.js' },
+                context: sequelize.getQueryInterface(),
+                storage: new umzug_1.SequelizeStorage({ sequelize }),
+                logger: console,
+            });
+            const migrations = yield umzug.pending();
+            if (migrations.length > 0) {
+                umzug
+                    .up()
+                    .then((result) => {
+                    console.log('Migrations executed successfully.', result);
+                })
+                    .catch((error) => {
+                    console.error('Error executing migrations:', error);
+                });
+            }
+        });
+    }
+    runMigrations();
 });
 exports.setUpModels = setUpModels;

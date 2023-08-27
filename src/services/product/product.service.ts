@@ -52,6 +52,7 @@ export const saveProduct = async (product: NewProduct): Promise<Product> => {
 }
 
 export const updateProduct = async (product: Partial<Product>, id: number): Promise<void> => {
+  console.log(product)
   const now = getNow()
   product.updatedAt = now
   await ProductModel.update(product, { where: { id } })

@@ -34,10 +34,10 @@ exports.productModifierSchema = {
         allowNull: false,
         type: sequelize_1.DataTypes.INTEGER
     },
-    order: {
-        allowNull: false,
-        type: sequelize_1.DataTypes.INTEGER
-    },
+    // order: {
+    //   allowNull: false,
+    //   type: DataTypes.INTEGER
+    // },
     delete: {
         type: sequelize_1.DataTypes.BOOLEAN,
         allowNull: false
