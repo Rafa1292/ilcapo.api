@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ExcludeElementAttributes } from '../../services/excludeElement/excludeElement.types'
 
 export class ExcludeElementModel
@@ -13,7 +13,18 @@ export class ExcludeElementModel
 
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
+
+  static config (sequelize: Sequelize): any {
+    return {
+      sequelize,
+      tableName: 'excludeElements',
+      modelName: 'excludeElement',
+      timestamps: true
+    }
+  }
 }
+
+
 
 export const excludeElementSchema = {
   id: {

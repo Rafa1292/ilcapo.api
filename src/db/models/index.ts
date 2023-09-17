@@ -65,8 +65,8 @@ import {
   upgradeElementPriceSchema,
 } from './upgradeElementPrice.model'
 import { ElementPriceModel, elementPriceSchema } from './elementPrice.model'
-import { SequelizeStorage, Umzug } from 'umzug'
-import { ExcludeElementModel } from './excludeElement.model'
+// import { SequelizeStorage, Umzug } from 'umzug'
+import { ExcludeElementModel, excludeElementSchema } from './excludeElement.model'
 
 export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   InputCategoryModel.init(
@@ -150,6 +150,10 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
     elementPriceSchema,
     ElementPriceModel.config(sequelize)
   )
+  ExcludeElementModel.init(
+    excludeElementSchema,
+    ExcludeElementModel.config(sequelize)
+  )
 
   InputCategoryModel.associate(sequelize.models)
   IngredientCategoryModel.associate(sequelize.models)
@@ -177,6 +181,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   ModifierElementUpgradeModel.associate(sequelize.models)
   // ProductReferenceModel.associate(sequelize.models)
 
+  await ElementPriceModel.sync()
   await MagnitudeModel.sync()
   await MeasureModel.sync()
   await IngredientCategoryModel.sync()
@@ -206,28 +211,27 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   await MenuModel.sync()
   await ItemPriceModel.sync()
   await UpgradeElementPriceModel.sync()
-  await ElementPriceModel.sync()
   await ExcludeElementModel.sync()
 
-  async function runMigrations() {
-    const umzug = new Umzug({
-      migrations: { glob: 'migrations/*.js' },
-      context: sequelize.getQueryInterface(),
-      storage: new SequelizeStorage({ sequelize }),
-      logger: console,
-    })
-    const migrations = await umzug.pending()
-    if (migrations.length > 0) {
-      umzug
-        .up()
-        .then((result: any) => {
-          console.log('Migrations executed successfully.', result)
-        })
-        .catch((error: Error) => {
-          console.error('Error executing migrations:', error)
-        })
-    }
-  }
+  // async function runMigrations() {
+  //   const umzug = new Umzug({
+  //     migrations: { glob: 'migrations/*.js' },
+  //     context: sequelize.getQueryInterface(),
+  //     storage: new SequelizeStorage({ sequelize }),
+  //     logger: console,
+  //   })
+  //   const migrations = await umzug.pending()
+  //   if (migrations.length > 0) {
+  //     umzug
+  //       .up()
+  //       .then((result: any) => {
+  //         console.log('Migrations executed successfully.', result)
+  //       })
+  //       .catch((error: Error) => {
+  //         console.error('Error executing migrations:', error)
+  //       })
+  //   }
+  // }
 
-  runMigrations()
+  // runMigrations()
 }
