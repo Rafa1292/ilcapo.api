@@ -6,10 +6,7 @@ import { ModifierElement } from '../../services/modifierElement/modifierElement.
 export class ModifierGroupModel extends Model implements ModifierGroupAttributes {
   public id!: number
   public name!: string
-  public minSelectable!: number
-  public maxSelectable!: number
-  public isRequired!: boolean
-  public label!: string
+  public showLabel!: boolean
   public elements!: ModifierElement[]
   public modifierGroupUpgrade!: ModifierElementUpgrade
   public delete!: boolean
@@ -47,21 +44,9 @@ export const modifierGroupSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  minSelectable: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
-  maxSelectable: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
-  isRequired: {
+  showLabel: {
     allowNull: false,
     type: DataTypes.BOOLEAN
-  },
-  label: {
-    allowNull: false,
-    type: DataTypes.STRING
   },
   delete: {
     type: DataTypes.BOOLEAN,

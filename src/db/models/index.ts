@@ -66,6 +66,7 @@ import {
 } from './upgradeElementPrice.model'
 import { ElementPriceModel, elementPriceSchema } from './elementPrice.model'
 import { SequelizeStorage, Umzug } from 'umzug'
+import { ExcludeElementModel } from './excludeElement.model'
 
 export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   InputCategoryModel.init(
@@ -206,6 +207,7 @@ export const setUpModels = async (sequelize: Sequelize): Promise<void> => {
   await ItemPriceModel.sync()
   await UpgradeElementPriceModel.sync()
   await ElementPriceModel.sync()
+  await ExcludeElementModel.sync()
 
   async function runMigrations() {
     const umzug = new Umzug({

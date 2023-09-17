@@ -5,11 +5,9 @@ import { ProductReference } from '../productReference/productReference.types'
 export interface ModifierElementAttributes {
   id: number
   name: string
-  quantity: number
   delete: boolean
   defaultRecipeId: number
   combinable: boolean
-  numberOfParts: number
   prices: ElementPrice[]
   combinableModifierGroupId: number
   modifierUpgrade: ModifierElementUpgrade

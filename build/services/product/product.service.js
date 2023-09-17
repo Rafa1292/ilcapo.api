@@ -61,6 +61,7 @@ const saveProduct = (product) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.saveProduct = saveProduct;
 const updateProduct = (product, id) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(product);
     const now = (0, timeManager_1.getNow)();
     product.updatedAt = now;
     yield product_model_1.ProductModel.update(product, { where: { id } });

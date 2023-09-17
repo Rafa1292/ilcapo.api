@@ -5,7 +5,6 @@ import { ProductModifier } from '../../services/productModifier/productModifier.
 export class ProductModel extends Model implements ProductAttributes {
   public id!: number
   public name!: string
-  public description!: string
   public pictureUrl!: string
   public allowsModify!: boolean
   public needsCommand!: boolean
@@ -41,10 +40,6 @@ export const productSchema = {
     type: DataTypes.INTEGER
   },
   name: {
-    allowNull: false,
-    type: DataTypes.STRING
-  },
-  description: {
     allowNull: false,
     type: DataTypes.STRING
   },

@@ -3,7 +3,6 @@ import { ProductModifier } from '../productModifier/productModifier.types'
 export interface ProductAttributes {
   id: number
   name: string
-  description: string
   pictureUrl: string
   allowsModify: boolean
   productModifiers: ProductModifier[]

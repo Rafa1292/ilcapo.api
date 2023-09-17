@@ -9,7 +9,6 @@ export const toNewProduct = async (product: any): Promise<Product> => {
     id: product.id,
     name: product.name,
     allowsModify: product.allowsModify,
-    description: product.description,
     pictureUrl: product.pictureUrl,
     needsCommand: product.needsCommand,
     active: product.active,

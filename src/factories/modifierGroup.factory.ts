@@ -10,10 +10,7 @@ export const toNewModifierGroup = async (modifierGroup: any): Promise<ModifierGr
   return {
     id: modifierGroup.id,
     name: modifierGroup.name,
-    minSelectable: modifierGroup.minSelectable,
-    maxSelectable: modifierGroup.maxSelectable,
-    isRequired: modifierGroup.isRequired,
-    label: modifierGroup.label,
+    showLabel: modifierGroup.showLabel,
     elements: tempGroupElements,
     createdBy: modifierGroup.createdBy,
     updatedBy: modifierGroup.updatedBy,

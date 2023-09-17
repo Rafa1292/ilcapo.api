@@ -36,6 +36,14 @@ exports.productSchema = {
         allowNull: false,
         type: sequelize_1.DataTypes.STRING
     },
+    needsCommand: {
+        allowNull: false,
+        type: sequelize_1.DataTypes.BOOLEAN
+    },
+    active: {
+        allowNull: false,
+        type: sequelize_1.DataTypes.BOOLEAN
+    },
     allowsModify: {
         allowNull: false,
         type: sequelize_1.DataTypes.BOOLEAN

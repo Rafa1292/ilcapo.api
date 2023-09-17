@@ -7,6 +7,10 @@ export class ProductModifierModel extends Model implements ProductModifierAttrib
   public productId!: number
   public modifierGroupId!: number
   public order!: number
+  public price!: number
+  public minSelect!: number
+  public maxSelect!: number
+  public priceByGroup!: boolean
   public modifierGroup!: ModifierGroup
   public delete!: boolean
   public createdBy!: number
@@ -47,10 +51,26 @@ export const productModifierSchema = {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  // order: {
-  //   allowNull: false,
-  //   type: DataTypes.INTEGER
-  // },
+  order: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  price: {
+    allowNull: false,
+    type: DataTypes.DECIMAL(10, 2)
+  },
+  minSelect: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  maxSelect: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
+  priceByGroup: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN
+  },
   delete: {
     type: DataTypes.BOOLEAN,
     allowNull: false

@@ -5,7 +5,6 @@ export interface SaleItemAttributes {
   id: number
   name: string
   saleItemCategoryId: number
-  description: string
   pictureUrl: string
   prices: ItemPrice[]
   delete: boolean

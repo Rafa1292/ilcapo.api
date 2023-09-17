@@ -6,10 +6,8 @@ import { ElementPrice } from '../../services/elementPrice/elementPrice.types'
 export class ModifierElementModel extends Model implements ModifierElementAttributes {
   public id!: number
   public name!: string
-  public quantity!: number
   public defaultRecipeId!: number
   public combinable!: boolean
-  public numberOfParts!: number
   public prices!: ElementPrice[]
   public combinableModifierGroupId!: number
   public modifierUpgrade!: ModifierElementUpgrade
@@ -60,17 +58,9 @@ export const modifierElementSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  quantity: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
   combinable: {
     allowNull: false,
     type: DataTypes.BOOLEAN
-  },
-  numberOfParts: {
-    allowNull: false,
-    type: DataTypes.INTEGER
   },
   combinableModifierGroupId: {
     allowNull: false,

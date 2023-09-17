@@ -7,7 +7,6 @@ export class SaleItemModel extends Model implements SaleItemAttributes {
   public id!: number
   public name!: string
   public saleItemCategoryId!: number
-  public description!: string
   public pictureUrl!: string
   public prices!: ItemPrice[]
   public saleItemProducts!: SaleItemProduct[]
@@ -47,10 +46,6 @@ export const saleItemSchema = {
     type: DataTypes.INTEGER,
   },
   name: {
-    allowNull: false,
-    type: DataTypes.STRING,
-  },
-  description: {
     allowNull: false,
     type: DataTypes.STRING,
   },
