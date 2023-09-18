@@ -1,50 +1,45 @@
-import { Brand, NewBrand } from './brand.types'
+import { Brand, BrandAttributes } from './brand.types'
 import { BrandModel } from '../../db/models/brand.model'
-import { toNewInputCategory } from '../../factories/inputCategory.factory'
 import { getNow } from '../../utils/timeManager'
+import { validateBrand } from '../../factories/brand.factory'
 
 export const getBrands = async (): Promise<Brand[]> => {
-  return await BrandModel.findAll(
-    {
-      where: {
-        delete: false
-      }
-    }
-  )
+  const brandModels = await BrandModel.findAll({
+    where: {
+      delete: false,
+    },
+  })
+  const brands: Brand[] = []
+  for (const brandModel of brandModels) {
+    brands.push(await validateBrand(brandModel))
+  }
+  return brands
 }
 
 export const getBrandById = async (id: number): Promise<Brand> => {
   const response = await BrandModel.findByPk(id)
   if (response === null) throw new Error('Brand not found')
   if (response.delete) throw new Error('Brand deleted')
-  return await toNewInputCategory(response)
+  return await validateBrand(response)
 }
 
-export const saveBrand = async (brand: NewBrand): Promise<Brand> => {
-  const now = getNow()
-  brand.createdAt = now
-  brand.updatedAt = now
-  return await BrandModel.create(brand)
+export const saveBrand = async (brand: Brand): Promise<Brand> => {
+  const { id, ...newBrand } = BrandModel.getBrand(brand, 0)
+  return await BrandModel.create(newBrand)
 }
 
-export const updateBrand = async (brand: Partial<Brand>, id: number): Promise<void> => {
-  const now = getNow()
-  brand.updatedAt = now
-  await BrandModel.update(brand, { where: { id } })
+export const updateBrand = async (
+  brand: Partial<BrandAttributes>,
+  id: number
+): Promise<void> => {
+  const updateBrand = BrandModel.getPartialBrand(brand, 0)
+  await BrandModel.update(updateBrand, { where: { id } })
 }
 
-export const deleteInputCategory = async (id: number): Promise<void> => {
-  const brand = await getBrandById(id)
-  const now = getNow()
-  brand.updatedAt = now
-  brand.delete = true
-  await updateBrand(brand, id)
+export const deleteBrand = async (id: number): Promise<void> => {
+  await updateBrand({ delete: true }, id)
 }
 
-export const recoveryInputCategory = async (id: number): Promise<void> => {
-  const brand = await getBrandById(id)
-  const now = getNow()
-  brand.updatedAt = now
-  brand.delete = false
-  await updateBrand(brand, id)
+export const recoveryBrand = async (id: number): Promise<void> => {
+  await updateBrand({ delete: false }, id)
 }

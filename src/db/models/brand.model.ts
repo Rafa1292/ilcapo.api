@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { BrandAttributes } from '../../services/brand/brand.types'
+import { Brand, BrandAttributes } from '../../services/brand/brand.types'
 
 export class BrandModel extends Model implements BrandAttributes {
   public id!: number
@@ -7,7 +7,6 @@ export class BrandModel extends Model implements BrandAttributes {
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
-
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
@@ -21,6 +20,27 @@ export class BrandModel extends Model implements BrandAttributes {
       tableName: 'brands',
       modelName: 'brand',
       timestamps: true
+    }
+  }
+
+  public static getBrand (brand: Brand, userId: number): BrandAttributes {
+    const now = new Date()
+    return {
+      ...brand,
+      createdAt: now,
+      updatedAt: now,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId
+    }
+  }
+
+  public static getPartialBrand (brand: Partial<BrandAttributes>, userId: number): Partial<BrandAttributes> {
+    const now = new Date()
+    return {
+      ...brand,
+      updatedAt: now,
+      updatedBy: userId
     }
   }
 }

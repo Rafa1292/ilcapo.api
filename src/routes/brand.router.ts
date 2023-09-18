@@ -18,6 +18,19 @@ router.get('/', async (_req: Request, res: Response) => {
   res.send(response)
 })
 
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await brandService.recoveryBrand(id)
+    response.setResponse({}, ['Brand recovery successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
@@ -36,7 +49,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createBrand } = await brandFactory.toNewBrand(req.body)
+    const createBrand = await brandFactory.validateBrand(req.body)
     const savedBrand = await brandService.saveBrand(createBrand)
     response.setResponse(savedBrand, ['Brand saved successfully'], false)
   } catch (error: any) {
@@ -50,9 +63,9 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const brand = await brandFactory.toNewBrand(req.body)
-    const savedBrand = await brandService.updateBrand(brand, id)
-    response.setResponse(savedBrand, ['Brand updated successfully'], false)
+    const brand = await brandFactory.validatePartialBrand(req.body)
+    await brandService.updateBrand(brand, id)
+    response.setResponse({}, ['Brand updated successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -64,13 +77,14 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedBrand = await brandService.deleteInputCategory(id)
-    response.setResponse(deletedBrand, ['Brand deleted successfully'], false)
+    await brandService.deleteBrand(id)
+    response.setResponse({}, ['Brand deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
   }
   res.json(response)
 })
+
 
 export default router
