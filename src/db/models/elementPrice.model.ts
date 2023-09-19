@@ -1,25 +1,52 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
-import { ElementPriceAttributes } from "../../services/elementPrice/elementPrice.types";
+import { DataTypes, Model, Sequelize } from 'sequelize'
+import {
+  ElementPrice,
+  ElementPriceAttributes,
+} from '../../services/elementPrice/elementPrice.types'
 
 export class ElementPriceModel extends Model implements ElementPriceAttributes {
-  public id!: number;
-  public elementId!: number;
-  public menuId!: number;
-  public price!: number;
-  public delete!: boolean;
-  public createdBy!: number;
-  public updatedBy!: number;
+  public id!: number
+  public elementId!: number
+  public menuId!: number
+  public price!: number
+  public delete!: boolean
+  public createdBy!: number
+  public updatedBy!: number
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
 
   static config(sequelize: Sequelize): any {
     return {
       sequelize,
-      tableName: "elementPrices",
-      modelName: "elementPrice",
+      tableName: 'elementPrices',
+      modelName: 'elementPrice',
       timestamps: true,
-    };
+    }
+  }
+
+  public static getElementPrice(
+    elementPrice: ElementPrice,
+    userId: number
+  ): ElementPriceAttributes {
+    const now = new Date()
+    return {
+      ...elementPrice,
+      createdBy: userId,
+      updatedBy: userId,
+      delete: false,
+      createdAt: now,
+      updatedAt: now,
+    }
+  }
+
+  public static getPartialElementPrice(elementPrice: Partial<ElementPrice>, userId: number): Partial<ElementPriceAttributes> {
+    const now = new Date()
+    return {
+      ...elementPrice,
+      updatedAt: now,
+      updatedBy: userId
+    }
   }
 }
 
@@ -54,4 +81,4 @@ export const elementPriceSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
-};
+}

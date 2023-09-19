@@ -1,4 +1,4 @@
-
+import {traceFields} from '../../utils/genericTypes/traceFields.type';
 export interface ElementPriceAttributes {
     id: number
     elementId: number
@@ -10,8 +10,5 @@ export interface ElementPriceAttributes {
     createdBy?: number
     updatedBy?: number
   }
-  
-  export interface ElementPrice extends Required<ElementPriceAttributes> { }
-  
-  export interface NewElementPrice extends Omit<ElementPriceAttributes, 'id'> { }
-  
+    
+  export interface ElementPrice extends Omit<ElementPriceAttributes, keyof typeof traceFields> { }  

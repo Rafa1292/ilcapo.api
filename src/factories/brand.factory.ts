@@ -13,7 +13,7 @@ const brandSchema = z.object({
 })
 
 export const validateBrand = async (brand: any): Promise<Brand> => {
-  const result = brandSchema.safeParse(brand)
+  const result = await brandSchema.safeParseAsync(brand)
 
   if (!result.success) {
     throw new Error(result.error.message)

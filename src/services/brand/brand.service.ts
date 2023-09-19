@@ -1,6 +1,5 @@
 import { Brand, BrandAttributes } from './brand.types'
 import { BrandModel } from '../../db/models/brand.model'
-import { getNow } from '../../utils/timeManager'
 import { validateBrand } from '../../factories/brand.factory'
 
 export const getBrands = async (): Promise<Brand[]> => {
