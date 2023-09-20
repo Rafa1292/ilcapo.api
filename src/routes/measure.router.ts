@@ -36,7 +36,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createMeasure } = await measureFactory.toNewMeasure(req.body)
+    const { id, ...createMeasure } = await measureFactory.validateMeasure(req.body)
     const savedMeasure = await measureService.saveMeasure(createMeasure)
     response.setResponse(savedMeasure, ['Measure saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +50,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const measure = await measureFactory.toNewMeasure(req.body)
+    const measure = await measureFactory.validateMeasure(req.body)
     const savedMeasure = await measureService.updateMeasure(measure, id)
     response.setResponse(savedMeasure, ['Measure updated successfully'], false)
   } catch (error) {

@@ -1,6 +1,6 @@
-import { Measure, NewMeasure } from './measure.types'
+import { Measure, MeasureAttributes, NewMeasure } from './measure.types'
 import { MeasureModel } from '../../db/models/measure.model'
-import { toNewMeasure } from '../../factories/measure.factory'
+import { validateMeasure } from '../../factories/measure.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getMeasures = async (): Promise<Measure[]> => {
@@ -18,7 +18,7 @@ export const getMeasures = async (): Promise<Measure[]> => {
   )
 }
 
-export const getMeasuresWithDeletedItems = async (): Promise<Measure[]> => {
+export const getMeasuresWithDeletedItems = async (): Promise<MeasureAttributes[]> => {
   return await MeasureModel.findAll()
 }
 
@@ -26,7 +26,7 @@ export const getMeasureById = async (id: number): Promise<Measure> => {
   const response = await MeasureModel.findByPk(id)
   if (response === null) throw new Error('Measure not found')
   if (response.delete) throw new Error('Measure deleted')
-  return await toNewMeasure(response)
+  return await validateMeasure(response)
 }
 
 export const saveMeasure = async (measure: NewMeasure): Promise<Measure> => {
@@ -35,7 +35,7 @@ export const saveMeasure = async (measure: NewMeasure): Promise<Measure> => {
   measure.updatedAt = now
   const savedMeasure = await MeasureModel.create(measure)
   if (savedMeasure.principalMeasure) await updatePrincipalMeasure(savedMeasure.id, savedMeasure.magnitudeId)
-  return await toNewMeasure(savedMeasure)
+  return await validateMeasure(savedMeasure)
 }
 
 export const updateMeasure = async (measure: Partial<Measure>, id: number): Promise<void> => {

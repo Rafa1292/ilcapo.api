@@ -1,3 +1,4 @@
+import { traceFields } from '../../utils/genericTypes/traceFields.type'
 import { Measure } from '../measure/measure.types'
 import { PreparationStep } from '../preparationStep/preparationStep.types'
 
@@ -18,6 +19,5 @@ export interface IngredientAttributes {
   updatedBy?: number
 }
 
-export interface Ingredient extends Required<IngredientAttributes> { }
 
-export interface NewIngredient extends Omit<IngredientAttributes, 'id'> { }
+export interface Ingredient extends Omit<IngredientAttributes, keyof typeof traceFields> { }

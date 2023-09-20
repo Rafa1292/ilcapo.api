@@ -1,3 +1,5 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
+
 export interface MeasureAttributes {
   id: number
   name: string
@@ -12,6 +14,5 @@ export interface MeasureAttributes {
   updatedBy?: number
 }
 
-export interface Measure extends Required<MeasureAttributes> { }
 
-export interface NewMeasure extends Omit<MeasureAttributes, 'id'> { }
+export interface Measure extends Omit<MeasureAttributes, keyof typeof traceFields> { }

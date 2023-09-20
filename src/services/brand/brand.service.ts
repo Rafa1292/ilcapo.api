@@ -1,6 +1,5 @@
 import { Brand, BrandAttributes } from './brand.types'
 import { BrandModel } from '../../db/models/brand.model'
-import { validateBrand } from '../../factories/brand.factory'
 
 export const getBrands = async (): Promise<Brand[]> => {
   const brandModels = await BrandModel.findAll({
@@ -8,18 +7,15 @@ export const getBrands = async (): Promise<Brand[]> => {
       delete: false,
     },
   })
-  const brands: Brand[] = []
-  for (const brandModel of brandModels) {
-    brands.push(await validateBrand(brandModel))
-  }
-  return brands
+
+  return brandModels
 }
 
 export const getBrandById = async (id: number): Promise<Brand> => {
-  const response = await BrandModel.findByPk(id)
-  if (response === null) throw new Error('Brand not found')
-  if (response.delete) throw new Error('Brand deleted')
-  return await validateBrand(response)
+  const brand = await BrandModel.findByPk(id)
+  if (brand === null) throw new Error('Brand not found')
+  if (brand.delete) throw new Error('Brand deleted')
+  return brand
 }
 
 export const saveBrand = async (brand: Brand): Promise<Brand> => {

@@ -1,3 +1,5 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
+
 export interface BrandAttributes {
   id: number
   name: string
@@ -11,5 +13,5 @@ export interface BrandAttributes {
 export interface Brand
   extends Omit<
     BrandAttributes,
-    'createdAt' | 'updatedAt' | 'createdBy' | 'updatedBy' | 'delete'
+    keyof typeof traceFields
   > {}

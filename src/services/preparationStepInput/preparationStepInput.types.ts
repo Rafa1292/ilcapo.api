@@ -1,3 +1,5 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
+
 export interface PreparationStepInputAttributes {
   id: number
   inputId: number
@@ -11,6 +13,5 @@ export interface PreparationStepInputAttributes {
   updatedBy?: number
 }
 
-export interface PreparationStepInput extends Required<PreparationStepInputAttributes> { }
 
-export interface NewPreparationStepInput extends Omit<PreparationStepInputAttributes, 'id'> { }
+export interface PreparationStepInput extends Omit<PreparationStepInputAttributes, keyof typeof traceFields> { }

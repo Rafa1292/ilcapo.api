@@ -1,6 +1,6 @@
 import { PreparationStep, NewPreparationStep } from './preparationStep.types'
 import { PreparationStepModel } from '../../db/models/preparationStep.model'
-import { toNewPreparationStep } from '../../factories/preparationStep.factory'
+import { validatePreparationStep } from '../../factories/preparationStep.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getPreparationStepsWithDeletedItems = async (): Promise<PreparationStep[]> => {
@@ -17,7 +17,7 @@ export const getPreparationStepById = async (id: number): Promise<PreparationSte
   )
   if (response === null) throw new Error('PreparationStep not found')
   if (response.delete) throw new Error('PreparationStep deleted')
-  return await toNewPreparationStep(response)
+  return await validatePreparationStep(response)
 }
 
 export const savePreparationStep = async (preparationStep: NewPreparationStep): Promise<PreparationStep> => {
