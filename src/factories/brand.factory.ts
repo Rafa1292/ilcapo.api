@@ -31,3 +31,7 @@ export const validatePartialBrand = async (brand: any): Promise<Partial<Brand>> 
 
   return result.data
 }
+
+export const validateBrands = async (brands: any[]): Promise<Brand[]> => {
+  return await Promise.all(brands.map(async (brand: any) => await validateBrand(brand)))
+}

@@ -1,7 +1,7 @@
-import { z } from 'zod'
+import { union, z } from 'zod'
 import { Ingredient } from '../services/ingredient/ingredient.types'
 import * as ingredientValidator from '../validations/ingredient.validator'
-import { measureSchema } from '../factories/measure.factory'
+import { measureSchema } from './measure.factory'
 import { preparationStepSchema } from './preparationStep.factory'
 
 const ingredientSchema = z.object({
@@ -33,14 +33,24 @@ const ingredientSchema = z.object({
     required_error: 'El precio es requerido',
     invalid_type_error: 'El precio debe ser un numero entero',
   }),
-  measure: measureSchema,
-  preparationSteps: z.array(preparationStepSchema)
-
+  measure: union([measureSchema, z.undefined()]).optional(),
+  preparationSteps: z.array(preparationStepSchema).optional(),
 })
 
 export const validateIngredient = async (ingredient: any): Promise<Ingredient> => {
-  await ingredientValidator.newIngredientIsValid(ingredient)
   const result = await ingredientSchema.safeParseAsync(ingredient)
+  await ingredientValidator.newIngredientIsValid(ingredient)
+
+  if (!result.success) {
+    throw new Error(result.error.message)
+  }
+
+  return result.data
+}
+
+export const validatePartialIngredient = async (ingredient: any): Promise<Partial<Ingredient>> => {
+  const result = await ingredientSchema.safeParseAsync(ingredient)
+  await ingredientValidator.newIngredientIsValid(ingredient)
 
   if (!result.success) {
     throw new Error(result.error.message)

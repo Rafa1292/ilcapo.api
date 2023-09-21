@@ -4,13 +4,16 @@ import * as ingredientCategoryService from '../services/ingredientCategory/ingre
 import * as ingredientCategoryFactory from '../factories/ingredientCategory.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
+import { IngredientCategory } from '../services/ingredientCategory/ingredientCategory.types'
 
 const router = express.Router()
 
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await ingredientCategoryService.getIngredientCategories(), ['Ingredient categories retrieved successfully'], false)
+    const ingredientCatgoryModels: IngredientCategory[] = await ingredientCategoryService.getIngredientCategories()
+    const ingredientCategories = await ingredientCategoryFactory.validateIngredientCategories(ingredientCatgoryModels)
+    response.setResponse(ingredientCategories, ['Ingredient categories retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -22,8 +25,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const ingredientCategory = await ingredientCategoryService.getIngredientCategoryById(id)
-    if (ingredientCategory !== undefined) {
+    const ingredientCategoryModel = await ingredientCategoryService.getIngredientCategoryById(id)
+    if (ingredientCategoryModel !== undefined) {
+      const ingredientCategory = await ingredientCategoryFactory.validateIngredientCategory(ingredientCategoryModel)
       response.setResponse(ingredientCategory, ['Ingredient category retrieved successfully'], false)
     }
   } catch (error) {
@@ -36,7 +40,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createIngredientCategory } = await ingredientCategoryFactory.toNewIngredientCategory(req.body)
+    const createIngredientCategory = await ingredientCategoryFactory.validateIngredientCategory(req.body)
     const savedIngredientCategory = await ingredientCategoryService.saveIngredientCategory(createIngredientCategory)
     response.setResponse(savedIngredientCategory, ['Ingredient category saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +54,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const ingredientCategory = await ingredientCategoryFactory.toNewIngredientCategory(req.body)
+    const ingredientCategory = await ingredientCategoryFactory.validatePartialIngredientCategory(req.body)
     const savedIngredientCategory = await ingredientCategoryService.updateIngredientCategory(ingredientCategory, id)
     response.setResponse(savedIngredientCategory, ['Ingredient category updated successfully'], false)
   } catch (error) {
@@ -64,8 +68,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedIngredientCategory = await ingredientCategoryService.deleteIngredientCategory(id)
-    response.setResponse(deletedIngredientCategory, ['Ingredient category deleted successfully'], false)
+    await ingredientCategoryService.deleteIngredientCategory(id)
+    response.setResponse({}, ['Ingredient category deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

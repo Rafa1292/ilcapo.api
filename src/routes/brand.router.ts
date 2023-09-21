@@ -10,7 +10,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await brandService.getBrands(), ['Brands retrieved successfully'], false)
+    const brandModels = await brandService.getBrands()
+    const brands = await brandFactory.validateBrands(brandModels)
+    response.setResponse(brands, ['Brands retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -35,8 +37,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const brand = await brandService.getBrandById(id)
-    if (brand !== undefined) {
+    const brandModel = await brandService.getBrandById(id)
+    if (brandModel !== undefined) {
+      const brand = await brandFactory.validateBrand(brandModel)
       response.setResponse(brand, ['Brand retrieved successfully'], false)
     }
   } catch (error) {

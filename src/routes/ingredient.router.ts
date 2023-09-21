@@ -10,7 +10,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await ingredientService.getIngredients(), ['Ingredients retrieved successfully'], false)
+    const ingredientModels = await ingredientService.getIngredients()
+    const ingredients = await ingredientFactory.validateIngredients(ingredientModels)
+    response.setResponse(ingredients, ['Ingredients retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -22,8 +24,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const ingredient = await ingredientService.getIngredientById(id)
-    if (ingredient !== undefined) {
+    const ingredientModel = await ingredientService.getIngredientById(id)
+    if (ingredientModel !== undefined) {
+      const ingredient = await ingredientFactory.validateIngredient(ingredientModel)
       response.setResponse(ingredient, ['Ingredient retrieved successfully'], false)
     }
   } catch (error) {
@@ -50,7 +53,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const ingredient = await ingredientFactory.validateIngredient(req.body)
+    const ingredient = await ingredientFactory.validatePartialIngredient(req.body)
     const savedIngredient = await ingredientService.updateIngredient(ingredient, id)
     response.setResponse(savedIngredient, ['Ingredient updated successfully'], false)
   } catch (error) {

@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { IngredientCategoryAttributes } from '../../services/ingredientCategory/ingredientCategory.types'
+import { IngredientCategory, IngredientCategoryAttributes } from '../../services/ingredientCategory/ingredientCategory.types'
 
 export class IngredientCategoryModel extends Model implements IngredientCategoryAttributes {
   public id!: number
@@ -21,6 +21,27 @@ export class IngredientCategoryModel extends Model implements IngredientCategory
       tableName: 'ingredientCategories',
       modelName: 'ingredientCategory',
       timestamps: true
+    }
+  }
+
+  public static getIngredientCategory(category: IngredientCategory, userId:number): IngredientCategoryAttributes {
+    const now = new Date()
+    return {
+      ...category,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialIngredientCategory(category: Partial<IngredientCategory>, userId:number): Partial<IngredientCategoryAttributes> {
+    const now = new Date()
+    return {
+      ...category,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

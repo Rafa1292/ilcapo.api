@@ -1,7 +1,5 @@
-import { IngredientCategory, NewIngredientCategory } from './ingredientCategory.types'
+import { IngredientCategory, IngredientCategoryAttributes } from './ingredientCategory.types'
 import { IngredientCategoryModel } from '../../db/models/ingredientCategory.model'
-import { toNewIngredientCategory } from '../../factories/ingredientCategory.factory'
-import { getNow } from '../../utils/timeManager'
 
 export const getIngredientCategories = async (): Promise<IngredientCategory[]> => {
   return await IngredientCategoryModel.findAll(
@@ -26,34 +24,24 @@ export const getIngredientCategoryById = async (id: number): Promise<IngredientC
   const response = await IngredientCategoryModel.findByPk(id)
   if (response === null) throw new Error('IngredientCategory not found')
   if (response.delete) throw new Error('IngredientCategory deleted')
-  return await toNewIngredientCategory(response)
+  return response
 }
 
-export const saveIngredientCategory = async (ingredientCategory: NewIngredientCategory): Promise<IngredientCategory> => {
-  const now = getNow()
-  ingredientCategory.createdAt = now
-  ingredientCategory.updatedAt = now
-  return await IngredientCategoryModel.create(ingredientCategory)
+export const saveIngredientCategory = async (ingredientCategory: IngredientCategory): Promise<IngredientCategory> => {
+  const { id, ...newIngredientCategory } = IngredientCategoryModel.getIngredientCategory(ingredientCategory, 0)
+  return await IngredientCategoryModel.create(newIngredientCategory)
 }
 
-export const updateIngredientCategory = async (ingredientCategory: Partial<IngredientCategory>, id: number): Promise<void> => {
-  const now = getNow()
-  ingredientCategory.updatedAt = now
-  await IngredientCategoryModel.update(ingredientCategory, { where: { id } })
+export const updateIngredientCategory = async (ingredientCategory: Partial<IngredientCategoryAttributes>, id: number): Promise<void> => {
+  const updateIngredientCategory = IngredientCategoryModel.getPartialIngredientCategory(ingredientCategory, 0)
+  await IngredientCategoryModel.update(updateIngredientCategory, { where: { id } })
 }
 
 export const deleteIngredientCategory = async (id: number): Promise<void> => {
-  const ingredientCategory = await getIngredientCategoryById(id)
-  const now = getNow()
-  ingredientCategory.updatedAt = now
-  ingredientCategory.delete = true
-  await updateIngredientCategory(ingredientCategory, id)
+  
+  await updateIngredientCategory({delete: true}, id)
 }
 
 export const recoveryIngredientCategory = async (id: number): Promise<void> => {
-  const ingredientCategory = await getIngredientCategoryById(id)
-  const now = getNow()
-  ingredientCategory.updatedAt = now
-  ingredientCategory.delete = false
-  await updateIngredientCategory(ingredientCategory, id)
+  await updateIngredientCategory({delete: false}, id)
 }
