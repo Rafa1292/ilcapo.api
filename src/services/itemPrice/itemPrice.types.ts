@@ -1,3 +1,4 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
 
 export interface ItemPriceAttributes {
     id: number
@@ -11,7 +12,6 @@ export interface ItemPriceAttributes {
     updatedBy?: number
   }
   
-  export interface ItemPrice extends Required<ItemPriceAttributes> { }
   
-  export interface NewItemPrice extends Omit<ItemPriceAttributes, 'id'> { }
+  export interface ItemPrice extends Omit<ItemPriceAttributes, keyof typeof traceFields> { }
   

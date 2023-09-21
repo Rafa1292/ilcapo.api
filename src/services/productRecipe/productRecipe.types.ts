@@ -1,3 +1,5 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
+
 export interface ProductRecipeAttributes {
   id: number
   modifierElementId: number
@@ -10,6 +12,4 @@ export interface ProductRecipeAttributes {
   updatedBy?: number
 }
 
-export interface ProductRecipe extends Required<ProductRecipeAttributes> { }
-
-export interface NewProductRecipe extends Omit<ProductRecipeAttributes, 'id'> { }
+export interface ProductRecipe extends Omit<ProductRecipeAttributes, keyof typeof traceFields> { }

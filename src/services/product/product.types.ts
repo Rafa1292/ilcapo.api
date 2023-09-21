@@ -1,3 +1,4 @@
+import { traceFields } from '../../utils/genericTypes/traceFields.type'
 import { ProductModifier } from '../productModifier/productModifier.types'
 
 export interface ProductAttributes {
@@ -15,6 +16,4 @@ export interface ProductAttributes {
   updatedBy?: number
 }
 
-export interface Product extends Required<ProductAttributes> { }
-
-export interface NewProduct extends Omit<ProductAttributes, 'id'> { }
+export interface Product extends Omit<ProductAttributes, keyof typeof traceFields> { }

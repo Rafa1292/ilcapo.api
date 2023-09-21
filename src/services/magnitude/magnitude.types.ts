@@ -1,3 +1,4 @@
+import { traceFields } from '../../utils/genericTypes/traceFields.type'
 import { Measure } from '../measure/measure.types'
 
 export interface MagnitudeAttributes {
@@ -11,6 +12,5 @@ export interface MagnitudeAttributes {
   updatedBy?: number
 }
 
-export interface Magnitude extends Required<MagnitudeAttributes> { }
 
-export interface NewMagnitude extends Omit<MagnitudeAttributes, 'id'> {}
+export interface Magnitude extends Omit<MagnitudeAttributes, keyof typeof traceFields> {}

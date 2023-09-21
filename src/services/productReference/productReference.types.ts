@@ -1,3 +1,4 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
 
 export interface ProductReferenceAttributes {
   id: number
@@ -9,6 +10,4 @@ export interface ProductReferenceAttributes {
   updatedBy?: number
 }
 
-export interface ProductReference extends Required<ProductReferenceAttributes> { }
-
-export interface NewProductReference extends Omit<ProductReferenceAttributes, 'id'> { }
+export interface ProductReference extends Omit<ProductReferenceAttributes, keyof typeof traceFields> { }

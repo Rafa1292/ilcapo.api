@@ -1,3 +1,4 @@
+import { traceFields } from '../../utils/genericTypes/traceFields.type'
 import { Brand } from '../brand/brand.types'
 import { Input } from '../input/input.types'
 import { Measure } from '../measure/measure.types'
@@ -26,6 +27,4 @@ export interface ProviderInputAttributes {
   updatedBy?: number
 }
 
-export interface ProviderInput extends Required<ProviderInputAttributes> { }
-
-export interface NewProviderInput extends Omit<ProviderInputAttributes, 'id' | 'provider' | 'input'> { }
+export interface ProviderInput extends Omit<ProviderInputAttributes, keyof typeof traceFields> { }

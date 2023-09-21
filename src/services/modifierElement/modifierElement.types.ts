@@ -1,3 +1,4 @@
+import { traceFields } from '../../utils/genericTypes/traceFields.type'
 import { ElementPrice } from '../elementPrice/elementPrice.types'
 import { ModifierElementUpgrade } from '../modifierElementUpgrade/modifierElementUpgrade.types'
 import { ProductReference } from '../productReference/productReference.types'
@@ -18,6 +19,5 @@ export interface ModifierElementAttributes {
   updatedBy?: number
 }
 
-export interface ModifierElement extends Required<ModifierElementAttributes> { productReference?: ProductReference, price?: number }
 
-export interface NewModifierElement extends Omit<ModifierElementAttributes, 'id'> { }
+export interface ModifierElement extends Omit<ModifierElementAttributes, keyof typeof traceFields> { productReference?: ProductReference, price?: number }

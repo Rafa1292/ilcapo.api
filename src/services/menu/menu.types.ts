@@ -1,3 +1,4 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
 
 export interface MenuAttributes {
   id: number
@@ -10,6 +11,5 @@ export interface MenuAttributes {
   updatedBy?: number
 }
 
-export interface Menu extends Required<MenuAttributes> { }
 
-export interface NewMenu extends Omit<MenuAttributes, 'id'> { }
+export interface Menu extends Omit<MenuAttributes, keyof typeof traceFields> { }

@@ -1,3 +1,5 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
+
 export interface ProviderAttributes {
   id: number
   name: string
@@ -10,6 +12,5 @@ export interface ProviderAttributes {
   updatedBy?: number
 }
 
-export interface Provider extends Required<ProviderAttributes> {}
 
-export interface NewProvider extends Omit<ProviderAttributes, 'id'> {}
+export interface Provider extends Omit<ProviderAttributes, keyof typeof traceFields> {}

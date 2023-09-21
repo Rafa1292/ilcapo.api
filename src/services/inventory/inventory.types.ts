@@ -1,3 +1,5 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
+
 export interface InventoryAttributes {
   id: number
   initialValue: number
@@ -13,4 +15,4 @@ export interface InventoryAttributes {
   updatedBy?: number
 }
 
-export interface Inventory extends Required<InventoryAttributes> { }
+export interface Inventory extends Omit<InventoryAttributes, keyof typeof traceFields> { }

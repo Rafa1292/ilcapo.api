@@ -1,3 +1,4 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
 
 export interface UpgradeElementPriceAttributes {
     id: number
@@ -10,8 +11,6 @@ export interface UpgradeElementPriceAttributes {
     createdBy?: number
     updatedBy?: number
   }
-  
-  export interface UpgradeElementPrice extends Required<UpgradeElementPriceAttributes> { }
-  
-  export interface NewUpgradeElementPrice extends Omit<UpgradeElementPriceAttributes, 'id'> { }
+    
+  export interface UpgradeElementPrice extends Omit<UpgradeElementPriceAttributes, keyof typeof traceFields> { }
   

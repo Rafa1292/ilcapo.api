@@ -1,3 +1,4 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
 import { SaleItem } from "../saleItem/saleItem.types"
 
 export interface SaleItemCategoryAttributes {
@@ -11,6 +12,4 @@ export interface SaleItemCategoryAttributes {
   updatedBy?: number
 }
 
-export interface SaleItemCategory extends Required<SaleItemCategoryAttributes> { }
-
-export interface NewSaleItemCategory extends Omit<SaleItemCategoryAttributes, 'id'> { }
+export interface SaleItemCategory extends Omit<SaleItemCategoryAttributes, keyof typeof traceFields> { }

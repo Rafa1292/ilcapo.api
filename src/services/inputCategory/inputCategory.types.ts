@@ -1,3 +1,5 @@
+import { traceFields } from "../../utils/genericTypes/traceFields.type"
+
 export interface InputCategoryAttributes {
   id: number
   name: string
@@ -8,6 +10,5 @@ export interface InputCategoryAttributes {
   updatedBy?: number
 }
 
-export interface InputCategory extends Required<InputCategoryAttributes> { }
 
-export interface NewInputCategory extends Omit<InputCategoryAttributes, 'id'> { }
+export interface InputCategory extends Omit<InputCategoryAttributes, keyof typeof traceFields> { }

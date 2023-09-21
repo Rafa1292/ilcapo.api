@@ -1,3 +1,4 @@
+import { traceFields } from '../../utils/genericTypes/traceFields.type'
 import { RecipeStepIngredient } from '../recipeStepIngredient/recipeStepIngredient.type'
 
 export interface RecipeStepAttributes {
@@ -15,6 +16,4 @@ export interface RecipeStepAttributes {
   updatedBy?: number
 }
 
-export interface RecipeStep extends Required<RecipeStepAttributes> { }
-
-export interface NewRecipeStep extends Omit<RecipeStepAttributes, 'id'> { }
+export interface RecipeStep extends Omit<RecipeStepAttributes, keyof typeof traceFields> { }
