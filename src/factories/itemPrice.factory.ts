@@ -1,23 +1,49 @@
+import { z } from "zod";
 import { ItemPrice } from "../services/itemPrice/itemPrice.types";
 
-export const toNewItemPrice = async (itemPrice: any): Promise<ItemPrice> => {
-  return {
-    id: itemPrice.id,
-    itemId: itemPrice.itemId,
-    menuId: itemPrice.menuId,
-    price: itemPrice.price,
-    createdBy: itemPrice.createdBy,
-    updatedBy: itemPrice.updatedBy,
-    createdAt: itemPrice.createdAt,
-    updatedAt: itemPrice.updatedAt,
-    delete: itemPrice.delete,
-  };
+const itemPriceSchema = z.object({
+  id: z.number({
+    required_error: 'El id es requerido',
+    invalid_type_error: 'El id debe ser un numero entero',
+  }),
+  itemId: z.number({
+    required_error: 'El item es requerido',
+    invalid_type_error: 'El item debe ser un numero entero',
+  }),
+  menuId: z.number({
+    required_error: 'El menu es requerido',
+    invalid_type_error: 'El menu debe ser un numero entero',
+  }),
+  price: z.number({
+    required_error: 'El precio es requerido',
+    invalid_type_error: 'El precio debe ser un numero entero',
+  })
+})
+
+export const validateItemPrice = async (itemPrice: any): Promise<ItemPrice> => {
+  const result = await itemPriceSchema.safeParseAsync(itemPrice)
+
+  if (!result.success) {
+    throw new Error(result.error.message)
+  }
+
+  return result.data
 };
 
-export const toNewItemPrices = async (items: any[]): Promise<ItemPrice[]> => {
+export const validatePartialItemPrice = async (itemPrice: any): Promise<Partial<ItemPrice>> => {
+  const result = await itemPriceSchema.partial().safeParseAsync(itemPrice)
+
+  if (!result.success) {
+    throw new Error(result.error.message)
+  }
+
+  return result.data
+};
+
+export const validateItemPrices = async (items: any[]): Promise<ItemPrice[]> => {
   return await Promise.all(
     items.map(async (item) => {
-      return await toNewItemPrice(item);
+      return await validateItemPrice(item);
     })
   );
 };

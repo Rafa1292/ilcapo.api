@@ -36,7 +36,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createInput } = await inputFactory.toNewInput(req.body)
+    const { id, ...createInput } = await inputFactory.validateInput(req.body)
     const savedInput = await inputService.saveInput(createInput)
     response.setResponse(savedInput, ['Input saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +50,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const input = await inputFactory.toNewInput(req.body)
+    const input = await inputFactory.validateInput(req.body)
     const savedInput = await inputService.updateInput(input, id)
     response.setResponse(savedInput, ['Input updated successfully'], false)
   } catch (error) {

@@ -1,6 +1,6 @@
 import { Magnitude, NewMagnitude } from './magnitude.types'
 import { MagnitudeModel } from '../../db/models/magnitude.model'
-import { toNewMagnitude, toNewMagnitudes } from '../../factories/magnitude.factory'
+import { validateMagnitude, validateMagnitudes } from '../../factories/magnitude.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getMagnitudes = async (): Promise<Magnitude[]> => {
@@ -17,14 +17,14 @@ export const getMagnitudes = async (): Promise<Magnitude[]> => {
     }
   )
 
-  return await toNewMagnitudes(magnitudes)
+  return await validateMagnitudes(magnitudes)
 }
 
 export const getMagnitudeById = async (id: number): Promise<Magnitude> => {
   const response = await MagnitudeModel.findByPk(id)
   if (response === null) throw new Error('Magnitude not found')
   if (response.delete) throw new Error('Magnitude deleted')
-  return await toNewMagnitude(response)
+  return await validateMagnitude(response)
 }
 
 export const saveMagnitude = async (magnitude: NewMagnitude): Promise<Magnitude> => {
@@ -32,7 +32,7 @@ export const saveMagnitude = async (magnitude: NewMagnitude): Promise<Magnitude>
   magnitude.createdAt = now
   magnitude.updatedAt = now
   const savedMagnitude = await MagnitudeModel.create(magnitude)
-  return await toNewMagnitude(savedMagnitude)
+  return await validateMagnitude(savedMagnitude)
 }
 
 export const updateMagnitude = async (magnitude: Partial<Magnitude>, id: number): Promise<void> => {

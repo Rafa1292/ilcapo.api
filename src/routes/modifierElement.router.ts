@@ -38,7 +38,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/:modifierGroupId', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createModifierElement } = await modifierElementFactory.toNewModifierElement(req.body)
+    const { id, ...createModifierElement } = await modifierElementFactory.validateModifierElement(req.body)
     if (id > 0) {
       response.setResponse(undefined, ['ModifierElement already exists and was recovery'], false)
     } else {
@@ -64,7 +64,7 @@ router.patch('/:id/:modifierGroupId', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const elementId = parseInt(req.params.id)
-    const modifierElement = await modifierElementFactory.toNewModifierElement(req.body)
+    const modifierElement = await modifierElementFactory.validateModifierElement(req.body)
     const savedModifierElement = await modifierElementService.updateModifierElement(modifierElement, elementId)
 
     if (modifierElement.productReference !== undefined) {

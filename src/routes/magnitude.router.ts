@@ -36,7 +36,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createMagnitude } = await magnitudeFactory.toNewMagnitude(req.body)
+    const { id, ...createMagnitude } = await magnitudeFactory.validateMagnitude(req.body)
     const savedMagnitude = await magnitudeService.saveMagnitude(createMagnitude)
     response.setResponse(savedMagnitude, ['Magnitude saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +50,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const magnitude = await magnitudeFactory.toNewMagnitude(req.body)
+    const magnitude = await magnitudeFactory.validateMagnitude(req.body)
     const savedMagnitude = await magnitudeService.updateMagnitude(magnitude, id)
     response.setResponse(savedMagnitude, ['Magnitude updated successfully'], false)
   } catch (error) {

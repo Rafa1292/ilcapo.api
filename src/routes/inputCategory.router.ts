@@ -36,7 +36,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createInputCategory } = await inputCategoryFactory.toNewInputCategory(req.body)
+    const { id, ...createInputCategory } = await inputCategoryFactory.validateInputCategory(req.body)
     const savedInputCategory = await inputCategoryService.saveInputCategory(createInputCategory)
     response.setResponse(savedInputCategory, ['Input category saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +50,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const inputCategory = await inputCategoryFactory.toNewInputCategory(req.body)
+    const inputCategory = await inputCategoryFactory.validateInputCategory(req.body)
     const savedInputCategory = await inputCategoryService.updateInputCategory(inputCategory, id)
     response.setResponse(savedInputCategory, ['Input category updated successfully'], false)
   } catch (error) {

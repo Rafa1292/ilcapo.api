@@ -40,3 +40,17 @@ export const validateMeasure = async (measure: any): Promise<Measure> => {
 
   return result.data
 }
+
+export const validatePartialMeasure = async (measure: any): Promise<Partial<Measure>> => {
+  const result = await measureSchema.partial().safeParseAsync(measure)
+
+  if (!result.success) {
+    throw new Error(result.error.message)
+  }
+
+  return result.data
+}
+
+export const validateMeasures = async (measures: any[]): Promise<Measure[]> => {
+  return await Promise.all(measures.map(async (measure) => await validateMeasure(measure)))
+}

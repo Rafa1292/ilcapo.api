@@ -1,6 +1,6 @@
 import { Transaction } from "sequelize";
 import { ItemPriceModel } from "../../db/models/itemPrice.model";
-import { toNewItemPrice } from "../../factories/itemPrice.factory";
+import { validateItemPrice } from "../../factories/itemPrice.factory";
 import { ItemPrice } from "./itemPrice.types";
 import { getNow } from "../../utils/timeManager";
 
@@ -13,7 +13,7 @@ export const saveItemPrice = async (
   newItemPrice.createdAt = now
   newItemPrice.updatedAt = now
   const currentItemPrice = await ItemPriceModel.create(newItemPrice, { transaction });
-  return toNewItemPrice(currentItemPrice);
+  return validateItemPrice(currentItemPrice);
 };
 
 export const updateItemPrice = async ( itemPrice: ItemPrice, id: number, transaction: Transaction): Promise<ItemPrice | null> => {
@@ -25,7 +25,7 @@ export const updateItemPrice = async ( itemPrice: ItemPrice, id: number, transac
     },
     transaction
   });
-  return toNewItemPrice(updatedItemPrice);
+  return validateItemPrice(updatedItemPrice);
 };
 
 export const deleteItemPrice = async (id: number, transaction: Transaction): Promise<void> => {

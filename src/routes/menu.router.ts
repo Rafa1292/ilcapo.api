@@ -41,7 +41,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 router.post("/", async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse();
   try {
-    const { id, ...createMenu } = await menuFactory.toNewMenu(req.body);
+    const { id, ...createMenu } = await menuFactory.validateMenu(req.body);
     const savedMenu = await menuService.saveMenu(createMenu);
     response.setResponse(savedMenu, ["Menu saved successfully"], false);
   } catch (error: any) {
@@ -54,7 +54,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/", async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse();
   try {
-    const updateMenu = await menuFactory.toNewMenu(req.body);
+    const updateMenu = await menuFactory.validateMenu(req.body);
     const updatedMenu = await menuService.updateMenu(updateMenu);
     response.setResponse(updatedMenu, ["Menu updated successfully"], false);
   } catch (error: any) {

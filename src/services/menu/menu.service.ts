@@ -1,5 +1,5 @@
 import { MenuModel } from "../../db/models/menu.model";
-import { toNewMenu, toNewMenus } from "../../factories/menu.factory";
+import { validateMenu, validateMenus } from "../../factories/menu.factory";
 import { getNow } from "../../utils/timeManager";
 import { Menu, NewMenu } from "./menu.types";
 
@@ -9,7 +9,7 @@ export const getMenus = async (): Promise<Menu[]> => {
       delete: false,
     },
   });
-  return await toNewMenus(menus);
+  return await validateMenus(menus);
 };
 
 export const getMenuById = async (id: number): Promise<Menu | null> => {
@@ -19,7 +19,7 @@ export const getMenuById = async (id: number): Promise<Menu | null> => {
       delete: false,
     },
   });
-  return toNewMenu(menu);
+  return validateMenu(menu);
 };
 
 export const saveMenu = async (menu: NewMenu): Promise<Menu> => {
@@ -27,7 +27,7 @@ export const saveMenu = async (menu: NewMenu): Promise<Menu> => {
   menu.createdAt = now
   menu.updatedAt = now
   const newMenu = await MenuModel.create(menu);
-  return toNewMenu(newMenu);
+  return validateMenu(newMenu);
 };
 
 export const updateMenu = async (menu: Partial<Menu>): Promise<Menu | null> => {
@@ -38,7 +38,7 @@ export const updateMenu = async (menu: Partial<Menu>): Promise<Menu | null> => {
       id: menu.id,
     },
   });
-  return toNewMenu(updatedMenu);
+  return validateMenu(updatedMenu);
 };
 
 export const deleteMenu = async (id: number): Promise<Menu | null> => {
@@ -51,5 +51,5 @@ export const deleteMenu = async (id: number): Promise<Menu | null> => {
       },
     }
   );
-  return toNewMenu(deletedMenu);
+  return validateMenu(deletedMenu);
 };

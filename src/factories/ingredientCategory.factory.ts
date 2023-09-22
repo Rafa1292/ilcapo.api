@@ -24,7 +24,7 @@ export const validateIngredientCategory = async (ingredientCategory: any): Promi
 }
 
 export const validatePartialIngredientCategory = async (ingredientCategory: any): Promise<Partial<IngredientCategory>> => {
-  const result = await ingredientCategorySchema.safeParseAsync(ingredientCategory)
+  const result = await ingredientCategorySchema.partial().safeParseAsync(ingredientCategory)
   await ingredientCategoryValidator.newIngredientCategoryIsValid(ingredientCategory)
 
   if (!result.success) throw new Error(result.error.message)

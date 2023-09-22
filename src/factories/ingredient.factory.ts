@@ -49,7 +49,7 @@ export const validateIngredient = async (ingredient: any): Promise<Ingredient> =
 }
 
 export const validatePartialIngredient = async (ingredient: any): Promise<Partial<Ingredient>> => {
-  const result = await ingredientSchema.safeParseAsync(ingredient)
+  const result = await ingredientSchema.partial().safeParseAsync(ingredient)
   await ingredientValidator.newIngredientIsValid(ingredient)
 
   if (!result.success) {

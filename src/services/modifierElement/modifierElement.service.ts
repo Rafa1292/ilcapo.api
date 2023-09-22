@@ -1,6 +1,6 @@
 import { ModifierElement, NewModifierElement } from './modifierElement.types'
 import { ModifierElementModel } from '../../db/models/modifierElement.model'
-import { toNewModifierElement } from '../../factories/modifierElement.factory'
+import { validateModifierElement } from '../../factories/modifierElement.factory'
 import { Transaction } from 'sequelize'
 import {
   deleteElementPrice,
@@ -44,7 +44,7 @@ export const getModifierElementById = async (
     include: ['modifierUpgrade', 'productReference', 'prices'],
   })
   if (response === null) throw new Error('ModifierElement not found')
-  return await toNewModifierElement(response)
+  return await validateModifierElement(response)
 }
 
 export const saveModifierElement = async (

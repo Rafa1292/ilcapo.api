@@ -1,6 +1,6 @@
 import { Input, NewInput } from './input.types'
 import { InputModel } from '../../db/models/input.model'
-import { toNewInput } from '../../factories/input.factory'
+import { validateInput } from '../../factories/input.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getInputs = async (): Promise<Input[]> => {
@@ -26,7 +26,7 @@ export const getInputById = async (id: number): Promise<Input> => {
   const response = await InputModel.findByPk(id)
   if (response === null) throw new Error('Input not found')
   if (response.delete) throw new Error('Input deleted')
-  return await toNewInput(response)
+  return await validateInput(response)
 }
 
 export const saveInput = async (input: NewInput): Promise<Input> => {

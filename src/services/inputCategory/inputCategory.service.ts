@@ -1,6 +1,6 @@
 import { InputCategory, NewInputCategory } from './inputCategory.types'
 import { InputCategoryModel } from '../../db/models/inputCategory.model'
-import { toNewInputCategory } from '../../factories/inputCategory.factory'
+import { validateInputCategory } from '../../factories/inputCategory.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getInputCategories = async (): Promise<InputCategory[]> => {
@@ -26,7 +26,7 @@ export const getInputCategoryById = async (id: number): Promise<InputCategory> =
   const response = await InputCategoryModel.findByPk(id)
   if (response === null) throw new Error('InputCategory not found')
   if (response.delete) throw new Error('InputCategory deleted')
-  return await toNewInputCategory(response)
+  return await validateInputCategory(response)
 }
 
 export const saveInputCategory = async (inputCategory: NewInputCategory): Promise<InputCategory> => {

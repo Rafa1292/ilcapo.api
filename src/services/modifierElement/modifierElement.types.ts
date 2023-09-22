@@ -9,9 +9,9 @@ export interface ModifierElementAttributes {
   delete: boolean
   defaultRecipeId: number
   combinable: boolean
-  prices: ElementPrice[]
+  prices?: ElementPrice[]
   combinableModifierGroupId: number
-  modifierUpgrade: ModifierElementUpgrade
+  modifierUpgrade?: ModifierElementUpgrade
   modifierGroupId: number
   createdAt?: Date
   updatedAt?: Date
