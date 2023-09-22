@@ -1,6 +1,6 @@
 import { Recipe, NewRecipe } from './recipe.types'
 import { RecipeModel } from '../../db/models/recipe.model'
-import { toNewRecipe, toNewRecipes } from '../../factories/recipe.factory'
+import { validateRecipe, validateRecipes } from '../../factories/recipe.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getRecipes = async (): Promise<Recipe[]> => {
@@ -30,7 +30,7 @@ export const getRecipes = async (): Promise<Recipe[]> => {
     }
   )
 
-  return await toNewRecipes(recipes)
+  return await validateRecipes(recipes)
 }
 
 export const getRecipesWithDeletedItems = async (): Promise<Recipe[]> => {
@@ -62,7 +62,7 @@ export const getRecipeById = async (id: number): Promise<Recipe> => {
   if (response === null) throw new Error('Recipe not found')
   if (response.delete) throw new Error('Recipe deleted')
   console.log(response)
-  return await toNewRecipe(response)
+  return await validateRecipe(response)
 }
 
 export const saveRecipe = async (recipe: NewRecipe): Promise<Recipe> => {

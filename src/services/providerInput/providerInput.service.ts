@@ -1,13 +1,13 @@
 import { ProviderInput, NewProviderInput } from './providerInput.types'
 import { ProviderInputModel } from '../../db/models/providerInput.model'
-import { toNewProviderInput, toNewProviderInputs } from '../../factories/providerInput.factory'
+import { validateProviderInput, validateProviderInputs } from '../../factories/providerInput.factory'
 import { newProviderInputIsValid } from '../../validations/providerInput.validator'
 import { getNow } from '../../utils/timeManager'
 
 export const getProviderInputById = async (id: number): Promise<ProviderInput> => {
   const response = await ProviderInputModel.findByPk(id)
   if (response === null) throw new Error('ProviderInput not found')
-  return await toNewProviderInput(response)
+  return await validateProviderInput(response)
 }
 
 export const saveProviderInput = async (providerInput: NewProviderInput): Promise<ProviderInput> => {
@@ -41,7 +41,7 @@ export const recoveryProviderInput = async (id: number): Promise<ProviderInput> 
 export const getProviderInputByProviderIdAndInputIdAndBrandId = async (id: number, providerId: number, inputId: number, brandId: number): Promise<ProviderInput | null> => {
   const response = await ProviderInputModel.findOne({ where: { providerId, inputId, brandId } })
   if (response !== null && response.id !== id) {
-    return await toNewProviderInput(response)
+    return await validateProviderInput(response)
   }
 
   return null
@@ -70,7 +70,7 @@ export const getProviderInputsByInputId = async (inputId: number): Promise<Provi
       ]
     })
   if (response === null) throw new Error('ProviderInput not found')
-  return await toNewProviderInputs(response)
+  return await validateProviderInputs(response)
 }
 
 export const getProviderInputsByProviderId = async (providerId: number): Promise<ProviderInput[]> => {
@@ -96,5 +96,5 @@ export const getProviderInputsByProviderId = async (providerId: number): Promise
       ]
     })
   if (response === null) throw new Error('ProviderInput not found')
-  return await toNewProviderInputs(response)
+  return await validateProviderInputs(response)
 }

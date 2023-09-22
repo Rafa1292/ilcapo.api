@@ -1,6 +1,6 @@
 import { SaleItemCategory, NewSaleItemCategory } from './saleItemCategory.types'
 import { SaleItemCategoryModel } from '../../db/models/saleItemCategory.model'
-import { toNewSaleItemCategory } from '../../factories/saleItemCategory.factory'
+import { validateSaleItemCategory } from '../../factories/saleItemCategory.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getSaleItemCategories = async (): Promise<SaleItemCategory[]> => {
@@ -87,7 +87,7 @@ export const getSaleItemCategoryById = async (
   const response = await SaleItemCategoryModel.findByPk(id)
   if (response === null) throw new Error('SaleItemCategory not found')
   if (response.delete) throw new Error('SaleItemCategory deleted')
-  return await toNewSaleItemCategory(response)
+  return await validateSaleItemCategory(response)
 }
 
 export const saveSaleItemCategory = async (

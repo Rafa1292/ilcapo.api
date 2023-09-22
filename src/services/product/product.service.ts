@@ -1,6 +1,6 @@
 import { Product, NewProduct } from './product.types'
 import { ProductModel } from '../../db/models/product.model'
-import { toNewProduct, toNewProducts } from '../../factories/product.factory'
+import { validateProduct, validateProducts } from '../../factories/product.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getProducts = async (): Promise<Product[]> => {
@@ -30,7 +30,7 @@ export const getProducts = async (): Promise<Product[]> => {
     }
   )
 
-  return await toNewProducts(products)
+  return await validateProducts(products)
 }
 
 export const getProductsWithDeletedItems = async (): Promise<Product[]> => {
@@ -41,7 +41,7 @@ export const getProductById = async (id: number): Promise<Product> => {
   const response = await ProductModel.findByPk(id)
   if (response === null) throw new Error('Product not found')
   if (response.delete) throw new Error('Product deleted')
-  return await toNewProduct(response)
+  return await validateProduct(response)
 }
 
 export const saveProduct = async (product: NewProduct): Promise<Product> => {

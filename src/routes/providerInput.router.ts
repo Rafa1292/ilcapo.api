@@ -67,7 +67,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createProviderInput } = await providerInputFactory.toNewProviderInput(req.body)
+    const { id, ...createProviderInput } = await providerInputFactory.validateProviderInput(req.body)
     const savedProviderInput = await providerInputService.saveProviderInput(createProviderInput)
     response.setResponse(savedProviderInput, ['Provider input saved successfully'], false)
   } catch (error: any) {
@@ -81,7 +81,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const providerInput = await providerInputFactory.toNewProviderInput(req.body)
+    const providerInput = await providerInputFactory.validateProviderInput(req.body)
     const savedProviderInput = await providerInputService.updateProviderInput(providerInput, id)
     response.setResponse(savedProviderInput, ['Provider input updated successfully'], false)
   } catch (error) {

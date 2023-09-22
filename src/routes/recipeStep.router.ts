@@ -28,7 +28,7 @@ router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   const transaction = await sequelize.transaction()
   try {
-    const { id, ...createRecipeStep } = await recipeStepFactory.toNewRecipeStep(req.body)
+    const { id, ...createRecipeStep } = await recipeStepFactory.validateRecipeStep(req.body)
     const savedRecipeStep = await recipeStepService.saveRecipeStep(createRecipeStep)
     await saveRecipeStepIngredients(createRecipeStep.recipeStepIngredients, savedRecipeStep.id)
     await transaction.commit()
@@ -76,7 +76,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const transaction = await sequelize.transaction()
   try {
     const id = parseInt(req.params.id)
-    const recipeStep = await recipeStepFactory.toNewRecipeStep(req.body)
+    const recipeStep = await recipeStepFactory.validateRecipeStep(req.body)
     const savedRecipeStep = await recipeStepService.updateRecipeStep(recipeStep, id)
     response.setResponse(savedRecipeStep, ['RecipeStep updated successfully'], false)
     await transaction.commit()

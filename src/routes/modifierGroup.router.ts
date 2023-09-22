@@ -36,7 +36,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createModifierGroup } = await modifierGroupFactory.toNewModifierGroup(req.body)
+    const { id, ...createModifierGroup } = await modifierGroupFactory.validateModifierGroup(req.body)
     const savedModifierGroup = await modifierGroupService.saveModifierGroup(createModifierGroup)
     response.setResponse(savedModifierGroup, ['ModifierGroup saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +50,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const modifierGroup = await modifierGroupFactory.toNewModifierGroup(req.body)
+    const modifierGroup = await modifierGroupFactory.validateModifierGroup(req.body)
     const savedModifierGroup = await modifierGroupService.updateModifierGroup(modifierGroup, id)
     response.setResponse(savedModifierGroup, ['ModifierGroup updated successfully'], false)
   } catch (error) {

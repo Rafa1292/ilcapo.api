@@ -36,7 +36,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createProvider } = await providerFactory.toNewProvider(req.body)
+    const { id, ...createProvider } = await providerFactory.validateProvider(req.body)
     const savedProvider = await providerService.saveProvider(createProvider)
     response.setResponse(savedProvider, ['Provider saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +50,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const provider = await providerFactory.toNewProvider(req.body)
+    const provider = await providerFactory.validateProvider(req.body)
     const savedProvider = await providerService.updateProvider(provider, id)
     response.setResponse(savedProvider, ['Provider updated successfully'], false)
   } catch (error) {

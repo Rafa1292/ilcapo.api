@@ -1,12 +1,12 @@
 import { ProductReference, NewProductReference } from './productReference.types'
 import { ProductReferenceModel } from '../../db/models/productReference.model'
-import { toNewProductReference } from '../../factories/productReference.factory'
+import { validateProductReference } from '../../factories/productReference.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getProductReferenceByModifierElementId = async (id: number): Promise<ProductReference> => {
   const response = await ProductReferenceModel.findOne({ where: { modifierElementId: id } })
   if (response === null) throw new Error('ProductReference not found')
-  return await toNewProductReference(response)
+  return await validateProductReference(response)
 }
 
 export const saveProductReference = async (productReference: NewProductReference): Promise<ProductReference> => {

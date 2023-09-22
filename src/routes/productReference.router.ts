@@ -11,7 +11,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const productReference = await productReferenceFactory.toNewProductReference(req.body)
+    const productReference = await productReferenceFactory.validateProductReference(req.body)
     const savedProductReference = await productReferenceService.updateProductReference(productReference, id)
     response.setResponse(savedProductReference, ['ProductReference updated successfully'], false)
   } catch (error) {

@@ -24,7 +24,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const modifierElementUpgrade = await modifierElementUpgradeFactory.toNewModifierElementUpgrade(req.body)
+    const modifierElementUpgrade = await modifierElementUpgradeFactory.validateModifierElementUpgrade(req.body)
     const savedModifierElementUpgrade = await modifierElementUpgradeService.updateModifierElementUpgrade(modifierElementUpgrade, id)
     response.setResponse(savedModifierElementUpgrade, ['ModifierGroupUpgrade updated successfully'], false)
   } catch (error) {

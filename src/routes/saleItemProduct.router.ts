@@ -10,7 +10,7 @@ const router = express.Router()
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createSaleItemProduct } = await saleItemProductFactory.toNewSaleItemProduct(req.body)
+    const { id, ...createSaleItemProduct } = await saleItemProductFactory.validateSaleItemProduct(req.body)
     const savedSaleItemProduct = await saleItemProductService.saveSaleItemProduct(createSaleItemProduct)
     response.setResponse(savedSaleItemProduct, ['SaleItem Product saved successfully'], false)
   } catch (error: any) {
@@ -24,7 +24,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const saleItemProduct = await saleItemProductFactory.toNewSaleItemProduct(req.body)
+    const saleItemProduct = await saleItemProductFactory.validateSaleItemProduct(req.body)
     const savedSaleItemProduct = await saleItemProductService.updateSaleItemProduct(saleItemProduct, id)
     response.setResponse(savedSaleItemProduct, ['SaleItem Product updated successfully'], false)
   } catch (error) {

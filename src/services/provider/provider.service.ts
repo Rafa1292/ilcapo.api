@@ -1,6 +1,6 @@
 import { Provider, NewProvider } from './provider.types'
 import { ProviderModel } from '../../db/models/provider.model'
-import { toNewProvider } from '../../factories/provider.factory'
+import { validateProvider } from '../../factories/provider.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getProviders = async (): Promise<Provider[]> => {
@@ -21,7 +21,7 @@ export const getProviderById = async (id: number): Promise<Provider> => {
   const response = await ProviderModel.findByPk(id)
   if (response === null) throw new Error('Provider not found')
   if (response.delete) throw new Error('Provider deleted')
-  return await toNewProvider(response)
+  return await validateProvider(response)
 }
 
 export const saveProvider = async (provider: NewProvider): Promise<void> => {

@@ -1,6 +1,6 @@
 import { ModifierGroup, NewModifierGroup } from './modifierGroup.types'
 import { ModifierGroupModel } from '../../db/models/modifierGroup.model'
-import { toNewModifierGroup, toNewModifierGroups } from '../../factories/modifierGroup.factory'
+import { validateModifierGroup, validateModifierGroups } from '../../factories/modifierGroup.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
@@ -25,7 +25,7 @@ export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
       ]
     }
   )
-  return await toNewModifierGroups(modifierGroups)
+  return await validateModifierGroups(modifierGroups)
 }
 
 export const getModifierGroupsWithDeletedItems = async (): Promise<ModifierGroup[]> => {
@@ -51,7 +51,7 @@ export const getModifierGroupById = async (id: number): Promise<ModifierGroup> =
     })
   if (response === null) throw new Error('ModifierGroup not found')
   if (response.delete) throw new Error('ModifierGroup deleted')
-  return await toNewModifierGroup(response)
+  return await validateModifierGroup(response)
 }
 
 export const saveModifierGroup = async (modifierGroup: NewModifierGroup): Promise<ModifierGroup> => {

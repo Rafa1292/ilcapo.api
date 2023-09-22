@@ -1,7 +1,7 @@
 import { Brand } from '../services/brand/brand.types'
 import { z } from 'zod'
 
-const brandSchema = z.object({
+export const brandSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',

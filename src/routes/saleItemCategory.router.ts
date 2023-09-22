@@ -47,7 +47,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createSaleItemCategory } = await saleItemCategoryFactory.toNewSaleItemCategory(req.body)
+    const { id, ...createSaleItemCategory } = await saleItemCategoryFactory.validateSaleItemCategory(req.body)
     const savedSaleItemCategory = await saleItemCategoryService.saveSaleItemCategory(createSaleItemCategory)
     response.setResponse(savedSaleItemCategory, ['SaleItem category saved successfully'], false)
   } catch (error: any) {
@@ -61,7 +61,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const saleItemCategory = await saleItemCategoryFactory.toNewSaleItemCategory(req.body)
+    const saleItemCategory = await saleItemCategoryFactory.validateSaleItemCategory(req.body)
     const savedSaleItemCategory = await saleItemCategoryService.updateSaleItemCategory(saleItemCategory, id)
     response.setResponse(savedSaleItemCategory, ['SaleItem category updated successfully'], false)
   } catch (error) {

@@ -33,3 +33,21 @@ export const validatePreparationStepInput = async (preparationStepInput: any): P
 
   return result.data
 }
+
+export const validatePartialPreparationStepInput = async (preparationStepInput: any): Promise<Partial<PreparationStepInput>> => {
+  const result = await preparationStepInputSchema.partial().safeParseAsync(preparationStepInput)
+
+  if (!result.success) {
+    throw new Error(result.error.message)
+  }
+
+  return result.data
+}
+
+export const validatePreparationStepInputs = async (preparationStepInputs: any[]): Promise<PreparationStepInput[]> => {
+  return await Promise.all(
+    preparationStepInputs.map(async (preparationStepInput) => {
+      return await validatePreparationStepInput(preparationStepInput)
+    })
+  )
+}

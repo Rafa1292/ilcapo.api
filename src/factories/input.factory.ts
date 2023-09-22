@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { Input } from '../services/input/input.types'
 import * as inputValidator from '../validations/input.validator'
 
-const inputSchema = z.object({
+export const inputSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',

@@ -36,7 +36,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createRecipe } = await recipeFactory.toNewRecipe(req.body)
+    const { id, ...createRecipe } = await recipeFactory.validateRecipe(req.body)
     const savedRecipe = await recipeService.saveRecipe(createRecipe)
     response.setResponse(savedRecipe, ['Recipe saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +50,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const recipe = await recipeFactory.toNewRecipe(req.body)
+    const recipe = await recipeFactory.validateRecipe(req.body)
     const savedRecipe = await recipeService.updateRecipe(recipe, id)
     response.setResponse(savedRecipe, ['Recipe updated successfully'], false)
   } catch (error) {

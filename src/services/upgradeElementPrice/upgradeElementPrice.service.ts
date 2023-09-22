@@ -1,6 +1,6 @@
 import { Transaction } from "sequelize";
 import { UpgradeElementPriceModel } from "../../db/models/upgradeElementPrice.model";
-import { toNewUpgradeElementPrice } from "../../factories/upgradeElementPrice.factory";
+import { validateUpgradeElementPrice } from "../../factories/upgradeElementPrice.factory";
 import { UpgradeElementPrice } from "./upgradeElementPrice.types";
 import { getNow } from "../../utils/timeManager";
 
@@ -13,7 +13,7 @@ export const saveUpgradeElementPrice = async (
   rest.createdAt = now
   rest.updatedAt = now
   const newItemPrice = await UpgradeElementPriceModel.create(rest, { transaction });
-  return toNewUpgradeElementPrice(newItemPrice);
+  return validateUpgradeElementPrice(newItemPrice);
 };
 
 export const updateUpgradeElementPrice = async (
@@ -29,7 +29,7 @@ export const updateUpgradeElementPrice = async (
     },
     transaction
   });
-  return toNewUpgradeElementPrice(updatedItemPrice);
+  return validateUpgradeElementPrice(updatedItemPrice);
 };
 
 export const deleteUpgradeElementPrice = async (id: number, transaction: Transaction): Promise<void> => {

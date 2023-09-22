@@ -1,6 +1,6 @@
 import { SaleItem, NewSaleItem } from './saleItem.types'
 import { SaleItemModel } from '../../db/models/saleItem.model'
-import { toNewSaleItem } from '../../factories/saleItem.factory'
+import { validateSaleItem } from '../../factories/saleItem.factory'
 import { Transaction } from 'sequelize'
 import { deleteItemPrice, saveItemPrice, updateItemPrice } from '../itemPrice/itemPrice.service'
 import { getNow } from '../../utils/timeManager'
@@ -32,7 +32,7 @@ export const getSaleItemById = async (id: number): Promise<SaleItem> => {
   const response = await SaleItemModel.findByPk(id, { include: ['prices'] })
   if (response === null) throw new Error('SaleItem not found')
   if (response.delete) throw new Error('SaleItem deleted')
-  return await toNewSaleItem(response)
+  return await validateSaleItem(response)
 }
 
 export const saveSaleItem = async (saleItem: NewSaleItem): Promise<void> => {

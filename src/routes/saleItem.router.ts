@@ -39,7 +39,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createSaleItem } = await saleItemFactory.toNewSaleItem(req.body)
+    const { id, ...createSaleItem } = await saleItemFactory.validateSaleItem(req.body)
     const savedSaleItem = await saleItemService.saveSaleItem(createSaleItem)
     response.setResponse(savedSaleItem, ['SaleItem saved successfully'], false)
   } catch (error: any) {
@@ -55,7 +55,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     const prices = req.body.prices as ItemPrice[]
     validatePrices(prices)
-    const saleItem = await saleItemFactory.toNewSaleItem({...req.body, prices} as SaleItem)
+    const saleItem = await saleItemFactory.validateSaleItem({...req.body, prices} as SaleItem)
     const savedSaleItem = await saleItemService.updateSaleItem(saleItem, id)
     response.setResponse(savedSaleItem, ['SaleItem updated successfully'], false)
   } catch (error) {

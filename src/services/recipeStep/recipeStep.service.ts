@@ -1,5 +1,5 @@
 import { RecipeStep, NewRecipeStep } from './recipeStep.types'
-import { toNewRecipeStep } from '../../factories/recipeStep.factory'
+import { validateRecipeStep } from '../../factories/recipeStep.factory'
 import { RecipeStepModel } from '../../db/models/recipeStep.model'
 import { getNow } from '../../utils/timeManager'
 
@@ -17,7 +17,7 @@ export const getRecipeStepById = async (id: number): Promise<RecipeStep> => {
   )
   if (response === null) throw new Error('RecipeStep not found')
   if (response.delete) throw new Error('RecipeStep deleted')
-  return await toNewRecipeStep(response)
+  return await validateRecipeStep(response)
 }
 
 export const saveRecipeStep = async (recipeStep: NewRecipeStep): Promise<RecipeStep> => {

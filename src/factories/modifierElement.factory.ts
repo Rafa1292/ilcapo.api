@@ -3,7 +3,7 @@ import { ModifierElement } from '../services/modifierElement/modifierElement.typ
 import * as modifierElementValidator from '../validations/modifierElement.validator'
 import { elementPriceSchema } from './elementPrice.factory'
 
-const modifierElementSchema = z.object({
+export const modifierElementSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
@@ -33,6 +33,17 @@ const modifierElementSchema = z.object({
 
 export const validateModifierElement = async (modifierElement: any): Promise<ModifierElement> => {
   const result = await modifierElementSchema.safeParseAsync(modifierElement)
+  await modifierElementValidator.newModifierElementIsValid(modifierElement)
+
+  if (!result.success) {
+    throw new Error(result.error.message)
+  }
+
+  return result.data  
+}
+
+export const validatePartialModifierElement = async (modifierElement: any): Promise<Partial<ModifierElement>> => {
+  const result = await modifierElementSchema.partial().safeParseAsync(modifierElement)
   await modifierElementValidator.newModifierElementIsValid(modifierElement)
 
   if (!result.success) {

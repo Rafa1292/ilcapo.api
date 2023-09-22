@@ -32,13 +32,33 @@ export const preparationStepSchema = z.object({
 })
 
 export const validatePreparationStep = async (preparationStep: any): Promise<PreparationStep> => {
-  await preparationStepValidator.newPreparationStepIsValid()
   
   const result = await preparationStepSchema.safeParseAsync(preparationStep)
+  await preparationStepValidator.newPreparationStepIsValid()
 
   if (!result.success) {
     throw new Error(result.error.message)
   }
 
   return result.data
+}
+
+export const validatePartialPreparationStep = async (preparationStep: any): Promise<Partial<PreparationStep>> => {
+  
+  const result = await preparationStepSchema.partial().safeParseAsync(preparationStep)
+  await preparationStepValidator.newPreparationStepIsValid()
+
+  if (!result.success) {
+    throw new Error(result.error.message)
+  }
+
+  return result.data
+} 
+
+export const validatePreparationSteps = async (preparationSteps: any[]): Promise<PreparationStep[]> => {
+  return await Promise.all(
+    preparationSteps.map(async (preparationStep) => {
+      return await validatePreparationStep(preparationStep)
+    })
+  )
 }

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { ItemPrice } from "../services/itemPrice/itemPrice.types";
 
-const itemPriceSchema = z.object({
+export const itemPriceSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
