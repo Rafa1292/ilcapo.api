@@ -1,5 +1,8 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { ExcludeElementAttributes } from '../../services/excludeElement/excludeElement.types'
+import {
+  ExcludeElement,
+  ExcludeElementAttributes,
+} from '../../services/excludeElement/excludeElement.types'
 
 export class ExcludeElementModel
   extends Model
@@ -14,17 +17,41 @@ export class ExcludeElementModel
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
-  static config (sequelize: Sequelize): any {
+  public static getExcludeElement(
+    excludeElement: ExcludeElement,
+    userId: number
+  ): ExcludeElementAttributes {
+    const now = new Date()
+    return {
+      ...excludeElement,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now,
+    }
+  }
+
+  public static getPartialExcludeElement(
+    excludeElement: Partial<ExcludeElement>,
+    userId: number
+  ): Partial<ExcludeElementAttributes> {
+    const now = new Date()
+    return {
+      ...excludeElement,
+      updatedBy: userId,
+      updatedAt: now,
+    }
+  }
+  
+  static config(sequelize: Sequelize): any {
     return {
       sequelize,
       tableName: 'excludeElements',
       modelName: 'excludeElement',
-      timestamps: true
+      timestamps: true,
     }
   }
 }
-
-
 
 export const excludeElementSchema = {
   id: {

@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { ModifierGroupAttributes } from '../../services/modifierGroup/modifierGroup.types'
+import { ModifierGroup, ModifierGroupAttributes } from '../../services/modifierGroup/modifierGroup.types'
 import { ModifierElementUpgrade } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
 import { ModifierElement } from '../../services/modifierElement/modifierElement.types'
 
@@ -29,6 +29,27 @@ export class ModifierGroupModel extends Model implements ModifierGroupAttributes
       tableName: 'modifierGroups',
       modelName: 'modifierGroup',
       timestamps: true
+    }
+  }
+
+  public static getModifierGroup(modifierGroup: ModifierGroup, userId:number): ModifierGroupAttributes{
+    const now = new Date()
+    return {
+      ...modifierGroup,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialModifierGroup(modifierGroup: Partial<ModifierGroup>, userId:number): Partial<ModifierGroupAttributes>{
+    const now = new Date()
+    return {
+      ...modifierGroup,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

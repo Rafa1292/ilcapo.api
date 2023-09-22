@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { ProductReferenceAttributes } from '../../services/productReference/productReference.types'
+import { ProductReference, ProductReferenceAttributes } from '../../services/productReference/productReference.types'
 
 export class ProductReferenceModel extends Model implements ProductReferenceAttributes {
   public id!: number
@@ -24,6 +24,26 @@ export class ProductReferenceModel extends Model implements ProductReferenceAttr
       tableName: 'productRefrences',
       modelName: 'productReference',
       timestamps: true
+    }
+  }
+
+  public static getProductReference (productReference: ProductReference, userId: number): ProductReferenceAttributes {
+    const now = new Date()
+    return {
+      ...productReference,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialProductReference (productReference: Partial<ProductReferenceAttributes>, userId: number): Partial<ProductReferenceAttributes> {
+    const now = new Date()
+    return {
+      ...productReference,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

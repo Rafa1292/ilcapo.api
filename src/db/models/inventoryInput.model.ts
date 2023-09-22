@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { InventoryInputAttributes } from '../../services/inventoryInput/inventoryInput.types'
+import { InventoryInput, InventoryInputAttributes } from '../../services/inventoryInput/inventoryInput.types'
 
 export class InventoryInputModel extends Model implements InventoryInputAttributes {
   public id!: number
@@ -26,6 +26,27 @@ export class InventoryInputModel extends Model implements InventoryInputAttribut
       tableName: 'inventoryInputs',
       modelName: 'inventoryInput',
       timestamps: true
+    }
+  }
+
+  public static getInventoryInput (inventoryInput: InventoryInput, userId: number): InventoryInputAttributes {
+    const now = new Date()
+    return {
+      ...inventoryInput,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialInventoryInput (inventoryInput: Partial<InventoryInputAttributes>, userId: number): Partial<InventoryInputAttributes> {
+    const now = new Date()
+    return {
+      ...inventoryInput,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

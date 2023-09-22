@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { ProviderAttributes } from '../../services/provider/provider.types'
+import { Provider, ProviderAttributes } from '../../services/provider/provider.types'
 export class ProviderModel extends Model implements ProviderAttributes {
   public id!: number
   public name!: string
@@ -22,6 +22,27 @@ export class ProviderModel extends Model implements ProviderAttributes {
       tableName: 'providers',
       modelName: 'provider',
       timestamps: true
+    }
+  }
+
+  public static getProvider (provider: Provider, userId: number): ProviderAttributes {
+    const now = new Date()
+    return {
+      ...provider,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialProvider (provider: Partial<ProviderAttributes>, userId: number): Partial<ProviderAttributes> {
+    const now = new Date()
+    return {
+      ...provider,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

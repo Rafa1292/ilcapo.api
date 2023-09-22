@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { InventoryAttributes } from '../../services/inventory/inventory.types'
+import { Inventory, InventoryAttributes } from '../../services/inventory/inventory.types'
 
 export class InventoryModel extends Model implements InventoryAttributes {
   public id!: number
@@ -31,6 +31,28 @@ export class InventoryModel extends Model implements InventoryAttributes {
       timestamps: true
     }
   }
+
+  public static getInventory (inventory: Inventory, userId: number): InventoryAttributes {
+    const now = new Date()
+    return {
+      ...inventory,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialInventory (inventory: Partial<InventoryAttributes>, userId: number): Partial<InventoryAttributes> {
+    const now = new Date()
+    return {
+      ...inventory,
+      updatedBy: userId,
+      updatedAt: now
+    }
+  }
+
 }
 
 export const inventorySchema = {

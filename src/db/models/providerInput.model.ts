@@ -3,7 +3,7 @@ import { Brand } from '../../services/brand/brand.types'
 import { Input } from '../../services/input/input.types'
 import { Measure } from '../../services/measure/measure.types'
 import { Provider } from '../../services/provider/provider.types'
-import { ProviderInputAttributes } from '../../services/providerInput/providerInput.types'
+import { ProviderInput, ProviderInputAttributes } from '../../services/providerInput/providerInput.types'
 
 export class ProviderInputModel extends Model implements ProviderInputAttributes {
   public id!: number
@@ -40,6 +40,27 @@ export class ProviderInputModel extends Model implements ProviderInputAttributes
       tableName: 'providerInputs',
       modelName: 'providerInput',
       timestamps: true
+    }
+  }
+
+  public static getProviderInput (providerInput: ProviderInput, userId: number): ProviderInputAttributes {
+    const now = new Date()
+    return {
+      ...providerInput,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialProviderInput (providerInput: Partial<ProviderInputAttributes>, userId: number): Partial<ProviderInputAttributes> {
+    const now = new Date()
+    return {
+      ...providerInput,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

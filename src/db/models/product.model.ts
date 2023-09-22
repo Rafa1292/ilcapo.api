@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { ProductAttributes } from '../../services/product/product.types'
+import { Product, ProductAttributes } from '../../services/product/product.types'
 import { ProductModifier } from '../../services/productModifier/productModifier.types'
 
 export class ProductModel extends Model implements ProductAttributes {
@@ -28,6 +28,27 @@ export class ProductModel extends Model implements ProductAttributes {
       tableName: 'products',
       modelName: 'product',
       timestamps: true
+    }
+  }
+
+  public static getProduct (product: Product, userId: number): ProductAttributes {
+    const now = new Date()
+    return {
+      ...product,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialProduct (product: Partial<ProductAttributes>, userId: number): Partial<ProductAttributes> {
+    const now = new Date()
+    return {
+      ...product,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

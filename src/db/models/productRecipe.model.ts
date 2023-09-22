@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { ProductRecipeAttributes } from '../../services/productRecipe/productRecipe.types'
+import { ProductRecipe, ProductRecipeAttributes } from '../../services/productRecipe/productRecipe.types'
 
 export class ProductRecipeModel extends Model implements ProductRecipeAttributes {
   public id!: number
@@ -25,6 +25,27 @@ export class ProductRecipeModel extends Model implements ProductRecipeAttributes
       tableName: 'productRecipes',
       modelName: 'productRecipe',
       timestamps: true
+    }
+  }
+
+  public static getProductRecipe (productRecipe: ProductRecipe, userId: number): ProductRecipeAttributes {
+    const now = new Date()
+    return {
+      ...productRecipe,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialProductRecipe (productRecipe: Partial<ProductRecipeAttributes>, userId: number): Partial<ProductRecipeAttributes> {
+    const now = new Date()
+    return {
+      ...productRecipe,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

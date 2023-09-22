@@ -1,6 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ModifierGroup } from '../../services/modifierGroup/modifierGroup.types'
-import { ProductModifierAttributes } from '../../services/productModifier/productModifier.types'
+import { ProductModifier, ProductModifierAttributes } from '../../services/productModifier/productModifier.types'
 
 export class ProductModifierModel extends Model implements ProductModifierAttributes {
   public id!: number
@@ -32,6 +32,27 @@ export class ProductModifierModel extends Model implements ProductModifierAttrib
       tableName: 'productModifiers',
       modelName: 'productModifier',
       timestamps: true
+    }
+  }
+
+  public static getProductModifier(productModifier: ProductModifier, userId:number): ProductModifierAttributes{
+    const now = new Date()
+    return {
+      ...productModifier,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialProductModifier(productModifier: Partial<ProductModifierAttributes>, userId:number): Partial<ProductModifierAttributes>{
+    const now = new Date()
+    return {
+      ...productModifier,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

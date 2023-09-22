@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { MenuAttributes } from "../../services/menu/menu.types";
+import { Menu, MenuAttributes } from "../../services/menu/menu.types";
 
 export class MenuModel extends Model implements MenuAttributes {
   public id!: number;
@@ -18,6 +18,27 @@ export class MenuModel extends Model implements MenuAttributes {
       tableName: "menus",
       modelName: "menu",
       timestamps: true,
+    };
+  }
+
+  public static getMenu(menu: Menu, userId: number): MenuAttributes {
+    const now = new Date();
+    return {
+      ...menu,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now,
+    };
+  }
+
+  public static getPartialMenu(menu: Partial<MenuAttributes>, userId: number): Partial<MenuAttributes> {
+    const now = new Date();
+    return {
+      ...menu,
+      updatedBy: userId,
+      updatedAt: now,
     };
   }
 }

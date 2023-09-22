@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { PreparationStepInputAttributes } from '../../services/preparationStepInput/preparationStepInput.types'
+import { PreparationStepInput, PreparationStepInputAttributes } from '../../services/preparationStepInput/preparationStepInput.types'
 
 export class PreparationStepInputModel extends Model implements PreparationStepInputAttributes {
   public id!: number
@@ -35,6 +35,27 @@ export class PreparationStepInputModel extends Model implements PreparationStepI
       tableName: 'preparationStepInputs',
       modelName: 'preparationStepInput',
       timestamps: true
+    }
+  }
+
+  public static getPeparationStepInput (preparationStepInput: PreparationStepInput, userId: number): PreparationStepInputAttributes {
+    const now = new Date()
+    return {
+      ...preparationStepInput,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialPeparationStepInput (preparationStepInput: Partial<PreparationStepInputAttributes>, userId: number): Partial<PreparationStepInputAttributes> {
+    const now = new Date()
+    return {
+      ...preparationStepInput,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

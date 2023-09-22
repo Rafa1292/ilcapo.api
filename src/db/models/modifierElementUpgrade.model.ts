@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { ModifierElementUpgradeAttributes } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
+import { ModifierElementUpgrade, ModifierElementUpgradeAttributes } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
 import { UpgradeElementPrice } from '../../services/upgradeElementPrice/upgradeElementPrice.types'
 
 export class ModifierElementUpgradeModel extends Model implements ModifierElementUpgradeAttributes {
@@ -25,6 +25,27 @@ export class ModifierElementUpgradeModel extends Model implements ModifierElemen
       timestamps: true
     }
   }
+
+  public static getModifierElementUpgrade (modifierElementUpgrade: ModifierElementUpgrade, userId: number): ModifierElementUpgradeAttributes {
+    const now = new Date()
+    return {
+      ...modifierElementUpgrade,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+    public static getPartialModifierElementUpgrade (modifierElementUpgrade: Partial<ModifierElementUpgrade>, userId: number): Partial<ModifierElementUpgradeAttributes> {
+      const now = new Date()
+      return {
+        ...modifierElementUpgrade,
+        updatedBy: userId,
+        updatedAt: now
+      }
+    }
+
 }
 
 export const modifierElementUpgradeSchema = {

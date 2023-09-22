@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { RecipeStepAttributes } from '../../services/recipeStep/recipeStep.types'
+import { RecipeStep, RecipeStepAttributes } from '../../services/recipeStep/recipeStep.types'
 import { RecipeStepIngredient } from '../../services/recipeStepIngredient/recipeStepIngredient.type'
 
 export class RecipeStepModel extends Model implements RecipeStepAttributes {
@@ -30,6 +30,27 @@ export class RecipeStepModel extends Model implements RecipeStepAttributes {
       tableName: 'recipeSteps',
       modelName: 'recipeStep',
       timestamps: true
+    }
+  }
+
+  public static getRecipeStep (recipeStep: RecipeStep, userId: number): RecipeStepAttributes {
+    const now = new Date()
+    return {
+      ...recipeStep,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialRecipeStep (recipeStep: Partial<RecipeStepAttributes>, userId: number): Partial<RecipeStepAttributes> {
+    const now = new Date()
+    return {
+      ...recipeStep,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

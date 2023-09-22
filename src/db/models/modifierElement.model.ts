@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { ModifierElementAttributes } from '../../services/modifierElement/modifierElement.types'
+import { ModifierElement, ModifierElementAttributes } from '../../services/modifierElement/modifierElement.types'
 import { ModifierElementUpgrade } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
 import { ElementPrice } from '../../services/elementPrice/elementPrice.types'
 
@@ -43,6 +43,27 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
       tableName: 'modifierElements',
       modelName: 'modifierElement',
       timestamps: true
+    }
+  }
+
+  public static getModifierElement(modifierElement: ModifierElement, userId:number): ModifierElementAttributes{
+    const now = new Date()
+    return {
+      ...modifierElement,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialModifierElement(modifierElement: Partial<ModifierElementAttributes>, userId:number): Partial<ModifierElementAttributes>{
+    const now = new Date()
+    return {
+      ...modifierElement,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

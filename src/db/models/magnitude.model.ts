@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { MagnitudeAttributes } from '../../services/magnitude/magnitude.types'
+import { Magnitude, MagnitudeAttributes } from '../../services/magnitude/magnitude.types'
 
 export class MagnitudeModel extends Model implements MagnitudeAttributes {
   public id!: number
@@ -21,6 +21,27 @@ export class MagnitudeModel extends Model implements MagnitudeAttributes {
       tableName: 'magnitudes',
       modelName: 'magnitude',
       timestamps: true
+    }
+  }
+
+  public static getMagnitude (magnitude: Magnitude, userId: number): MagnitudeAttributes {
+    const now = new Date()
+    return {
+      ...magnitude,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialMagnitude (magnitude: Partial<MagnitudeAttributes>, userId: number): Partial<MagnitudeAttributes> {
+    const now = new Date()
+    return {
+      ...magnitude,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

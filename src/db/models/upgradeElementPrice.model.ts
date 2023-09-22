@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { UpgradeElementPriceAttributes } from "../../services/upgradeElementPrice/upgradeElementPrice.types";
+import { UpgradeElementPrice, UpgradeElementPriceAttributes } from "../../services/upgradeElementPrice/upgradeElementPrice.types";
 
 export class UpgradeElementPriceModel extends Model implements UpgradeElementPriceAttributes {
   public id!: number;
@@ -19,6 +19,27 @@ export class UpgradeElementPriceModel extends Model implements UpgradeElementPri
       tableName: "upgradePrices",
       modelName: "upgradePrice",
       timestamps: true,
+    };
+  }
+
+  public static getUpgradeElementPrice(upgradeElementPrice: UpgradeElementPrice, userId: number): UpgradeElementPriceAttributes {
+    const now = new Date();
+    return {
+      ...upgradeElementPrice,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now,
+    };
+  }
+
+  public static getPartialUpgradeElementPrice(upgradeElementPrice: Partial<UpgradeElementPriceAttributes>, userId: number): Partial<UpgradeElementPriceAttributes> {
+    const now = new Date();
+    return {
+      ...upgradeElementPrice,
+      updatedBy: userId,
+      updatedAt: now,
     };
   }
 }

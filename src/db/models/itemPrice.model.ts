@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { ItemPriceAttributes } from "../../services/itemPrice/itemPrice.types";
+import { ItemPrice, ItemPriceAttributes } from "../../services/itemPrice/itemPrice.types";
 
 export class ItemPriceModel extends Model implements ItemPriceAttributes {
   public id!: number;
@@ -19,6 +19,27 @@ export class ItemPriceModel extends Model implements ItemPriceAttributes {
       tableName: "itemPrices",
       modelName: "itemPrice",
       timestamps: true,
+    };
+  }
+
+  public static getItemPrice(itemPrice: ItemPrice, userId: number): ItemPriceAttributes {
+    const now = new Date();
+    return {
+      ...itemPrice,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now,
+    };
+  }
+
+  public static getPartialItemPrice(itemPrice: Partial<ItemPriceAttributes>, userId: number): Partial<ItemPriceAttributes> {
+    const now = new Date();
+    return {
+      ...itemPrice,
+      updatedBy: userId,
+      updatedAt: now,
     };
   }
 }

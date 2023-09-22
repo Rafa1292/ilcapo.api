@@ -23,6 +23,27 @@ export class InputCategoryModel extends Model implements InputCategoryAttributes
       timestamps: true
     }
   }
+
+  public static getInputCategory (inputCategory: InputCategoryAttributes, userId: number): InputCategoryAttributes {
+    const now = new Date()
+    return {
+      ...inputCategory,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialInputCategory (inputCategory: Partial<InputCategoryAttributes>, userId: number): Partial<InputCategoryAttributes> {
+    const now = new Date()
+    return {
+      ...inputCategory,
+      updatedBy: userId,
+      updatedAt: now
+    }
+  }
 }
 
 export const inputCategorySchema = {

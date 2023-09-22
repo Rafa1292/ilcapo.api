@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { InputAttributes } from '../../services/input/input.types'
+import { Input, InputAttributes } from '../../services/input/input.types'
 
 export class InputModel extends Model implements InputAttributes {
   public id!: number
@@ -22,28 +22,52 @@ export class InputModel extends Model implements InputAttributes {
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
-  static associate (models: any): void {
-    this.hasMany(models.providerInput, { foreignKey: 'inputId', as: 'providerInputs' })
+  public static getInput(input: Input, userId: number): InputAttributes {
+    const now = new Date()
+    return {
+      ...input,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now,
+    }
+  }
+
+  public static getPartialInput(input: Partial<InputAttributes>, userId: number): Partial<InputAttributes> {
+    const now = new Date()
+    return {
+      ...input,
+      updatedBy: userId,
+      updatedAt: now,
+    }
+  }
+
+  static associate(models: any): void {
+    this.hasMany(models.providerInput, {
+      foreignKey: 'inputId',
+      as: 'providerInputs',
+    })
 
     this.belongsToMany(models.inventory, {
       through: models.inventoryInput,
       foreignKey: 'inputId',
-      as: 'inventories'
+      as: 'inventories',
     })
     this.hasMany(models.preparationStepInput, {
       foreignKey: 'inputId',
-      as: 'preparationStepInputs'
+      as: 'preparationStepInputs',
     })
 
     this.belongsTo(models.measure, { foreignKey: 'measureId', as: 'measure' })
   }
 
-  static config (sequelize: Sequelize): any {
+  static config(sequelize: Sequelize): any {
     return {
       sequelize,
       tableName: 'inputs',
       modelName: 'input',
-      timestamps: true
+      timestamps: true,
     }
   }
 }
@@ -53,66 +77,66 @@ export const inputSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   name: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   lowerPrice: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   upperPrice: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   currentPrice: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   lastPrice: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   expectedPrice: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   stock: {
     allowNull: false,
-    type: DataTypes.FLOAT
+    type: DataTypes.FLOAT,
   },
   presentation: {
     allowNull: false,
-    type: DataTypes.FLOAT
+    type: DataTypes.FLOAT,
   },
   suggestedStock: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   currentProviderId: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   measureId: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   inputCategoryId: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   delete: {
     allowNull: false,
-    type: DataTypes.BOOLEAN
+    type: DataTypes.BOOLEAN,
   },
   createdBy: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   updatedBy: {
     allowNull: false,
-    type: DataTypes.INTEGER
-  }
+    type: DataTypes.INTEGER,
+  },
 }

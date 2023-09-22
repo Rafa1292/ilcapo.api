@@ -1,8 +1,14 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { PreparationStepAttributes } from '../../services/preparationStep/preparationStep.types'
+import {
+  PreparationStep,
+  PreparationStepAttributes,
+} from '../../services/preparationStep/preparationStep.types'
 import { PreparationStepInput } from '../../services/preparationStepInput/preparationStepInput.types'
 
-export class PreparationStepModel extends Model implements PreparationStepAttributes {
+export class PreparationStepModel
+  extends Model
+  implements PreparationStepAttributes
+{
   public id!: number
   public stepNumber!: number
   public description!: string
@@ -17,19 +23,46 @@ export class PreparationStepModel extends Model implements PreparationStepAttrib
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
-  static associate (models: any): void {
+  static associate(models: any): void {
     this.hasMany(models.preparationStepInput, {
       foreignKey: 'preparationStepId',
-      as: 'preparationStepInputs'
+      as: 'preparationStepInputs',
     })
   }
 
-  static config (sequelize: Sequelize): any {
+  static config(sequelize: Sequelize): any {
     return {
       sequelize,
       tableName: 'preparationSteps',
       modelName: 'preparationStep',
-      timestamps: true
+      timestamps: true,
+    }
+  }
+
+  public static getPreparationStep(
+    preparationStep: PreparationStep,
+    userId: number
+  ): PreparationStepAttributes {
+    const now = new Date()
+    return {
+      ...preparationStep,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now,
+    }
+  }
+
+  public static getPartialPreparationStep(
+    preparationStep: PreparationStep,
+    userId: number
+  ): Partial<PreparationStepAttributes> {
+    const now = new Date()
+    return {
+      ...preparationStep,
+      updatedBy: userId,
+      updatedAt: now,
     }
   }
 }
@@ -39,38 +72,38 @@ export const preparationStepSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   stepNumber: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   description: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   cost: {
     allowNull: false,
-    type: DataTypes.DECIMAL
+    type: DataTypes.DECIMAL,
   },
   minutesOfPreparation: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   ingredientId: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   delete: {
     type: DataTypes.BOOLEAN,
-    allowNull: false
+    allowNull: false,
   },
   createdBy: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   updatedBy: {
     allowNull: false,
-    type: DataTypes.INTEGER
-  }
+    type: DataTypes.INTEGER,
+  },
 }

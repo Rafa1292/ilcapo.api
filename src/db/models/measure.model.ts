@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { MeasureAttributes } from '../../services/measure/measure.types'
+import { Measure, MeasureAttributes } from '../../services/measure/measure.types'
 
 export class MeasureModel extends Model implements MeasureAttributes {
   public id!: number
@@ -26,6 +26,27 @@ export class MeasureModel extends Model implements MeasureAttributes {
       tableName: 'measures',
       modelName: 'measure',
       timestamps: true
+    }
+  }
+
+  public static getMeasure (measure: Measure, userId: number): MeasureAttributes {
+    const now = new Date()
+    return {
+      ...measure,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialMeasure (measure: Partial<MeasureAttributes>, userId: number): Partial<MeasureAttributes> {
+    const now = new Date()
+    return {
+      ...measure,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { SaleItemProductAttributes } from '../../services/saleItemProduct/saleItemProduct.types'
+import { SaleItemProduct, SaleItemProductAttributes } from '../../services/saleItemProduct/saleItemProduct.types'
 import { Product } from '../../services/product/product.types'
 
 export class SaleItemProductModel extends Model implements SaleItemProductAttributes {
@@ -29,6 +29,27 @@ export class SaleItemProductModel extends Model implements SaleItemProductAttrib
       tableName: 'saleItemProducts',
       modelName: 'saleItemProduct',
       timestamps: true
+    }
+  }
+
+  public static getSaleItemProduct (saleItemProduct: SaleItemProduct, userId: number): SaleItemProductAttributes {
+    const now = new Date()
+    return {
+      ...saleItemProduct,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialSaleItemProduct (saleItemProduct: Partial<SaleItemProductAttributes>, userId: number): Partial<SaleItemProductAttributes> {
+    const now = new Date()
+    return {
+      ...saleItemProduct,
+      updatedBy: userId,
+      updatedAt: now
     }
   }
 }

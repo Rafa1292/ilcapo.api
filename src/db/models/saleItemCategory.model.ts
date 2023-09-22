@@ -25,6 +25,27 @@ export class SaleItemCategoryModel extends Model implements SaleItemCategoryAttr
       timestamps: true
     }
   }
+
+  public static getSaleItemCategory (saleItemCategory: SaleItemCategoryAttributes, userId: number): SaleItemCategoryAttributes {
+    const now = new Date()
+    return {
+      ...saleItemCategory,
+      delete: false,
+      createdBy: userId,
+      updatedBy: userId,
+      createdAt: now,
+      updatedAt: now
+    }
+  }
+
+  public static getPartialSaleItemCategory (saleItemCategory: Partial<SaleItemCategoryAttributes>, userId: number): Partial<SaleItemCategoryAttributes> {
+    const now = new Date()
+    return {
+      ...saleItemCategory,
+      updatedBy: userId,
+      updatedAt: now
+    }
+  }
 }
 
 export const saleItemCategorySchema = {
