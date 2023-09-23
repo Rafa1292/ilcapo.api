@@ -1,18 +1,14 @@
 import { ProductRecipeModel } from '../../db/models/productRecipe.model'
-import { getNow } from '../../utils/timeManager'
-import { NewProductRecipe, ProductRecipe } from './productRecipe.types'
+import { ProductRecipe, ProductRecipeAttributes } from './productRecipe.types'
 
-export const saveProductRecipe = async (productRecipe: NewProductRecipe): Promise<ProductRecipe> => {
-  const now = getNow()
-  productRecipe.createdAt = now
-  productRecipe.updatedAt = now
-  return await ProductRecipeModel.create(productRecipe)
+export const saveProductRecipe = async (productRecipe: ProductRecipe): Promise<ProductRecipe> => {
+  const { id, ...rest } = ProductRecipeModel.getProductRecipe(productRecipe, 0)
+  return await ProductRecipeModel.create(rest)
 }
 
-export const updateProductRecipe = async (productRecipe: Partial<ProductRecipe>, id: number): Promise<void> => {
-  const now = getNow()
-  productRecipe.updatedAt = now
-  await ProductRecipeModel.update(productRecipe, { where: { id } })
+export const updateProductRecipe = async (productRecipe: Partial<ProductRecipeAttributes>, id: number): Promise<void> => {
+  const updatedProductRecipe = ProductRecipeModel.getPartialProductRecipe(productRecipe, id)
+  await ProductRecipeModel.update(updatedProductRecipe, { where: { id } })
 }
 
 export const deleteProductRecipe = async (id: number): Promise<void> => {

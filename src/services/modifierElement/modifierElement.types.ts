@@ -11,7 +11,7 @@ export interface ModifierElementAttributes {
   combinable: boolean
   prices?: ElementPrice[]
   combinableModifierGroupId: number
-  modifierUpgrade?: ModifierElementUpgrade
+  modifierUpgrade: ModifierElementUpgrade
   modifierGroupId: number
   createdAt?: Date
   updatedAt?: Date

@@ -1,7 +1,5 @@
 import { Ingredient, IngredientAttributes } from './ingredient.types'
 import { IngredientModel } from '../../db/models/ingredient.model'
-import { validateIngredient, validateIngredients } from '../../factories/ingredient.factory'
-import { getNow } from '../../utils/timeManager'
 
 export const getIngredients = async (): Promise<Ingredient[]> => {
   return await IngredientModel.findAll(

@@ -39,6 +39,18 @@ export class PreparationStepModel
     }
   }
 
+  public static getPartialPreparationStep(
+    preparationStep: Partial<PreparationStep>,
+    userId: number
+  ): Partial<PreparationStepAttributes> {
+    const now = new Date()
+    return {
+      ...preparationStep,
+      updatedBy: userId,
+      updatedAt: now,
+    }
+  }
+
   public static getPreparationStep(
     preparationStep: PreparationStep,
     userId: number
@@ -54,17 +66,6 @@ export class PreparationStepModel
     }
   }
 
-  public static getPartialPreparationStep(
-    preparationStep: PreparationStep,
-    userId: number
-  ): Partial<PreparationStepAttributes> {
-    const now = new Date()
-    return {
-      ...preparationStep,
-      updatedBy: userId,
-      updatedAt: now,
-    }
-  }
 }
 
 export const preparationStepSchema = {

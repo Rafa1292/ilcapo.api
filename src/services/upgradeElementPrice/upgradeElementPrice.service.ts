@@ -1,37 +1,36 @@
-import { Transaction } from "sequelize";
-import { UpgradeElementPriceModel } from "../../db/models/upgradeElementPrice.model";
-import { validateUpgradeElementPrice } from "../../factories/upgradeElementPrice.factory";
-import { UpgradeElementPrice } from "./upgradeElementPrice.types";
-import { getNow } from "../../utils/timeManager";
+import { Transaction } from 'sequelize'
+import { UpgradeElementPriceModel } from '../../db/models/upgradeElementPrice.model'
+import { UpgradeElementPrice } from './upgradeElementPrice.types'
 
 export const saveUpgradeElementPrice = async (
   upgradeElementPrice: UpgradeElementPrice,
   transaction: Transaction
 ): Promise<UpgradeElementPrice> => {
-  const { id, ...rest } = upgradeElementPrice;
-  const now = getNow()
-  rest.createdAt = now
-  rest.updatedAt = now
-  const newItemPrice = await UpgradeElementPriceModel.create(rest, { transaction });
-  return validateUpgradeElementPrice(newItemPrice);
-};
+  const { id, ...rest } = UpgradeElementPriceModel.getUpgradeElementPrice(
+    upgradeElementPrice,
+    0
+  )
+  return await UpgradeElementPriceModel.create(rest, { transaction })
+}
 
 export const updateUpgradeElementPrice = async (
   upgradeElementPrice: Partial<UpgradeElementPrice>,
   id: number,
   transaction: Transaction
-): Promise<UpgradeElementPrice | null> => {
-  const now = getNow()
-  upgradeElementPrice.updatedAt = now
-  const updatedItemPrice = await UpgradeElementPriceModel.update(upgradeElementPrice, {
+): Promise<Partial<UpgradeElementPrice> | null> => {
+  const updatedUpgradeElementPrice = UpgradeElementPriceModel.getPartialUpgradeElementPrice(upgradeElementPrice,0)
+  await UpgradeElementPriceModel.update(updatedUpgradeElementPrice, {
     where: {
       id: id,
     },
-    transaction
-  });
-  return validateUpgradeElementPrice(updatedItemPrice);
-};
+    transaction,
+  })
+  return upgradeElementPrice
+}
 
-export const deleteUpgradeElementPrice = async (id: number, transaction: Transaction): Promise<void> => {
-  await UpgradeElementPriceModel.destroy({ where: { id }, transaction });
+export const deleteUpgradeElementPrice = async (
+  id: number,
+  transaction: Transaction
+): Promise<void> => {
+  await UpgradeElementPriceModel.destroy({ where: { id }, transaction })
 }

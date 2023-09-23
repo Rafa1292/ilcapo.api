@@ -1,10 +1,8 @@
-import { Product, NewProduct } from './product.types'
+import { Product, ProductAttributes } from './product.types'
 import { ProductModel } from '../../db/models/product.model'
-import { validateProduct, validateProducts } from '../../factories/product.factory'
-import { getNow } from '../../utils/timeManager'
 
 export const getProducts = async (): Promise<Product[]> => {
-  const products = await ProductModel.findAll(
+  return await ProductModel.findAll(
     {
       where: {
         delete: false
@@ -30,7 +28,6 @@ export const getProducts = async (): Promise<Product[]> => {
     }
   )
 
-  return await validateProducts(products)
 }
 
 export const getProductsWithDeletedItems = async (): Promise<Product[]> => {
@@ -38,34 +35,26 @@ export const getProductsWithDeletedItems = async (): Promise<Product[]> => {
 }
 
 export const getProductById = async (id: number): Promise<Product> => {
-  const response = await ProductModel.findByPk(id)
-  if (response === null) throw new Error('Product not found')
-  if (response.delete) throw new Error('Product deleted')
-  return await validateProduct(response)
+  const product = await ProductModel.findByPk(id)
+  if (product === null) throw new Error('Product not found')
+  if (product.delete) throw new Error('Product deleted')
+  return product
 }
 
-export const saveProduct = async (product: NewProduct): Promise<Product> => {
-  const now = getNow()
-  product.createdAt = now
-  product.updatedAt = now
-  return await ProductModel.create(product)
+export const saveProduct = async (product: Product): Promise<Product> => {
+  const { id, ...rest } = ProductModel.getProduct(product, 0)
+  return await ProductModel.create(rest)
 }
 
-export const updateProduct = async (product: Partial<Product>, id: number): Promise<void> => {
-  console.log(product)
-  const now = getNow()
-  product.updatedAt = now
-  await ProductModel.update(product, { where: { id } })
+export const updateProduct = async (product: Partial<ProductAttributes>, id: number): Promise<void> => {
+  const updatedProduct = ProductModel.getPartialProduct(product, id)
+  await ProductModel.update(updatedProduct, { where: { id } })
 }
 
 export const deleteProduct = async (id: number): Promise<void> => {
-  const product = await getProductById(id)  
-  product.delete = true
-  await updateProduct(product, id)
+  await updateProduct({ delete: true }, id)
 }
 
 export const recoveryProduct = async (id: number): Promise<void> => {
-  const product = await getProductById(id)
-  product.delete = false
-  await updateProduct(product, id)
+  await updateProduct({ delete: false }, id)
 }

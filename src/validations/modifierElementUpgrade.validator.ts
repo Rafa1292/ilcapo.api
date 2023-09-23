@@ -13,6 +13,5 @@ export const newModifierElementUpgradeIsValid = async (modifierElementUpgrade: a
   if (modifierElementUpgrade.modifierElementId === undefined) {
     isValid = false
   }
-  console.log(1, '------is valid-------', isValid)
   return isValid
 }

@@ -19,7 +19,7 @@ export const updateElementPrice = async (
     elementPrice,
     0
   )
-  await ElementPriceModel.update(elementPrice, {
+  await ElementPriceModel.update(updatedElementPrice, {
     where: {
       id: id,
     },

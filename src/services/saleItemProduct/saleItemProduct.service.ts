@@ -1,18 +1,14 @@
 import { SaleItemProductModel } from '../../db/models/saleItemProduct.model'
-import { getNow } from '../../utils/timeManager'
-import { SaleItemProduct, NewSaleItemProduct } from './saleItemProduct.types'
+import { SaleItemProduct, SaleItemProductAttributes } from './saleItemProduct.types'
 
-export const saveSaleItemProduct = async (saleItemProduct: NewSaleItemProduct): Promise<SaleItemProduct> => {
-  const now = getNow()
-  saleItemProduct.createdAt = now
-  saleItemProduct.updatedAt = now
-  return await SaleItemProductModel.create(saleItemProduct)
+export const saveSaleItemProduct = async (saleItemProduct: SaleItemProduct): Promise<SaleItemProduct> => {
+  const { id, ...rest } = SaleItemProductModel.getSaleItemProduct(saleItemProduct, 0)
+  return await SaleItemProductModel.create(rest)
 }
 
-export const updateSaleItemProduct = async (saleItemProduct: Partial<SaleItemProduct>, id: number): Promise<void> => {
-  const now = getNow()
-  saleItemProduct.updatedAt = now
-  await SaleItemProductModel.update(saleItemProduct, { where: { id } })
+export const updateSaleItemProduct = async (saleItemProduct: Partial<SaleItemProductAttributes>, id: number): Promise<void> => {
+  const updatedSaleItemProduct = SaleItemProductModel.getPartialSaleItemProduct(saleItemProduct, id)
+  await SaleItemProductModel.update(updatedSaleItemProduct, { where: { id } })
 }
 
 export const deleteSaleItemProduct = async (id: number): Promise<void> => {

@@ -1,6 +1,5 @@
-import { PreparationStep, NewPreparationStep } from './preparationStep.types'
+import { PreparationStep, PreparationStepAttributes } from './preparationStep.types'
 import { PreparationStepModel } from '../../db/models/preparationStep.model'
-import { validatePreparationStep } from '../../factories/preparationStep.factory'
 import { getNow } from '../../utils/timeManager'
 
 export const getPreparationStepsWithDeletedItems = async (): Promise<PreparationStep[]> => {
@@ -12,41 +11,35 @@ const getPreparationStepsByIngredientId = async (ingredientId: number): Promise<
 }
 
 export const getPreparationStepById = async (id: number): Promise<PreparationStep> => {
-  const response = await PreparationStepModel.findByPk(id,
+  const preparationStep = await PreparationStepModel.findByPk(id,
     { include: { all: true } }
   )
-  if (response === null) throw new Error('PreparationStep not found')
-  if (response.delete) throw new Error('PreparationStep deleted')
-  return await validatePreparationStep(response)
+  if (preparationStep === null) throw new Error('PreparationStep not found')
+  if (preparationStep.delete) throw new Error('PreparationStep deleted')
+  return preparationStep
 }
 
-export const savePreparationStep = async (preparationStep: NewPreparationStep): Promise<PreparationStep> => {
-  const now = getNow()
-  preparationStep.createdAt = now
-  preparationStep.updatedAt = now
-  const savedPreparationStep = await PreparationStepModel.create(preparationStep)
+export const savePreparationStep = async (preparationStep: PreparationStep): Promise<PreparationStep> => {
+  const { id, ...rest } = PreparationStepModel.getPreparationStep(preparationStep, 0)
+  const savedPreparationStep = await PreparationStepModel.create(rest)
   await sortStepsAfterInsert(savedPreparationStep)
   return savedPreparationStep
 }
 
-export const updatePreparationStep = async (preparationStep: Partial<PreparationStep>, id: number): Promise<void> => {
+export const updatePreparationStep = async (preparationStep: Partial<PreparationStepAttributes>, id: number): Promise<void> => {
   await sortStepsAfterUpdate(preparationStep)
-  const now = getNow()
-  preparationStep.updatedAt = now
-  await PreparationStepModel.update(preparationStep, { where: { id } })
+  const updatedPreparationStep = PreparationStepModel.getPartialPreparationStep(preparationStep, id)
+  await PreparationStepModel.update(updatedPreparationStep, { where: { id } })
 }
 
 export const deletePreparationStep = async (id: number): Promise<void> => {
   const preparationStep = await getPreparationStepById(id)
-  const now = getNow()
-  await PreparationStepModel.update({ delete: true, updatedAt: now }, { where: { id } })
-  await sortStepsAfterDelete(preparationStep)
+  await updatePreparationStep({ ...preparationStep, delete: true }, id)
 }
 
 export const recoveryPreparationStep = async (id: number): Promise<void> => {
   const preparationStep = await getPreparationStepById(id)
-  preparationStep.delete = false
-  await updatePreparationStep(preparationStep, id)
+  await updatePreparationStep({ ...preparationStep, delete: false }, id)
 }
 
 export const stepUp = async (preparationStep: PreparationStep): Promise<void> => {
@@ -65,12 +58,11 @@ const sortStepsAfterInsert = async (preparationStep: Partial<PreparationStep>): 
   if (preparationStep.ingredientId === undefined) throw new Error('Ingredient id is undefined')
   const preparationSteps = await getPreparationStepsByIngredientId(preparationStep.ingredientId)
   const repeatPreparationStep = preparationSteps.find((step) => step.stepNumber === preparationStep.stepNumber && step.id !== preparationStep.id)
-  const now = getNow()
   if (repeatPreparationStep !== undefined) {
-    for (const step of preparationSteps) {
-      if (step.stepNumber >= preparationStep.stepNumber && step.id !== preparationStep.id) {
-        const stepNumber = step.stepNumber + 1
-        await PreparationStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } })
+    for (const preparationStep of preparationSteps) {
+      if (preparationStep.stepNumber >= preparationStep.stepNumber && preparationStep.id !== preparationStep.id) {
+        const stepNumber = preparationStep.stepNumber + 1
+        await updatePreparationStep({ stepNumber }, preparationStep.id)
       }
     }
   }
@@ -80,11 +72,10 @@ const sortStepsAfterDelete = async (preparationStep: Partial<PreparationStep>): 
   if (preparationStep.stepNumber === undefined) throw new Error('Step number is undefined')
   if (preparationStep.ingredientId === undefined) throw new Error('Ingredient id is undefined')
   const preparationSteps = await getPreparationStepsByIngredientId(preparationStep.ingredientId)
-  const now = getNow()
-  for (const step of preparationSteps) {
-    if (step.stepNumber > preparationStep.stepNumber) {
-      const stepNumber = step.stepNumber - 1
-      await PreparationStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } })
+  for (const preparationStep of preparationSteps) {
+    if (preparationStep.stepNumber > preparationStep.stepNumber) {
+      const stepNumber = preparationStep.stepNumber - 1
+      await updatePreparationStep({ stepNumber }, preparationStep.id)
     }
   }
 }
@@ -94,18 +85,17 @@ const sortStepsAfterUpdate = async (preparationStep: Partial<PreparationStep>): 
   if (preparationStep.id === undefined) throw new Error('Preparation step id is undefined')
   if (preparationStep.ingredientId === undefined) throw new Error('Ingredient id is undefined')
   const preparationSteps = await getPreparationStepsByIngredientId(preparationStep.ingredientId)
-  const updatePreparationStep = preparationSteps.find((step) => step.id === preparationStep.id)
-  if (updatePreparationStep === undefined) throw new Error('Preparation step not found')
-  const diference = updatePreparationStep?.stepNumber - preparationStep.stepNumber
+  const updatedPreparationStep = preparationSteps.find((step) => step.id === preparationStep.id)
+  if (updatedPreparationStep === undefined) throw new Error('Preparation step not found')
+  const diference = updatedPreparationStep?.stepNumber - preparationStep.stepNumber
   const modifier = diference > 0 ? 1 : -1
-  const index = diference > 0 ? preparationStep.stepNumber : updatePreparationStep.stepNumber
-  const length = diference > 0 ? updatePreparationStep.stepNumber : preparationStep.stepNumber
-  const now = getNow()
+  const index = diference > 0 ? preparationStep.stepNumber : updatedPreparationStep.stepNumber
+  const length = diference > 0 ? updatedPreparationStep.stepNumber : preparationStep.stepNumber
 
-  for (const step of preparationSteps) {
-    if (step.stepNumber >= index && step.stepNumber <= length && step.id !== preparationStep.id) {
-      const stepNumber = step.stepNumber + modifier
-      await PreparationStepModel.update({ stepNumber, updatedAt: now }, { where: { id: step.id } })
+  for (const preparationStep of preparationSteps) {
+    if (preparationStep.stepNumber >= index && preparationStep.stepNumber <= length && preparationStep.id !== preparationStep.id) {
+      const stepNumber = preparationStep.stepNumber + modifier
+      await updatePreparationStep({ stepNumber }, preparationStep.id)
     }
   }
 }

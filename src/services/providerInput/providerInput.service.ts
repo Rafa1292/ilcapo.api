@@ -1,4 +1,4 @@
-import { ProviderInput, NewProviderInput } from './providerInput.types'
+import { ProviderInput } from './providerInput.types'
 import { ProviderInputModel } from '../../db/models/providerInput.model'
 import { validateProviderInput, validateProviderInputs } from '../../factories/providerInput.factory'
 import { newProviderInputIsValid } from '../../validations/providerInput.validator'

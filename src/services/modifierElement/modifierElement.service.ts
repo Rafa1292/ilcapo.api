@@ -1,6 +1,5 @@
-import { ModifierElement, NewModifierElement } from './modifierElement.types'
+import { ModifierElement, ModifierElementAttributes } from './modifierElement.types'
 import { ModifierElementModel } from '../../db/models/modifierElement.model'
-import { validateModifierElement } from '../../factories/modifierElement.factory'
 import { Transaction } from 'sequelize'
 import {
   deleteElementPrice,
@@ -13,7 +12,6 @@ import {
   updateModifierElementUpgrade,
 } from '../modifierElementUpgrade/modifierElementUpgrade.service'
 import { ModifierElementUpgrade } from '../modifierElementUpgrade/modifierElementUpgrade.types'
-import { getNow } from '../../utils/timeManager'
 
 export const getModifierElements = async (): Promise<ModifierElement[]> => {
   return await ModifierElementModel.findAll({
@@ -40,24 +38,22 @@ export const getModifierElementsWithDeletedItems = async (
 export const getModifierElementById = async (
   id: number
 ): Promise<ModifierElement> => {
-  const response = await ModifierElementModel.findByPk(id, {
+  const modifierElement = await ModifierElementModel.findByPk(id, {
     include: ['modifierUpgrade', 'productReference', 'prices'],
   })
-  if (response === null) throw new Error('ModifierElement not found')
-  return await validateModifierElement(response)
+  if (modifierElement === null) throw new Error('ModifierElement not found')
+  return modifierElement
 }
 
 export const saveModifierElement = async (
-  modifierElement: NewModifierElement
+  modifierElement: ModifierElement
 ): Promise<ModifierElement> => {
   const transaction = await ModifierElementModel.sequelize?.transaction()
   if (!transaction) throw new Error('Transaction not found')
   try {
-    const now = getNow()
-    modifierElement.createdAt = now
-    modifierElement.updatedAt = now
+    const {id, ...rest} = ModifierElementModel.getModifierElement(modifierElement, 0)
     const newModifierElement = await ModifierElementModel.create(
-      modifierElement,
+      rest,
       { transaction }
     )
     await saveModifierElementUpgrade(
@@ -84,15 +80,14 @@ export const saveModifierElement = async (
 }
 
 export const updateModifierElement = async (
-  modifierElement: Partial<ModifierElement>,
+  modifierElement: Partial<ModifierElementAttributes>,
   id: number
 ): Promise<void> => {
   const transaction = await ModifierElementModel.sequelize?.transaction()
   if (!transaction) throw new Error('Transaction not found')
   try {
-    const now = getNow()
-    modifierElement.updatedAt = now
-    await ModifierElementModel.update(modifierElement, { where: { id } })
+    const updateModifierElement = ModifierElementModel.getPartialModifierElement(modifierElement, 0)
+    await ModifierElementModel.update(updateModifierElement, { where: { id } })
     const { prices, ...currentModifierElement } = await getModifierElementById(
       id
     )
@@ -106,7 +101,8 @@ export const updateModifierElement = async (
       ) || []
     const pricesToRemove = prices?.filter(
       (price) => !modifierElement.prices?.some((p) => p.id === price.id)
-    )
+    ) || []
+
     const pricesToSave =
       modifierElement.prices?.filter((price) => price.id === 0) || []
 
@@ -162,15 +158,14 @@ export const deleteModifierElement = async (id: number): Promise<void> => {
 }
 
 export const recoveryModifierElement = async (id: number): Promise<void> => {
-  const modifierElement = await getModifierElementById(id)
-  modifierElement.delete = false
-  await updateModifierElement(modifierElement, id)
+  await updateModifierElement({ delete: false }, id)
 }
 
 const savePrices = async (
   modifierElement: ModifierElement,
   transaction: Transaction
 ): Promise<void> => {
+  if (modifierElement.prices === undefined) throw new Error('Prices undefined')
   for (const price of modifierElement.prices) {
     await saveElementPrice(
       { ...price, elementId: modifierElement.id },
@@ -183,6 +178,7 @@ const updatePrices = async (
   modifierElement: ModifierElement,
   transaction: Transaction
 ): Promise<void> => {
+  if (modifierElement.prices === undefined) throw new Error('Prices undefined')
   for (const price of modifierElement.prices) {
     await updateElementPrice(
       { ...price, elementId: modifierElement.id },
@@ -196,6 +192,7 @@ const removePrices = async (
   modifierElement: ModifierElement,
   transaction: Transaction
 ): Promise<void> => {
+  if (modifierElement.prices === undefined) throw new Error('Prices undefined')
   for (const price of modifierElement.prices) {
     await deleteElementPrice(price.id, transaction)
   }

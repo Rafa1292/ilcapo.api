@@ -1,31 +1,24 @@
 import { Transaction } from "sequelize";
 import { ItemPriceModel } from "../../db/models/itemPrice.model";
-import { validateItemPrice } from "../../factories/itemPrice.factory";
 import { ItemPrice } from "./itemPrice.types";
-import { getNow } from "../../utils/timeManager";
 
 export const saveItemPrice = async (
   itemPrice: ItemPrice,
   transaction: Transaction
 ): Promise<ItemPrice> => {
-  const {id, ...newItemPrice } = itemPrice;
-  const now = getNow()
-  newItemPrice.createdAt = now
-  newItemPrice.updatedAt = now
-  const currentItemPrice = await ItemPriceModel.create(newItemPrice, { transaction });
-  return validateItemPrice(currentItemPrice);
+  const {id, ...newItemPrice } = ItemPriceModel.getItemPrice(itemPrice, 0);
+  return await ItemPriceModel.create(newItemPrice, { transaction });
 };
 
 export const updateItemPrice = async ( itemPrice: ItemPrice, id: number, transaction: Transaction): Promise<ItemPrice | null> => {
-  const now = getNow()
-  itemPrice.updatedAt = now
-  const updatedItemPrice = await ItemPriceModel.update(itemPrice, {
+  const updateItemPrice = ItemPriceModel.getPartialItemPrice(itemPrice, id);
+   await ItemPriceModel.update(updateItemPrice, {
     where: {
       id: id,
     },
     transaction
   });
-  return validateItemPrice(updatedItemPrice);
+  return ItemPriceModel.findByPk(id, { transaction });
 };
 
 export const deleteItemPrice = async (id: number, transaction: Transaction): Promise<void> => {

@@ -1,4 +1,4 @@
-import { Measure, MeasureAttributes, NewMeasure } from './measure.types'
+import { Measure, MeasureAttributes } from './measure.types'
 import { MeasureModel } from '../../db/models/measure.model'
 import { validateMeasure } from '../../factories/measure.factory'
 import { getNow } from '../../utils/timeManager'
@@ -23,25 +23,22 @@ export const getMeasuresWithDeletedItems = async (): Promise<MeasureAttributes[]
 }
 
 export const getMeasureById = async (id: number): Promise<Measure> => {
-  const response = await MeasureModel.findByPk(id)
-  if (response === null) throw new Error('Measure not found')
-  if (response.delete) throw new Error('Measure deleted')
-  return await validateMeasure(response)
+  const measure = await MeasureModel.findByPk(id)
+  if (measure === null) throw new Error('Measure not found')
+  if (measure.delete) throw new Error('Measure deleted')
+  return measure
 }
 
-export const saveMeasure = async (measure: NewMeasure): Promise<Measure> => {
-  const now = getNow()
-  measure.createdAt = now
-  measure.updatedAt = now
-  const savedMeasure = await MeasureModel.create(measure)
+export const saveMeasure = async (measure: Measure): Promise<Measure> => {
+  const { id, ...rest } = MeasureModel.getMeasure(measure, 0)
+  const savedMeasure = await MeasureModel.create(rest)
   if (savedMeasure.principalMeasure) await updatePrincipalMeasure(savedMeasure.id, savedMeasure.magnitudeId)
-  return await validateMeasure(savedMeasure)
+  return savedMeasure
 }
 
-export const updateMeasure = async (measure: Partial<Measure>, id: number): Promise<void> => {
-  const now = getNow()
-  measure.updatedAt = now
-  await MeasureModel.update(measure, { where: { id } })
+export const updateMeasure = async (measure: Partial<MeasureAttributes>, id: number): Promise<void> => {
+  const updateMeasure = MeasureModel.getPartialMeasure(measure, 0)
+  await MeasureModel.update(updateMeasure, { where: { id } })
   if (measure.principalMeasure !== undefined && measure.principalMeasure) {
     if (measure.magnitudeId === undefined) {
       const measure = await getMeasureById(id)
@@ -53,19 +50,11 @@ export const updateMeasure = async (measure: Partial<Measure>, id: number): Prom
 }
 
 export const deleteMeasure = async (id: number): Promise<void> => {
-  const measure = await getMeasureById(id)
-  const now = getNow()
-  measure.updatedAt = now
-  measure.delete = true
-  await updateMeasure(measure, id)
+  await updateMeasure({ delete: true }, id)
 }
 
 export const recoveryMeasure = async (id: number): Promise<void> => {
-  const measure = await getMeasureById(id)
-  const now = getNow()
-  measure.updatedAt = now
-  measure.delete = false
-  await updateMeasure(measure, id)
+  await updateMeasure({ delete: false }, id)
 }
 
 const updatePrincipalMeasure = async (principalMeasureId: number, magnitudeId: number): Promise<void> => {

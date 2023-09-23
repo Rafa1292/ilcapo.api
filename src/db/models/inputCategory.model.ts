@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { InputCategoryAttributes } from '../../services/inputCategory/inputCategory.types'
+import { InputCategory, InputCategoryAttributes } from '../../services/inputCategory/inputCategory.types'
 
 export class InputCategoryModel extends Model implements InputCategoryAttributes {
   public id!: number
@@ -24,7 +24,7 @@ export class InputCategoryModel extends Model implements InputCategoryAttributes
     }
   }
 
-  public static getInputCategory (inputCategory: InputCategoryAttributes, userId: number): InputCategoryAttributes {
+  public static getInputCategory (inputCategory: InputCategory, userId: number): InputCategoryAttributes {
     const now = new Date()
     return {
       ...inputCategory,

@@ -1,16 +1,12 @@
-import { Provider, NewProvider } from './provider.types'
+import { Provider, ProviderAttributes } from './provider.types'
 import { ProviderModel } from '../../db/models/provider.model'
-import { validateProvider } from '../../factories/provider.factory'
-import { getNow } from '../../utils/timeManager'
 
 export const getProviders = async (): Promise<Provider[]> => {
-  return await ProviderModel.findAll(
-    {
-      where: {
-        delete: false
-      }
-    }
-  )
+  return await ProviderModel.findAll({
+    where: {
+      delete: false,
+    },
+  })
 }
 
 export const getProvidersWithDeletedItems = async (): Promise<Provider[]> => {
@@ -18,33 +14,29 @@ export const getProvidersWithDeletedItems = async (): Promise<Provider[]> => {
 }
 
 export const getProviderById = async (id: number): Promise<Provider> => {
-  const response = await ProviderModel.findByPk(id)
-  if (response === null) throw new Error('Provider not found')
-  if (response.delete) throw new Error('Provider deleted')
-  return await validateProvider(response)
+  const provider = await ProviderModel.findByPk(id)
+  if (provider === null) throw new Error('Provider not found')
+  if (provider.delete) throw new Error('Provider deleted')
+  return provider
 }
 
-export const saveProvider = async (provider: NewProvider): Promise<void> => {
-  const now = getNow()
-  provider.createdAt = now
-  provider.updatedAt = now
-  await ProviderModel.create(provider)
+export const saveProvider = async (provider: Provider): Promise<void> => {
+  const { id, ...rest } = ProviderModel.getProvider(provider, 0)
+  await ProviderModel.create(rest)
 }
 
-export const updateProvider = async (provider: Partial<Provider>, id: number): Promise<void> => {
-  const now = getNow()
-  provider.updatedAt = now
-  await ProviderModel.update(provider, { where: { id } })
+export const updateProvider = async (
+  provider: Partial<ProviderAttributes>,
+  id: number
+): Promise<void> => {
+  const updatedProvider = ProviderModel.getPartialProvider(provider, id)
+  await ProviderModel.update(updatedProvider, { where: { id } })
 }
 
 export const deleteProvider = async (id: number): Promise<void> => {
-  const provider = await getProviderById(id)
-  provider.delete = true
-  await updateProvider(provider, id)
+  await updateProvider({ delete: true }, id)
 }
 
 export const recoveryProvider = async (id: number): Promise<void> => {
-  const provider = await getProviderById(id)
-  provider.delete = false
-  await updateProvider(provider, id)
+  await updateProvider({ delete: false }, id)
 }

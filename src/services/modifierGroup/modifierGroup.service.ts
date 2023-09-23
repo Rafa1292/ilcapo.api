@@ -1,10 +1,8 @@
-import { ModifierGroup, NewModifierGroup } from './modifierGroup.types'
+import { ModifierGroup, ModifierGroupAttributes } from './modifierGroup.types'
 import { ModifierGroupModel } from '../../db/models/modifierGroup.model'
-import { validateModifierGroup, validateModifierGroups } from '../../factories/modifierGroup.factory'
-import { getNow } from '../../utils/timeManager'
 
 export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
-  const modifierGroups: ModifierGroupModel[] = await ModifierGroupModel.findAll(
+  return await ModifierGroupModel.findAll(
     {
       where: {
         delete: false
@@ -25,7 +23,6 @@ export const getModifierGroups = async (): Promise<ModifierGroup[]> => {
       ]
     }
   )
-  return await validateModifierGroups(modifierGroups)
 }
 
 export const getModifierGroupsWithDeletedItems = async (): Promise<ModifierGroup[]> => {
@@ -33,7 +30,7 @@ export const getModifierGroupsWithDeletedItems = async (): Promise<ModifierGroup
 }
 
 export const getModifierGroupById = async (id: number): Promise<ModifierGroup> => {
-  const response = await ModifierGroupModel.findByPk(id,
+  const modifierGroup = await ModifierGroupModel.findByPk(id,
     {
       include: [
         {
@@ -49,36 +46,25 @@ export const getModifierGroupById = async (id: number): Promise<ModifierGroup> =
         }
       ]
     })
-  if (response === null) throw new Error('ModifierGroup not found')
-  if (response.delete) throw new Error('ModifierGroup deleted')
-  return await validateModifierGroup(response)
+  if (modifierGroup === null) throw new Error('ModifierGroup not found')
+  if (modifierGroup.delete) throw new Error('ModifierGroup deleted')
+  return modifierGroup
 }
 
-export const saveModifierGroup = async (modifierGroup: NewModifierGroup): Promise<ModifierGroup> => {
-  const now = getNow()
-  modifierGroup.createdAt = now
-  modifierGroup.updatedAt = now
-  return await ModifierGroupModel.create(modifierGroup)
+export const saveModifierGroup = async (modifierGroup: ModifierGroup): Promise<ModifierGroup> => {
+  const {id, ...rest } = ModifierGroupModel.getModifierGroup(modifierGroup, 0)
+  return await ModifierGroupModel.create(rest)
 }
 
-export const updateModifierGroup = async (modifierGroup: Partial<ModifierGroup>, id: number): Promise<void> => {
-  const now = getNow()
-  modifierGroup.updatedAt = now
-  await ModifierGroupModel.update(modifierGroup, { where: { id } })
+export const updateModifierGroup = async (modifierGroup: Partial<ModifierGroupAttributes>, id: number): Promise<void> => {
+  const updateModifierGroup = ModifierGroupModel.getPartialModifierGroup(modifierGroup, id)
+  await ModifierGroupModel.update(updateModifierGroup, { where: { id } })
 }
 
 export const deleteModifierGroup = async (id: number): Promise<void> => {
-  const modifierGroup = await getModifierGroupById(id)
-  const now = getNow()
-  modifierGroup.updatedAt = now
-  modifierGroup.delete = true
-  await updateModifierGroup(modifierGroup, id)
+  await updateModifierGroup({ delete: true }, id)
 }
 
 export const recoveryModifierGroup = async (id: number): Promise<void> => {
-  const modifierGroup = await getModifierGroupById(id)
-  const now = getNow()
-  modifierGroup.updatedAt = now
-  modifierGroup.delete = false
-  await updateModifierGroup(modifierGroup, id)
+  await updateModifierGroup({ delete: false }, id)
 }

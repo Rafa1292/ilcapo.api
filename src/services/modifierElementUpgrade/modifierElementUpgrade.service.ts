@@ -15,20 +15,14 @@ export const saveModifierElementUpgrade = async (
 ): Promise<void> => {
   const isValid = await newModifierElementUpgradeIsValid(modifierElementUpgrade)
   if (isValid) {
-    console.log(1, '-------is valid-----')
-    const { id, ...rest } = modifierElementUpgrade
-    const now = getNow()
-    rest.createdAt = now
-    rest.updatedAt = now
+    const { id, ...rest } = ModifierElementUpgradeModel.getModifierElementUpgrade(modifierElementUpgrade, 0)
     const newModifierElementUpgrade = await ModifierElementUpgradeModel.create(
       rest,
       { transaction }
     )
+    newModifierElementUpgrade.prices = modifierElementUpgrade.prices
     await savePrices(
-      {
-        id: newModifierElementUpgrade.id,
-        prices: modifierElementUpgrade.prices,
-      } as ModifierElementUpgrade,
+      newModifierElementUpgrade,
       transaction,
       newModifierElementUpgrade.id
     )
@@ -38,11 +32,11 @@ export const saveModifierElementUpgrade = async (
 const getModifierElementUpgradeById = async (
   id: number
 ): Promise<ModifierElementUpgrade> => {
-  const response = await ModifierElementUpgradeModel.findByPk(id, {
+  const modifierElementUpgrade = await ModifierElementUpgradeModel.findByPk(id, {
     include: ['prices'],
   })
-  if (response === null) throw new Error('ModifierElementUpgrade not found')
-  return response
+  if (modifierElementUpgrade === null) throw new Error('ModifierElementUpgrade not found')
+  return modifierElementUpgrade
 }
 
 export const updateModifierElementUpgrade = async (
@@ -52,9 +46,8 @@ export const updateModifierElementUpgrade = async (
   const transaction = await ModifierElementUpgradeModel.sequelize?.transaction()
   if (!transaction) throw new Error('Transaction not found')
   try {
-    const now = getNow()
-    modifierElementUpgrade.updatedAt = now
-    await ModifierElementUpgradeModel.update(modifierElementUpgrade, {
+    const updateModifierElementUpgrade = ModifierElementUpgradeModel.getPartialModifierElementUpgrade(modifierElementUpgrade, 0)
+    await ModifierElementUpgradeModel.update(updateModifierElementUpgrade, {
       where: { id },
     })
     const { prices, ...currentModifierElementUpgrade } =
@@ -103,14 +96,14 @@ export const deleteModifierElementUpgradeByModifierElementId = async (
   await ModifierElementUpgradeModel.destroy({ where: { modifierElementId } })
 }
 
-export const getModifierElementUpgradeByModiifierElementId = async (
+export const getModifierElementUpgradeByModifierElementId = async (
   modifierElementId: number
 ): Promise<ModifierElementUpgrade | null> => {
-  const response = await ModifierElementUpgradeModel.findOne({
+  const modifierElementUpgrade = await ModifierElementUpgradeModel.findOne({
     where: { modifierElementId },
   })
 
-  return response
+  return modifierElementUpgrade
 }
 
 const savePrices = async (
@@ -119,7 +112,6 @@ const savePrices = async (
   id: number
 ): Promise<void> => {
   for (const price of modifierElementUpgrade.prices) {
-    console.log(10, '-------upgradeid-----', id)
     await saveUpgradeElementPrice(
       { ...price, upgradeId: id },
       transaction
