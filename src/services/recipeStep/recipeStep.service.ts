@@ -1,5 +1,4 @@
-import { RecipeStep, NewRecipeStep } from './recipeStep.types'
-import { validateRecipeStep } from '../../factories/recipeStep.factory'
+import { RecipeStep, RecipeStepAttributes } from './recipeStep.types'
 import { RecipeStepModel } from '../../db/models/recipeStep.model'
 import { getNow } from '../../utils/timeManager'
 
@@ -12,40 +11,33 @@ const getRecipeStepsByRecipeId = async (recipeId: number): Promise<RecipeStep[]>
 }
 
 export const getRecipeStepById = async (id: number): Promise<RecipeStep> => {
-  const response = await RecipeStepModel.findByPk(id,
+  const recipeStep = await RecipeStepModel.findByPk(id,
     { include: { all: true } }
   )
-  if (response === null) throw new Error('RecipeStep not found')
-  if (response.delete) throw new Error('RecipeStep deleted')
-  return await validateRecipeStep(response)
+  if (recipeStep === null) throw new Error('RecipeStep not found')
+  if (recipeStep.delete) throw new Error('RecipeStep deleted')
+  return recipeStep
 }
 
-export const saveRecipeStep = async (recipeStep: NewRecipeStep): Promise<RecipeStep> => {
-  const now = getNow()
-  recipeStep.createdAt = now
-  recipeStep.updatedAt = now
-  const savedRecipeStep = await RecipeStepModel.create(recipeStep)
+export const saveRecipeStep = async (recipeStep: RecipeStep): Promise<RecipeStep> => {
+  const { id, ...rest } = RecipeStepModel.getRecipeStep(recipeStep, 0)
+  const savedRecipeStep = await RecipeStepModel.create(rest)
   await sortStepsAfterInsert(savedRecipeStep)
   return savedRecipeStep
 }
 
-export const updateRecipeStep = async (recipeStep: Partial<RecipeStep>, id: number): Promise<void> => {
-  await sortStepsAfterUpdate(recipeStep)
-  const now = getNow()
-  recipeStep.updatedAt = now
-  await RecipeStepModel.update(recipeStep, { where: { id } })
+export const updateRecipeStep = async (recipeStep: Partial<RecipeStepAttributes>, id: number): Promise<void> => {
+  const updateRecipeStep = await RecipeStepModel.getPartialRecipeStep(recipeStep, 0)
+  await sortStepsAfterUpdate(updateRecipeStep)
+  await RecipeStepModel.update(updateRecipeStep, { where: { id } })
 }
 
 export const deleteRecipeStep = async (id: number): Promise<void> => {
-  const recipeStep = await getRecipeStepById(id)
-  await RecipeStepModel.update({ delete: true }, { where: { id } })
-  await sortStepsAfterDelete(recipeStep)
+  await updateRecipeStep({ delete: true }, id)
 }
 
 export const recoveryRecipeStep = async (id: number): Promise<void> => {
-  const recipeStep = await getRecipeStepById(id)
-  recipeStep.delete = false
-  await updateRecipeStep(recipeStep, id)
+  await updateRecipeStep({ delete: false }, id)
 }
 
 export const stepUp = async (recipeStep: RecipeStep): Promise<void> => {

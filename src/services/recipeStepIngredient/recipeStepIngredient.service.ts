@@ -1,18 +1,14 @@
 import { RecipeStepIngredientModel } from '../../db/models/recipeStepIngredient.model'
-import { getNow } from '../../utils/timeManager'
-import { NewRecipeStepIngredient, RecipeStepIngredient } from './recipeStepIngredient.type'
+import { RecipeStepIngredient } from './recipeStepIngredient.type'
 
-export const saveRecipeStepIngredient = async (recipeStepIngredient: NewRecipeStepIngredient): Promise<RecipeStepIngredient> => {
-  const now = getNow()
-  recipeStepIngredient.createdAt = now
-  recipeStepIngredient.updatedAt = now
-  return await RecipeStepIngredientModel.create(recipeStepIngredient)
+export const saveRecipeStepIngredient = async (recipeStepIngredient: RecipeStepIngredient): Promise<RecipeStepIngredient> => {
+  const { id, ...rest } = RecipeStepIngredientModel.getRecipeStepIngredient(recipeStepIngredient,0)
+  return await RecipeStepIngredientModel.create(rest)
 }
 
 export const updateRecipeStepIngredient = async (recipeStepIngredient: Partial<RecipeStepIngredient>, id: number): Promise<void> => {
-  const now = getNow()
-  recipeStepIngredient.updatedAt = now
-  await RecipeStepIngredientModel.update(recipeStepIngredient, { where: { id } })
+  const updateRecipeStepIngredient = await RecipeStepIngredientModel.getPartialRecipeStepIngredient(recipeStepIngredient, 0)
+  await RecipeStepIngredientModel.update(updateRecipeStepIngredient, { where: { id } })
 }
 
 export const deleteRecipeStepIngredient = async (id: number): Promise<void> => {
@@ -21,7 +17,6 @@ export const deleteRecipeStepIngredient = async (id: number): Promise<void> => {
 
 export const saveRecipeStepIngredients = async (recipeStepIngredients: RecipeStepIngredient[], recipeStepId: number): Promise<void> => {
   for (const recipeStepIngredient of recipeStepIngredients) {
-    const { id, ...rest } = recipeStepIngredient
-    await saveRecipeStepIngredient({ ...rest, recipeStepId })
+    await saveRecipeStepIngredient({ ...recipeStepIngredient, recipeStepId })
   }
 }

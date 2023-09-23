@@ -1,7 +1,5 @@
-import { Recipe, NewRecipe } from './recipe.types'
+import { Recipe, RecipeAttributes } from './recipe.types'
 import { RecipeModel } from '../../db/models/recipe.model'
-import { validateRecipe, validateRecipes } from '../../factories/recipe.factory'
-import { getNow } from '../../utils/timeManager'
 
 export const getRecipes = async (): Promise<Recipe[]> => {
   const recipes = await RecipeModel.findAll(
@@ -30,7 +28,7 @@ export const getRecipes = async (): Promise<Recipe[]> => {
     }
   )
 
-  return await validateRecipes(recipes)
+  return recipes
 }
 
 export const getRecipesWithDeletedItems = async (): Promise<Recipe[]> => {
@@ -38,7 +36,7 @@ export const getRecipesWithDeletedItems = async (): Promise<Recipe[]> => {
 }
 
 export const getRecipeById = async (id: number): Promise<Recipe> => {
-  const response = await RecipeModel.findByPk(id,
+  const recipe = await RecipeModel.findByPk(id,
     {
       include: [
         {
@@ -59,33 +57,25 @@ export const getRecipeById = async (id: number): Promise<Recipe> => {
         }
       ]
     })
-  if (response === null) throw new Error('Recipe not found')
-  if (response.delete) throw new Error('Recipe deleted')
-  console.log(response)
-  return await validateRecipe(response)
+  if (recipe === null) throw new Error('Recipe not found')
+  if (recipe.delete) throw new Error('Recipe deleted')
+  return recipe
 }
 
-export const saveRecipe = async (recipe: NewRecipe): Promise<Recipe> => {
-  const now = getNow()
-  recipe.createdAt = now
-  recipe.updatedAt = now
-  return await RecipeModel.create(recipe)
+export const saveRecipe = async (recipe: Recipe): Promise<Recipe> => {
+  const { id, ...rest } = RecipeModel.getRecipe(recipe, 0)
+  return await RecipeModel.create(rest)
 }
 
-export const updateRecipe = async (recipe: Partial<Recipe>, id: number): Promise<void> => {
-  const now = getNow()
-  recipe.updatedAt = now
-  await RecipeModel.update(recipe, { where: { id } })
+export const updateRecipe = async (recipe: Partial<RecipeAttributes>, id: number): Promise<void> => {
+  const updateRecipe = await RecipeModel.getPartialRecipe(recipe, 0)
+  await RecipeModel.update(updateRecipe, { where: { id } })
 }
 
 export const deleteRecipe = async (id: number): Promise<void> => {
-  const recipe = await getRecipeById(id)
-  recipe.delete = true
-  await updateRecipe(recipe, id)
+  await updateRecipe({delete: true}, id)
 }
 
 export const recoveryRecipe = async (id: number): Promise<void> => {
-  const recipe = await getRecipeById(id)
-  recipe.delete = false
-  await updateRecipe(recipe, id)
+  await updateRecipe({delete: false}, id)
 }

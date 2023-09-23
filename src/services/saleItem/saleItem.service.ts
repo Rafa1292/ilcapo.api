@@ -1,4 +1,4 @@
-import { SaleItem, NewSaleItem } from './saleItem.types'
+import { SaleItem, SaleItemAttributes } from './saleItem.types'
 import { SaleItemModel } from '../../db/models/saleItem.model'
 import { validateSaleItem } from '../../factories/saleItem.factory'
 import { Transaction } from 'sequelize'
@@ -29,21 +29,19 @@ export const getSaleItemsWithDeletedItems = async (): Promise<SaleItem[]> => {
 }
 
 export const getSaleItemById = async (id: number): Promise<SaleItem> => {
-  const response = await SaleItemModel.findByPk(id, { include: ['prices'] })
-  if (response === null) throw new Error('SaleItem not found')
-  if (response.delete) throw new Error('SaleItem deleted')
-  return await validateSaleItem(response)
+  const saleItem = await SaleItemModel.findByPk(id, { include: ['prices'] })
+  if (saleItem === null) throw new Error('SaleItem not found')
+  if (saleItem.delete) throw new Error('SaleItem deleted')
+  return saleItem
 }
 
-export const saveSaleItem = async (saleItem: NewSaleItem): Promise<void> => {
+export const saveSaleItem = async (saleItem: SaleItem): Promise<void> => {
   const transaction = await SaleItemModel.sequelize?.transaction()
   if (!transaction) throw new Error('Transaction not found')
   try {
-    const now = getNow()
-    saleItem.createdAt = now
-    saleItem.updatedAt = now
-    const newSaleItem = await SaleItemModel.create(saleItem, { transaction })
-    await savePrices({ id: newSaleItem.id, prices: saleItem.prices } as SaleItem, transaction)
+    const { id, ...rest } = SaleItemModel.getSaleItem(saleItem, 0)
+    const newSaleItem = await SaleItemModel.create(rest, { transaction })
+    await savePrices({ ...newSaleItem, prices: saleItem.prices }, transaction)
     await transaction?.commit()
   } catch (error) {
     await transaction?.rollback()
@@ -51,13 +49,12 @@ export const saveSaleItem = async (saleItem: NewSaleItem): Promise<void> => {
   }
 }
 
-export const updateSaleItem = async (saleItem: Partial<SaleItem>, id: number ): Promise<void> => {
+export const updateSaleItem = async (saleItem: Partial<SaleItemAttributes>, id: number ): Promise<void> => {
   const transaction = await SaleItemModel.sequelize?.transaction()
   if (!transaction) throw new Error('Transaction not found')
   try {
-    const now = getNow()
-    saleItem.updatedAt = now
-    await SaleItemModel.update(saleItem, { where: { id }, transaction })
+    const updateSaleItem = await SaleItemModel.getPartialSaleItem(saleItem, 0)
+    await SaleItemModel.update(updateSaleItem, { where: { id }, transaction })
     const { prices, ...currentSaleItem } = await getSaleItemById(id)
     const pricesToUpdate = saleItem.prices?.filter(
       (price) => prices?.some((p) => p.id === price.id)
@@ -102,13 +99,9 @@ const removePrices = async (saleItem: SaleItem, transaction: Transaction): Promi
 }
 
 export const deleteSaleItem = async (id: number): Promise<void> => {
-  const saleItem = await getSaleItemById(id)
-  saleItem.delete = true
-  await updateSaleItem(saleItem, id)
+  await updateSaleItem({delete: true}, id)
 }
 
 export const recoverySaleItem = async (id: number): Promise<void> => {
-  const saleItem = await getSaleItemById(id)
-  saleItem.delete = false
-  await updateSaleItem(saleItem, id)
+  await updateSaleItem({delete: false}, id)
 }

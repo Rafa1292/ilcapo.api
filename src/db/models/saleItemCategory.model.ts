@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { SaleItemCategoryAttributes } from '../../services/saleItemCategory/saleItemCategory.types'
+import { SaleItemCategory, SaleItemCategoryAttributes } from '../../services/saleItemCategory/saleItemCategory.types'
 import { SaleItem } from '../../services/saleItem/saleItem.types'
 
 export class SaleItemCategoryModel extends Model implements SaleItemCategoryAttributes {
@@ -26,7 +26,7 @@ export class SaleItemCategoryModel extends Model implements SaleItemCategoryAttr
     }
   }
 
-  public static getSaleItemCategory (saleItemCategory: SaleItemCategoryAttributes, userId: number): SaleItemCategoryAttributes {
+  public static getSaleItemCategory (saleItemCategory: SaleItemCategory, userId: number): SaleItemCategoryAttributes {
     const now = new Date()
     return {
       ...saleItemCategory,

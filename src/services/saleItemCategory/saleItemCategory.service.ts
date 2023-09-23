@@ -1,4 +1,7 @@
-import { SaleItemCategory, NewSaleItemCategory } from './saleItemCategory.types'
+import {
+  SaleItemCategory,
+  SaleItemCategoryAttributes,
+} from './saleItemCategory.types'
 import { SaleItemCategoryModel } from '../../db/models/saleItemCategory.model'
 import { validateSaleItemCategory } from '../../factories/saleItemCategory.factory'
 import { getNow } from '../../utils/timeManager'
@@ -45,7 +48,7 @@ export const getSaleItemCategoriesWithActiveProducts = async (): Promise<
                 association: 'product',
                 where: {
                   active: true,
-                }
+                },
               },
             ],
           },
@@ -59,7 +62,9 @@ export const getSaleItemCategoriesWithActiveProducts = async (): Promise<
 
   categories.map((category) => {
     const newCategory = category.toJSON() as SaleItemCategory
+    if (newCategory.saleItems === undefined) return
     newCategory.saleItems = newCategory.saleItems.filter((saleItem) => {
+      if (saleItem.saleItemProducts === undefined) return false
       saleItem.saleItemProducts = saleItem.saleItemProducts.filter(
         (saleItemProduct) => {
           return saleItemProduct.product !== null
@@ -84,38 +89,35 @@ export const getSaleItemCategoriesWithDeletedItems = async (): Promise<
 export const getSaleItemCategoryById = async (
   id: number
 ): Promise<SaleItemCategory> => {
-  const response = await SaleItemCategoryModel.findByPk(id)
-  if (response === null) throw new Error('SaleItemCategory not found')
-  if (response.delete) throw new Error('SaleItemCategory deleted')
-  return await validateSaleItemCategory(response)
+  const saleItemCategory = await SaleItemCategoryModel.findByPk(id)
+  if (saleItemCategory === null) throw new Error('SaleItemCategory not found')
+  if (saleItemCategory.delete) throw new Error('SaleItemCategory deleted')
+  return saleItemCategory
 }
 
 export const saveSaleItemCategory = async (
-  saleItemCategory: NewSaleItemCategory
+  saleItemCategory: SaleItemCategory
 ): Promise<SaleItemCategory> => {
-  const now = getNow()
-  saleItemCategory.createdAt = now
-  saleItemCategory.updatedAt = now
-  return await SaleItemCategoryModel.create(saleItemCategory)
+  const { id, ...rest } = SaleItemCategoryModel.getSaleItemCategory(
+    saleItemCategory,
+    0
+  )
+  return await SaleItemCategoryModel.create(rest)
 }
 
 export const updateSaleItemCategory = async (
-  saleItemCategory: Partial<SaleItemCategory>,
+  saleItemCategory: Partial<SaleItemCategoryAttributes>,
   id: number
 ): Promise<void> => {
-  const now = getNow()
-  saleItemCategory.updatedAt = now
-  await SaleItemCategoryModel.update(saleItemCategory, { where: { id } })
+  const updateSaleItemCategory =
+    SaleItemCategoryModel.getPartialSaleItemCategory(saleItemCategory, 0)
+  await SaleItemCategoryModel.update(updateSaleItemCategory, { where: { id } })
 }
 
 export const deleteSaleItemCategory = async (id: number): Promise<void> => {
-  const saleItemCategory = await getSaleItemCategoryById(id)
-  saleItemCategory.delete = true
-  await updateSaleItemCategory(saleItemCategory, id)
+  await updateSaleItemCategory({ delete: true }, id)
 }
 
 export const recoverySaleItemCategory = async (id: number): Promise<void> => {
-  const saleItemCategory = await getSaleItemCategoryById(id)
-  saleItemCategory.delete = false
-  await updateSaleItemCategory(saleItemCategory, id)
+  await updateSaleItemCategory({ delete: false }, id)
 }
