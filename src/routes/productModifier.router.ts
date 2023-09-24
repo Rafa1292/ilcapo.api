@@ -10,7 +10,7 @@ const router = express.Router()
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createProductModifier } = await productModifierFactory.validateProductModifier(req.body)
+    const createProductModifier = await productModifierFactory.validateProductModifier(req.body)
     const savedProductModifiercreateProductModifier = await productModifierService.saveProductModifier(createProductModifier)
     response.setResponse(savedProductModifiercreateProductModifier, ['ProductModifier saved successfully'], false)
   } catch (error: any) {
@@ -23,7 +23,8 @@ router.post('/', async (req: Request, res: Response) => {
 router.get('/byProductId/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const productModifiers = await productModifierService.getProductModifiersByProductId(parseInt(req.params.id))
+    const productModifierModels = await productModifierService.getProductModifiersByProductId(parseInt(req.params.id))
+    const productModifiers = productModifierFactory.validateProductModifiers(productModifierModels)
     response.setResponse(productModifiers, ['Product modifier retrieved successfully'], false)
   } catch (error: any) {
     const errors = errorHandler(error)
@@ -36,7 +37,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const productModifier = await productModifierFactory.validateProductModifier(req.body)
+    const productModifier = await productModifierFactory.validatePartialProductModifier(req.body)
     const savedProductModifier = await productModifierService.updateProductModifier(productModifier, id)
     response.setResponse(savedProductModifier, ['ProductModifier updated successfully'], false)
   } catch (error) {

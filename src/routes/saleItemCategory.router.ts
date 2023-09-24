@@ -10,7 +10,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await saleItemCategoryService.getSaleItemCategories(), ['SaleItem categories retrieved successfully'], false)
+    const saleItemCategoryModels = await saleItemCategoryService.getSaleItemCategories()
+    const saleItemCategories = await saleItemCategoryFactory.validateSaleItemCategories(saleItemCategoryModels)
+    response.setResponse(saleItemCategories, ['SaleItem categories retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -21,7 +23,9 @@ router.get('/', async (_req: Request, res: Response) => {
 router.get('/activeProducts', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await saleItemCategoryService.getSaleItemCategoriesWithActiveProducts(), ['SaleItem categories retrieved successfully'], false)
+    const saleItemCategoryModels = await saleItemCategoryService.getSaleItemCategoriesWithActiveProducts()
+    const saleItemCategories = await saleItemCategoryFactory.validateSaleItemCategories(saleItemCategoryModels)
+    response.setResponse(saleItemCategories, ['SaleItem categories retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -33,10 +37,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const saleItemCategory = await saleItemCategoryService.getSaleItemCategoryById(id)
-    if (saleItemCategory !== undefined) {
-      response.setResponse(saleItemCategory, ['SaleItem category retrieved successfully'], false)
-    }
+    const saleItemCategoryModel = await saleItemCategoryService.getSaleItemCategoryById(id)
+    const saleItemCategory = await saleItemCategoryFactory.validateSaleItemCategory(saleItemCategoryModel)
+    response.setResponse(saleItemCategory, ['SaleItem category retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -47,7 +50,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createSaleItemCategory } = await saleItemCategoryFactory.validateSaleItemCategory(req.body)
+    const createSaleItemCategory = await saleItemCategoryFactory.validateSaleItemCategory(req.body)
     const savedSaleItemCategory = await saleItemCategoryService.saveSaleItemCategory(createSaleItemCategory)
     response.setResponse(savedSaleItemCategory, ['SaleItem category saved successfully'], false)
   } catch (error: any) {
@@ -61,7 +64,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const saleItemCategory = await saleItemCategoryFactory.validateSaleItemCategory(req.body)
+    const saleItemCategory = await saleItemCategoryFactory.validatePartialSaleItemCategory(req.body)
     const savedSaleItemCategory = await saleItemCategoryService.updateSaleItemCategory(saleItemCategory, id)
     response.setResponse(savedSaleItemCategory, ['SaleItem category updated successfully'], false)
   } catch (error) {
@@ -75,8 +78,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedSaleItemCategory = await saleItemCategoryService.deleteSaleItemCategory(id)
-    response.setResponse(deletedSaleItemCategory, ['SaleItem category deleted successfully'], false)
+    await saleItemCategoryService.deleteSaleItemCategory(id)
+    response.setResponse({}, ['SaleItem category deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

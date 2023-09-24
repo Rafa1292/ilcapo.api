@@ -10,7 +10,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await modifierGroupService.getModifierGroups(), ['ModifierGroups retrieved successfully'], false)
+    const modifierGroupModels = await modifierGroupService.getModifierGroups()
+    const modifierGroups = await modifierGroupFactory.validateModifierGroups(modifierGroupModels)
+    response.setResponse(modifierGroups, ['ModifierGroups retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -22,10 +24,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const modifierGroup = await modifierGroupService.getModifierGroupById(id)
-    if (modifierGroup !== undefined) {
+    const modifierGroupModel = await modifierGroupService.getModifierGroupById(id)
+    const modifierGroup = await modifierGroupFactory.validateModifierGroup(modifierGroupModel)
       response.setResponse(modifierGroup, ['ModifierGroup retrieved successfully'], false)
-    }
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -36,7 +37,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createModifierGroup } = await modifierGroupFactory.validateModifierGroup(req.body)
+    const createModifierGroup = await modifierGroupFactory.validateModifierGroup(req.body)
     const savedModifierGroup = await modifierGroupService.saveModifierGroup(createModifierGroup)
     response.setResponse(savedModifierGroup, ['ModifierGroup saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +51,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const modifierGroup = await modifierGroupFactory.validateModifierGroup(req.body)
+    const modifierGroup = await modifierGroupFactory.validatePartialModifierGroup(req.body)
     const savedModifierGroup = await modifierGroupService.updateModifierGroup(modifierGroup, id)
     response.setResponse(savedModifierGroup, ['ModifierGroup updated successfully'], false)
   } catch (error) {
@@ -64,8 +65,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedModifierGroup = await modifierGroupService.deleteModifierGroup(id)
-    response.setResponse(deletedModifierGroup, ['ModifierGroup deleted successfully'], false)
+    await modifierGroupService.deleteModifierGroup(id)
+    response.setResponse({}, ['ModifierGroup deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

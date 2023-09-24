@@ -10,7 +10,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await magnitudeService.getMagnitudes(), ['Magnitudes retrieved successfully'], false)
+    const magnitudeModels = await magnitudeService.getMagnitudes()
+    const magnitudes = magnitudeFactory.validateMagnitudes(magnitudeModels)
+    response.setResponse(magnitudes, ['Magnitudes retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -22,10 +24,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const magnitude = await magnitudeService.getMagnitudeById(id)
-    if (magnitude !== undefined) {
+    const magnitudeModel = await magnitudeService.getMagnitudeById(id)
+    const magnitude = magnitudeFactory.validateMagnitude(magnitudeModel)
       response.setResponse(magnitude, ['Magnitude retrieved successfully'], false)
-    }
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -36,7 +37,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createMagnitude } = await magnitudeFactory.validateMagnitude(req.body)
+    const createMagnitude = await magnitudeFactory.validateMagnitude(req.body)
     const savedMagnitude = await magnitudeService.saveMagnitude(createMagnitude)
     response.setResponse(savedMagnitude, ['Magnitude saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +51,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const magnitude = await magnitudeFactory.validateMagnitude(req.body)
+    const magnitude = await magnitudeFactory.validatePartialMagnitude(req.body)
     const savedMagnitude = await magnitudeService.updateMagnitude(magnitude, id)
     response.setResponse(savedMagnitude, ['Magnitude updated successfully'], false)
   } catch (error) {

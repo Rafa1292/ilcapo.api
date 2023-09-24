@@ -10,7 +10,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await measureService.getMeasures(), ['Measures retrieved successfully'], false)
+    const measureModels = await measureService.getMeasures()
+    const measures = measureFactory.validateMeasures(measureModels)
+    response.setResponse(measures, ['Measures retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -22,10 +24,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const measure = await measureService.getMeasureById(id)
-    if (measure !== undefined) {
+    const measureModel = await measureService.getMeasureById(id)
+    const measure = measureFactory.validateMeasure(measureModel)
       response.setResponse(measure, ['Measure retrieved successfully'], false)
-    }
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -36,7 +37,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createMeasure } = await measureFactory.validateMeasure(req.body)
+    const createMeasure = await measureFactory.validateMeasure(req.body)
     const savedMeasure = await measureService.saveMeasure(createMeasure)
     response.setResponse(savedMeasure, ['Measure saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +51,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const measure = await measureFactory.validateMeasure(req.body)
+    const measure = await measureFactory.validatePartialMeasure(req.body)
     const savedMeasure = await measureService.updateMeasure(measure, id)
     response.setResponse(savedMeasure, ['Measure updated successfully'], false)
   } catch (error) {
@@ -64,8 +65,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedMeasure = await measureService.deleteMeasure(id)
-    response.setResponse(deletedMeasure, ['Measure deleted successfully'], false)
+    await measureService.deleteMeasure(id)
+    response.setResponse({}, ['Measure deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

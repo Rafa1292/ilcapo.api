@@ -10,7 +10,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await inputService.getInputs(), ['Inputs retrieved successfully'], false)
+    const inputModels = await inputService.getInputs()
+    const inputs = inputFactory.validateInputs(inputModels)
+    response.setResponse(inputs, ['Inputs retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -22,10 +24,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const input = await inputService.getInputById(id)
-    if (input !== undefined) {
-      response.setResponse(input, ['Input retrieved successfully'], false)
-    }
+    const inputModel = await inputService.getInputById(id)
+    const input = inputFactory.validateInput(inputModel)
+    response.setResponse(input, ['Input retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -36,7 +37,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createInput } = await inputFactory.validateInput(req.body)
+    const createInput = await inputFactory.validateInput(req.body)
     const savedInput = await inputService.saveInput(createInput)
     response.setResponse(savedInput, ['Input saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +51,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const input = await inputFactory.validateInput(req.body)
+    const input = await inputFactory.validatePartialInput(req.body)
     const savedInput = await inputService.updateInput(input, id)
     response.setResponse(savedInput, ['Input updated successfully'], false)
   } catch (error) {
@@ -64,8 +65,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedInput = await inputService.deleteInput(id)
-    response.setResponse(deletedInput, ['Input deleted successfully'], false)
+    await inputService.deleteInput(id)
+    response.setResponse({}, ['Input deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

@@ -10,7 +10,7 @@ const router = express.Router()
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createProductRecipe } = await productRecipeFactory.validateProductRecipe(req.body)
+    const createProductRecipe = await productRecipeFactory.validateProductRecipe(req.body)
     const savedProductRecipe = await productRecipeService.saveProductRecipe(createProductRecipe)
     response.setResponse(savedProductRecipe, ['ProductRecipe saved successfully'], false)
   } catch (error: any) {
@@ -24,7 +24,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const productRecipe = await productRecipeFactory.validateProductRecipe(req.body)
+    const productRecipe = await productRecipeFactory.validatePartialProductRecipe(req.body)
     const savedProductRecipe = await productRecipeService.updateProductRecipe(productRecipe, id)
     response.setResponse(savedProductRecipe, ['ProductRecipe updated successfully'], false)
   } catch (error) {
@@ -52,10 +52,9 @@ router.get('/:productId/:modifierElementId', async (req: Request, res: Response)
   try {
     const productId = parseInt(req.params.productId)
     const modifierElementId = parseInt(req.params.modifierElementId)
-    const productRecipe = await productRecipeService.findProductRecipe(productId, modifierElementId)
-    if (productRecipe !== undefined) {
+    const productRecipeModel = await productRecipeService.findProductRecipe(productId, modifierElementId)
+    const productRecipe = productRecipeFactory.validateProductRecipe(productRecipeModel)
       response.setResponse(productRecipe, ['ProductRecipe retrieved successfully'], false)
-    }
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

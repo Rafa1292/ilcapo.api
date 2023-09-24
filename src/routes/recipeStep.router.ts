@@ -5,7 +5,6 @@ import * as recipeStepFactory from '../factories/recipeStep.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
 import sequelize from '../libs/sequelize'
-import { saveRecipeStepIngredients } from '../services/recipeStepIngredient/recipeStepIngredient.service'
 
 const router = express.Router()
 
@@ -13,10 +12,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const recipeStep = await recipeStepService.getRecipeStepById(id)
-    if (recipeStep !== undefined) {
+    const recipeStepModel = await recipeStepService.getRecipeStepById(id)
+    const recipeStep = recipeStepFactory.validateRecipeStep(recipeStepModel)
       response.setResponse(recipeStep, ['RecipeStep retrieved successfully'], false)
-    }
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -28,9 +26,10 @@ router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   const transaction = await sequelize.transaction()
   try {
-    const { id, ...createRecipeStep } = await recipeStepFactory.validateRecipeStep(req.body)
+    const createRecipeStep = await recipeStepFactory.validateRecipeStep(req.body)
     const savedRecipeStep = await recipeStepService.saveRecipeStep(createRecipeStep)
-    await saveRecipeStepIngredients(createRecipeStep.recipeStepIngredients, savedRecipeStep.id)
+    // la transaccion debe ir en el servicio
+    // await saveRecipeStepIngredients(createRecipeStep.recipeStepIngredients, savedRecipeStep.id)
     await transaction.commit()
     response.setResponse(savedRecipeStep, ['RecipeStep saved successfully'], false)
   } catch (error: any) {
@@ -45,8 +44,8 @@ router.get('/stepUp/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const recipeStep = await recipeStepService.getRecipeStepById(id)
-    if (recipeStep === undefined) throw new Error('RecipeStep not found')
+    const recipeStepModel = await recipeStepService.getRecipeStepById(id)
+    const recipeStep = await recipeStepFactory.validateRecipeStep(recipeStepModel)
     await recipeStepService.stepUp(recipeStep)
     response.setResponse(recipeStep, ['RecipeStep moved up successfully'], false)
   } catch (error) {
@@ -60,8 +59,8 @@ router.get('/stepDown/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const recipeStep = await recipeStepService.getRecipeStepById(id)
-    if (recipeStep === undefined) throw new Error('RecipeStep not found')
+    const recipeStepModel = await recipeStepService.getRecipeStepById(id)
+    const recipeStep = await recipeStepFactory.validateRecipeStep(recipeStepModel)
     await recipeStepService.stepDown(recipeStep)
     response.setResponse(recipeStep, ['RecipeStep moved down successfully'], false)
   } catch (error) {
@@ -76,7 +75,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const transaction = await sequelize.transaction()
   try {
     const id = parseInt(req.params.id)
-    const recipeStep = await recipeStepFactory.validateRecipeStep(req.body)
+    const recipeStep = await recipeStepFactory.validatePartialRecipeStep(req.body)
     const savedRecipeStep = await recipeStepService.updateRecipeStep(recipeStep, id)
     response.setResponse(savedRecipeStep, ['RecipeStep updated successfully'], false)
     await transaction.commit()
@@ -92,8 +91,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedRecipeStep = await recipeStepService.deleteRecipeStep(id)
-    response.setResponse(deletedRecipeStep, ['RecipeStep deleted successfully'], false)
+    await recipeStepService.deleteRecipeStep(id)
+    response.setResponse({}, ['RecipeStep deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

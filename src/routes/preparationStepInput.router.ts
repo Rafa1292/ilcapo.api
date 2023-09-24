@@ -10,7 +10,7 @@ const router = express.Router()
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createPreparationStepInput } = await preparationStepInputFactory.validatePreparationStepInput(req.body)
+    const createPreparationStepInput = await preparationStepInputFactory.validatePreparationStepInput(req.body)
     const savedPreparationStepInput = await preparationStepInputService.savePreparationStepInput(createPreparationStepInput)
     response.setResponse(savedPreparationStepInput, ['PreparationStepInput saved successfully'], false)
   } catch (error: any) {
@@ -24,7 +24,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const preparationStepInput = await preparationStepInputFactory.validatePreparationStepInput(req.body)
+    const preparationStepInput = await preparationStepInputFactory.validatePartialPreparationStepInput(req.body)
     const savedPreparationStepInput = await preparationStepInputService.updatePreparationStepInput(preparationStepInput, id)
     response.setResponse(savedPreparationStepInput, ['PreparationStepInput updated successfully'], false)
   } catch (error) {

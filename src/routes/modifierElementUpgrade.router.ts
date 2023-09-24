@@ -7,24 +7,11 @@ import { errorHandler } from '../utils/errorHandler'
 
 const router = express.Router()
 
-// router.post('/', async (req: Request, res: Response) => {
-//   const response = responseFactory.toNewCustomResponse()
-//   try {
-//     const createModifierElementUpgrade = await modifierElementUpgradeFactory.toNewModifierElementUpgrade(req.body)
-//     const savedModifierElementUpgrade = await modifierElementUpgradeService.saveModifierElementUpgrade(createModifierElementUpgrade)
-//     response.setResponse(savedModifierElementUpgrade, ['ModifierElementUpgrade saved successfully'], false)
-//   } catch (error: any) {
-//     const errors = errorHandler(error)
-//     response.setResponse(undefined, errors, true)
-//   }
-//   res.json(response)
-// })
-
 router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const modifierElementUpgrade = await modifierElementUpgradeFactory.validateModifierElementUpgrade(req.body)
+    const modifierElementUpgrade = await modifierElementUpgradeFactory.validatePartialModifierElementUpgrade(req.body)
     const savedModifierElementUpgrade = await modifierElementUpgradeService.updateModifierElementUpgrade(modifierElementUpgrade, id)
     response.setResponse(savedModifierElementUpgrade, ['ModifierGroupUpgrade updated successfully'], false)
   } catch (error) {
@@ -38,7 +25,8 @@ router.get('/elementUpgrade/:modifierElementId', async (_req: Request, res: Resp
   const response = responseFactory.toNewCustomResponse()
   try {
     const modifierElementId = parseInt(_req.params.modifierElementId)
-    const modifierElementUpgrade = await modifierElementUpgradeService.getModifierElementUpgradeByModifierElementId(modifierElementId)
+    const modifierElementUpgradeModel = await modifierElementUpgradeService.getModifierElementUpgradeByModifierElementId(modifierElementId)
+    const modifierElementUpgrade = modifierElementUpgradeFactory.validateModifierElementUpgrade(modifierElementUpgradeModel)
     response.setResponse(modifierElementUpgrade, ['ModifierElementUpgrade retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)

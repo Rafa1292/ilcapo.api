@@ -10,7 +10,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await recipeService.getRecipes(), ['Recipes retrieved successfully'], false)
+    const recipeModels = await recipeService.getRecipes()
+    const recipes = await recipeFactory.validateRecipes(recipeModels)
+    response.setResponse(recipes, ['Recipes retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -22,10 +24,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const recipe = await recipeService.getRecipeById(id)
-    if (recipe !== undefined) {
-      response.setResponse(recipe, ['Recipe retrieved successfully'], false)
-    }
+    const recipeModel = await recipeService.getRecipeById(id)
+    const recipe = await recipeFactory.validateRecipe(recipeModel)
+    response.setResponse(recipe, ['Recipe retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -36,7 +37,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createRecipe } = await recipeFactory.validateRecipe(req.body)
+    const createRecipe = await recipeFactory.validateRecipe(req.body)
     const savedRecipe = await recipeService.saveRecipe(createRecipe)
     response.setResponse(savedRecipe, ['Recipe saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +51,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const recipe = await recipeFactory.validateRecipe(req.body)
+    const recipe = await recipeFactory.validatePartialRecipe(req.body)
     const savedRecipe = await recipeService.updateRecipe(recipe, id)
     response.setResponse(savedRecipe, ['Recipe updated successfully'], false)
   } catch (error) {
@@ -64,8 +65,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedRecipe = await recipeService.deleteRecipe(id)
-    response.setResponse(deletedRecipe, ['Recipe deleted successfully'], false)
+    await recipeService.deleteRecipe(id)
+    response.setResponse({}, ['Recipe deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

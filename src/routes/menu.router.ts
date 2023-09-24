@@ -10,8 +10,10 @@ const router = express.Router();
 router.get("/", async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse();
   try {
+    const menuModels = await menuService.getMenus();
+    const menus = menuFactory.validateMenus(menuModels);
     response.setResponse(
-      await menuService.getMenus(),
+      menus,
       ["Menus retrieved successfully"],
       false
     );
@@ -26,8 +28,10 @@ router.get("/:id", async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse();
   try {
     const id = parseInt(req.params.id);
+    const menuModel = await menuService.getMenuById(id);
+    const menu = menuFactory.validateMenu(menuModel);
     response.setResponse(
-      await menuService.getMenuById(id),
+      menu,
       ["Menu retrieved successfully"],
       false
     );
@@ -41,7 +45,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 router.post("/", async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse();
   try {
-    const { id, ...createMenu } = await menuFactory.validateMenu(req.body);
+    const createMenu = await menuFactory.validateMenu(req.body);
     const savedMenu = await menuService.saveMenu(createMenu);
     response.setResponse(savedMenu, ["Menu saved successfully"], false);
   } catch (error: any) {
@@ -54,7 +58,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/", async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse();
   try {
-    const updateMenu = await menuFactory.validateMenu(req.body);
+    const updateMenu = await menuFactory.validatePartialMenu(req.body);
     const updatedMenu = await menuService.updateMenu(updateMenu);
     response.setResponse(updatedMenu, ["Menu updated successfully"], false);
   } catch (error: any) {
@@ -68,8 +72,8 @@ router.delete("/:id", async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse();
   try {
     const id = parseInt(req.params.id);
-    const deletedMenu = await menuService.deleteMenu(id);
-    response.setResponse(deletedMenu, ["Menu deleted successfully"], false);
+    await menuService.deleteMenu(id);
+    response.setResponse({}, ["Menu deleted successfully"], false);
   } catch (error) {
     const errors = errorHandler(error);
     response.setResponse([], errors, true);

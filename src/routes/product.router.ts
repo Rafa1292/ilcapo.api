@@ -10,7 +10,8 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const products = await productService.getProducts()
+    const productModels = await productService.getProducts()
+    const products = productFactory.validateProducts(productModels)
     response.setResponse(products, ['Products retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -23,10 +24,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const product = await productService.getProductById(id)
-    if (product !== undefined) {
+    const productModel = await productService.getProductById(id)
+    const product = productFactory.validateProduct(productModel)
       response.setResponse(product, ['Product retrieved successfully'], false)
-    }
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -37,7 +37,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createProduct } = await productFactory.validateProduct(req.body)
+    const createProduct = await productFactory.validateProduct(req.body)
     const savedProduct = await productService.saveProduct(createProduct)
     response.setResponse(savedProduct, ['Product saved successfully'], false)
   } catch (error: any) {
@@ -51,7 +51,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const product = await productFactory.validateProduct(req.body)
+    const product = await productFactory.validatePartialProduct(req.body)
     const savedProduct = await productService.updateProduct(product, id)
     response.setResponse(savedProduct, ['Product updated successfully'], false)
   } catch (error) {
@@ -65,8 +65,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedProduct = await productService.deleteProduct(id)
-    response.setResponse(deletedProduct, ['Product deleted successfully'], false)
+    await productService.deleteProduct(id)
+    response.setResponse({}, ['Product deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

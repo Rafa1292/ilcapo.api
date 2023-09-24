@@ -10,7 +10,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await providerService.getProviders(), ['Providers retrieved successfully'], false)
+    const providerModels = await providerService.getProviders()
+    const providers = await providerFactory.validateProviders(providerModels)
+    response.setResponse(providers, ['Providers retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -22,10 +24,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const provider = await providerService.getProviderById(id)
-    if (provider !== undefined) {
-      response.setResponse(provider, ['Provider retrieved successfully'], false)
-    }
+    const providerModel = await providerService.getProviderById(id)
+    const provider = await providerFactory.validateProvider(providerModel)
+    response.setResponse(provider, ['Provider retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -36,7 +37,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createProvider } = await providerFactory.validateProvider(req.body)
+    const createProvider = await providerFactory.validateProvider(req.body)
     const savedProvider = await providerService.saveProvider(createProvider)
     response.setResponse(savedProvider, ['Provider saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +51,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const provider = await providerFactory.validateProvider(req.body)
+    const provider = await providerFactory.validatePartialProvider(req.body)
     const savedProvider = await providerService.updateProvider(provider, id)
     response.setResponse(savedProvider, ['Provider updated successfully'], false)
   } catch (error) {
@@ -64,8 +65,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedProvider = await providerService.deleteProvider(id)
-    response.setResponse(deletedProvider, ['Provider deleted successfully'], false)
+    await providerService.deleteProvider(id)
+    response.setResponse({}, ['Provider deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

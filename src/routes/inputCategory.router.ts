@@ -10,7 +10,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    response.setResponse(await inputCategoryService.getInputCategories(), ['Input categories retrieved successfully'], false)
+    const inputCategoryModels = await inputCategoryService.getInputCategories()
+    const inputCategories = inputCategoryFactory.validateInputCategories(inputCategoryModels)
+    response.setResponse(inputCategories, ['Input categories retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -22,10 +24,9 @@ router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const inputCategory = await inputCategoryService.getInputCategoryById(id)
-    if (inputCategory !== undefined) {
+    const inputCategoryModel = await inputCategoryService.getInputCategoryById(id)
+    const inputCategory = inputCategoryFactory.validateInputCategory(inputCategoryModel)
       response.setResponse(inputCategory, ['Input category retrieved successfully'], false)
-    }
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -36,7 +37,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const { id, ...createInputCategory } = await inputCategoryFactory.validateInputCategory(req.body)
+    const createInputCategory = await inputCategoryFactory.validateInputCategory(req.body)
     const savedInputCategory = await inputCategoryService.saveInputCategory(createInputCategory)
     response.setResponse(savedInputCategory, ['Input category saved successfully'], false)
   } catch (error: any) {
@@ -50,7 +51,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const inputCategory = await inputCategoryFactory.validateInputCategory(req.body)
+    const inputCategory = await inputCategoryFactory.validatePartialInputCategory(req.body)
     const savedInputCategory = await inputCategoryService.updateInputCategory(inputCategory, id)
     response.setResponse(savedInputCategory, ['Input category updated successfully'], false)
   } catch (error) {
@@ -64,8 +65,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const deletedInputCategory = await inputCategoryService.deleteInputCategory(id)
-    response.setResponse(deletedInputCategory, ['Input category deleted successfully'], false)
+    await inputCategoryService.deleteInputCategory(id)
+    response.setResponse({}, ['Input category deleted successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
