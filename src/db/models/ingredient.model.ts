@@ -78,10 +78,11 @@ export const ingredientSchema = {
   name: {
     allowNull: false,
     type: DataTypes.STRING,
+    unique: true,
   },
   cost: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.INTEGER,
   },
   measureId: {
     allowNull: false,
@@ -93,11 +94,11 @@ export const ingredientSchema = {
   },
   presentation: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.FLOAT,
   },
   price: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.INTEGER,
   },
   delete: {
     type: DataTypes.BOOLEAN,

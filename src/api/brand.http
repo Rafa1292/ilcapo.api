@@ -1,5 +1,3 @@
-
-
 POST  http://localhost:4008/api/v1/brands
 content-type: application/json
 
@@ -19,5 +17,11 @@ content-type: application/json
 {
     "name": "adidas"
 }
+####
+
+PATCH  http://localhost:4008/api/v1/brands/recovery/1
+####
+
+DELETE  http://localhost:4008/api/v1/brands/1
 
 

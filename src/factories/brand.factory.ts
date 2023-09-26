@@ -30,7 +30,6 @@ export const validatePartialBrand = async (brand: any): Promise<Partial<Brand>> 
   if (!result.success) {
     throw new Error(result.error.message)
   }
-  console.log(result.data)
   result.data.name 
   && result.data.id
   && await validateName(result.data.name, result.data.id)
@@ -43,6 +42,6 @@ export const validateBrands = async (brands: any[]): Promise<Brand[]> => {
 }
 
 const validateName = async (name: string, id: number): Promise<void> => {
-  const brand = await getBrandByName(name, id)
-  if (brand !== undefined) throw new Error('Este nombre ya existe')
+  const object = await getBrandByName(name, id)
+  if (object !== undefined) throw new Error('Este nombre ya existe')
 }

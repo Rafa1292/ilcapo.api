@@ -30,6 +30,13 @@ export const getIngredients = async (): Promise<Ingredient[]> => {
   )
 }
 
+export const getIngredientByName = async (name: string, id: number): Promise<Ingredient | undefined> => {
+  const ingredients = await IngredientModel.findAll({})
+  return ingredients.find((tmpIngredient: Ingredient) => {
+    return tmpIngredient.name.toLowerCase() === name.toLowerCase() && tmpIngredient.id !== id
+  })
+}
+
 export const getIngredientsWithDeletedItems = async (): Promise<Ingredient[]> => {
   return await IngredientModel.findAll()
 }

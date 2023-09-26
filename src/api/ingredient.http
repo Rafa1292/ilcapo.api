@@ -1,0 +1,33 @@
+POST  http://localhost:4008/api/v1/ingredients
+content-type: application/json
+
+{
+    "name": "Masa",
+    "cost": 1000,
+    "measureId": 1,
+    "presentation": 100.0,
+    "price": 2000,
+    "ingredientCategoryId": 1
+}
+
+####
+
+GET http://localhost:4008/api/v1/ingredients
+
+####
+
+PATCH  http://localhost:4008/api/v1/ingredients/1
+content-type: application/json
+
+{
+    "name": "salsa",
+    "presentation": 100.5
+}
+####
+
+PATCH  http://localhost:4008/api/v1/ingredients/recovery/1
+####
+
+DELETE  http://localhost:4008/api/v1/ingredients/1
+
+

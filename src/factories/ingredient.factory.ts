@@ -1,14 +1,14 @@
 import { union, z } from 'zod'
 import { Ingredient } from '../services/ingredient/ingredient.types'
-import * as ingredientValidator from '../validations/ingredient.validator'
 import { measureSchema } from './measure.factory'
 import { preparationStepSchema } from './preparationStep.factory'
+import { getIngredientByName } from '../services/ingredient/ingredient.service'
 
 const ingredientSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   name: z.string({
     required_error: 'El nombre de la marca es requerido',
     invalid_type_error: 'El nombre de la marca debe ser  un texto',
@@ -39,26 +39,38 @@ const ingredientSchema = z.object({
 
 export const validateIngredient = async (ingredient: any): Promise<Ingredient> => {
   const result = await ingredientSchema.safeParseAsync(ingredient)
-  await ingredientValidator.newIngredientIsValid(ingredient)
 
   if (!result.success) {
     throw new Error(result.error.message)
   }
+  await validateName(result.data.name, result.data.id)
+
 
   return result.data
 }
 
 export const validatePartialIngredient = async (ingredient: any): Promise<Partial<Ingredient>> => {
+  console.log('validate partial ingredient')
   const result = await ingredientSchema.partial().safeParseAsync(ingredient)
-  await ingredientValidator.newIngredientIsValid(ingredient)
 
   if (!result.success) {
     throw new Error(result.error.message)
   }
+
+  console.log(result.data)
+  result.data.name 
+  && result.data.id
+  && await validateName(result.data.name, result.data.id)
 
   return result.data
 }
 
 export const validateIngredients = async (ingredients: any[]): Promise<Ingredient[]> => {
   return await Promise.all(ingredients.map(async (ingredient: any) => await validateIngredient(ingredient)))
+}
+
+const validateName = async (name: string, id: number): Promise<void> => {
+  console.log(id, '--------------------')
+  const object = await getIngredientByName(name, id)
+  if (object !== undefined) throw new Error('Este nombre ya existe')
 }

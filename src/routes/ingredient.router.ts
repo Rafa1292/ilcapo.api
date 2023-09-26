@@ -53,7 +53,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const ingredient = await ingredientFactory.validatePartialIngredient(req.body)
+    const ingredient = await ingredientFactory.validatePartialIngredient({...req.body,  id})
     const savedIngredient = await ingredientService.updateIngredient(ingredient, id)
     response.setResponse(savedIngredient, ['Ingredient updated successfully'], false)
   } catch (error) {
@@ -69,6 +69,19 @@ router.delete('/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     const deletedIngredient = await ingredientService.deleteIngredient(id)
     response.setResponse(deletedIngredient, ['Ingredient deleted successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await ingredientService.recoveryIngredient(id)
+    response.setResponse({}, ['Ingredient recovery successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
