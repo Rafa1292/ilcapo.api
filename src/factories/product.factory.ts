@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { Product } from '../services/product/product.types'
 import * as productValidator from '../validations/product.validator'
-import { productModifierSchema, validateProductModifiers } from './productModifier.factory'
+import { productModifierSchema } from './productModifier.factory'
 
 export const productSchema = z.object({
   id: z.number({

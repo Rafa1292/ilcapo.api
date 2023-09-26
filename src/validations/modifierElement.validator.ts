@@ -1,4 +1,4 @@
-import { getModifierElementsWithDeletedItems, recoveryModifierElement } from '../services/modifierElement/modifierElement.service'
+import { getModifierElementsWithDeletedItems } from '../services/modifierElement/modifierElement.service'
 import * as validator from '../utils/genericValidators/validator.util'
 
 const parseName = (name: any): string => {
@@ -13,10 +13,6 @@ const validateUniqueName = async (name: string, id: number, modifierGroupId: num
   const modifierElement = modifierElements.find((x) => x.name.toLowerCase() === name.toLowerCase())
   if (modifierElement !== null && modifierElement !== undefined) {
     if (modifierElement?.id !== id) {
-      if (modifierElement.delete) {
-        await recoveryModifierElement(modifierElement.id)
-        return modifierElement.id
-      }
       throw new Error('Este nombre de elemento ya existe')
     }
   }

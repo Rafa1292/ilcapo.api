@@ -13,9 +13,6 @@ const validateUniqueName = async (name: string, id: number): Promise<void> => {
   const input = inputs.find((input) => input.name.toLowerCase() === name.toLowerCase())
   if (input !== null && input !== undefined) {
     if (input?.id !== id) {
-      if (input.delete) {
-        throw new Error('Este nombre ya existe y fue borrado. Si desea recuperarlo dirigase a la sección de insumos borrados')
-      }
       throw new Error('Este nombre de insumo ya existe')
     }
   }

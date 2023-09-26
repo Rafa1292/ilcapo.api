@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { Magnitude } from '../services/magnitude/magnitude.types'
-import { Measure } from '../services/measure/measure.types'
 import * as magnitudeValidator from '../validations/magnitude.validator'
 import { measureSchema } from './measure.factory'
 

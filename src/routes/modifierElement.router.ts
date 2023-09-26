@@ -6,7 +6,6 @@ import * as modifierElementFactory from '../factories/modifierElement.factory'
 import * as productReferenceFactory from '../factories/productReference.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
-import { ProductReference } from '../services/productReference/productReference.types'
 
 const router = express.Router()
 

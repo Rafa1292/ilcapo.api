@@ -56,6 +56,7 @@ export const saveModifierElement = async (
       rest,
       { transaction }
     )
+    if(modifierElement.modifierUpgrade)
     await saveModifierElementUpgrade(
       {
         ...modifierElement.modifierUpgrade,

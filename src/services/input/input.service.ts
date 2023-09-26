@@ -1,7 +1,5 @@
 import { Input, InputAttributes } from './input.types'
 import { InputModel } from '../../db/models/input.model'
-import { validateInput } from '../../factories/input.factory'
-import { getNow } from '../../utils/timeManager'
 
 export const getInputs = async (): Promise<Input[]> => {
   return await InputModel.findAll(

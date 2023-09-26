@@ -11,6 +11,17 @@ export const getBrands = async (): Promise<Brand[]> => {
   return brandModels
 }
 
+export const getBrandByName = async (name: string, id: number): Promise<Brand | undefined> => {
+  const brands = await BrandModel.findAll({})
+
+  const brand = brands.find((tmpBrand: Brand) => {
+    return tmpBrand.name.toLowerCase() === name.toLowerCase() && tmpBrand.id !== id
+  })
+
+
+  return brand
+}
+
 export const getBrandById = async (id: number): Promise<Brand> => {
   const brand = await BrandModel.findByPk(id)
   if (brand === null) throw new Error('Brand not found')
@@ -23,10 +34,7 @@ export const saveBrand = async (brand: Brand): Promise<Brand> => {
   return await BrandModel.create(newBrand)
 }
 
-export const updateBrand = async (
-  brand: Partial<BrandAttributes>,
-  id: number
-): Promise<void> => {
+export const updateBrand = async (brand: Partial<BrandAttributes>, id: number): Promise<void> => {
   const updateBrand = BrandModel.getPartialBrand(brand, 0)
   await BrandModel.update(updateBrand, { where: { id } })
 }

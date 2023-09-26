@@ -1,6 +1,5 @@
 import { ProductReference } from './productReference.types'
 import { ProductReferenceModel } from '../../db/models/productReference.model'
-import { getNow } from '../../utils/timeManager'
 
 export const getProductReferenceByModifierElementId = async (id: number): Promise<ProductReference> => {
   const productReference = await ProductReferenceModel.findOne({ where: { modifierElementId: id } })

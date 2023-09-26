@@ -3,9 +3,9 @@ import { ModifierGroup } from '../modifierGroup/modifierGroup.types'
 
 export interface ProductModifierAttributes {
   id: number
-  productId: number
-  modifierGroupId: number
   order: number
+  modifierGroupId: number
+  productId: number
   price: number
   minSelect: number
   maxSelect: number

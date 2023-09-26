@@ -4,7 +4,6 @@ import * as saleItemService from '../services/saleItem/saleItem.service'
 import * as saleItemFactory from '../factories/saleItem.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
-import { SaleItem } from '../services/saleItem/saleItem.types'
 import { ItemPrice } from '../services/itemPrice/itemPrice.types'
 import { validatePrices } from '../validations/saleItem.validator'
 

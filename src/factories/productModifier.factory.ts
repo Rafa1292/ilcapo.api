@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { ProductModifier } from '../services/productModifier/productModifier.types'
-import { modifierGroupSchema, validateModifierGroup } from './modifierGroup.factory'
+import { modifierGroupSchema } from './modifierGroup.factory'
 
 export const productModifierSchema = z.object({
   id: z.number({

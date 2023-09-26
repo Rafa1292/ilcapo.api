@@ -1,10 +1,6 @@
-
 export const errorHandler = (error: any): any => {
-  if (
-    error.name === 'UnauthorizedError' &&
-    error.inner.name === 'TokenExpiredError'
-  ) {
-    return ['Token expired']
+  if (error.name === 'UnauthorizedError' && error.inner.name === 'TokenExpiredError') {
+    return ['No tienes autorizacion para esta accion']
   }
 
   if (error?.errors?.length > 0) {

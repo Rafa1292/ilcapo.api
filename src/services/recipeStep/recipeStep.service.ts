@@ -67,7 +67,7 @@ const sortStepsAfterInsert = async (recipeStep: Partial<RecipeStep>): Promise<vo
   }
 }
 
-const sortStepsAfterDelete = async (recipeStep: Partial<RecipeStep>): Promise<void> => {
+export const sortStepsAfterDelete = async (recipeStep: Partial<RecipeStep>): Promise<void> => {
   if (recipeStep.stepNumber === undefined) throw new Error('Step number is undefined')
   if (recipeStep.recipeId === undefined) throw new Error('Recipe id is undefined')
   const recipeSteps = await getRecipeStepsByRecipeId(recipeStep.recipeId)

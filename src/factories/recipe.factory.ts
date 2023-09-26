@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { Recipe } from '../services/recipe/recipe.types'
-import { RecipeStep } from '../services/recipeStep/recipeStep.types'
 import * as recipeValidator from '../validations/recipe.validator'
 import { recipeStepSchema } from './recipeStep.factory'
 

@@ -1,7 +1,5 @@
 import { Measure, MeasureAttributes } from './measure.types'
 import { MeasureModel } from '../../db/models/measure.model'
-import { validateMeasure } from '../../factories/measure.factory'
-import { getNow } from '../../utils/timeManager'
 
 export const getMeasures = async (): Promise<Measure[]> => {
   return await MeasureModel.findAll(

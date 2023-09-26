@@ -13,9 +13,6 @@ const validateUniqueName = async (name: string, id: number): Promise<void> => {
   const product = products.find((product) => product.name.toLowerCase() === name.toLowerCase())
   if (product !== null && product !== undefined) {
     if (product?.id !== id) {
-      if (product.delete) {
-        throw new Error('Este nombre ya existe y fue borrado. Si desea recuperarlo dirigase a la sección de productos borrados')
-      }
       throw new Error('Este nombre de producto ya existe')
     }
   }

@@ -1,8 +1,6 @@
 import { ProviderInput, ProviderInputAttributes } from './providerInput.types'
 import { ProviderInputModel } from '../../db/models/providerInput.model'
-import { validateProviderInput, validateProviderInputs } from '../../factories/providerInput.factory'
 import { newProviderInputIsValid } from '../../validations/providerInput.validator'
-import { getNow } from '../../utils/timeManager'
 
 export const getProviderInputById = async (id: number): Promise<ProviderInput> => {
   const providerInput = await ProviderInputModel.findByPk(id)

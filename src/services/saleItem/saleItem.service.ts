@@ -1,9 +1,7 @@
 import { SaleItem, SaleItemAttributes } from './saleItem.types'
 import { SaleItemModel } from '../../db/models/saleItem.model'
-import { validateSaleItem } from '../../factories/saleItem.factory'
 import { Transaction } from 'sequelize'
 import { deleteItemPrice, saveItemPrice, updateItemPrice } from '../itemPrice/itemPrice.service'
-import { getNow } from '../../utils/timeManager'
 
 export const getSaleItems = async (): Promise<SaleItem[]> => {
   return await SaleItemModel.findAll({

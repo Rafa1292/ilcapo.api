@@ -1,0 +1,23 @@
+
+
+POST  http://localhost:4008/api/v1/brands
+content-type: application/json
+
+{
+    "name": "AdidAs"
+}
+
+####
+
+GET http://localhost:4008/api/v1/brands
+
+####
+
+PATCH  http://localhost:4008/api/v1/brands/1
+content-type: application/json
+
+{
+    "name": "adidas"
+}
+
+

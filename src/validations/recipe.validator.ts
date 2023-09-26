@@ -13,9 +13,6 @@ const validateUniqueName = async (name: string, id: number): Promise<void> => {
   const recipe = recipes.find((recipe) => recipe.name.toLowerCase() === name.toLowerCase())
   if (recipe !== null && recipe !== undefined) {
     if (recipe?.id !== id) {
-      if (recipe.delete) {
-        throw new Error('Este nombre ya existe y fue borrado. Si desea recuperarlo dirigase a la sección de recetas borradas')
-      }
       throw new Error('Este nombre de ingrediente ya existe')
     }
   }

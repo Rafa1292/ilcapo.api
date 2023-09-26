@@ -1,6 +1,5 @@
 import { PreparationStep, PreparationStepAttributes } from './preparationStep.types'
 import { PreparationStepModel } from '../../db/models/preparationStep.model'
-import { getNow } from '../../utils/timeManager'
 
 export const getPreparationStepsWithDeletedItems = async (): Promise<PreparationStep[]> => {
   return await PreparationStepModel.findAll()
@@ -68,7 +67,7 @@ const sortStepsAfterInsert = async (preparationStep: Partial<PreparationStep>): 
   }
 }
 
-const sortStepsAfterDelete = async (preparationStep: Partial<PreparationStep>): Promise<void> => {
+export const sortStepsAfterDelete = async (preparationStep: Partial<PreparationStep>): Promise<void> => {
   if (preparationStep.stepNumber === undefined) throw new Error('Step number is undefined')
   if (preparationStep.ingredientId === undefined) throw new Error('Ingredient id is undefined')
   const preparationSteps = await getPreparationStepsByIngredientId(preparationStep.ingredientId)

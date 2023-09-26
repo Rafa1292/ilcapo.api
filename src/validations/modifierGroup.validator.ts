@@ -13,9 +13,6 @@ const validateUniqueName = async (name: string, id: number): Promise<void> => {
   const modiifierGroup = modifierGroups.find((x) => x.name.toLowerCase() === name.toLowerCase())
   if (modiifierGroup !== null && modiifierGroup !== undefined) {
     if (modiifierGroup?.id !== id) {
-      if (modiifierGroup.delete) {
-        throw new Error('Este nombre ya existe y fue borrado. Si desea recuperarlo dirigase a la sección de grupos borrados')
-      }
       throw new Error('Este nombre de grupo ya existe')
     }
   }

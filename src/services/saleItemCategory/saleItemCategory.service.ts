@@ -3,8 +3,6 @@ import {
   SaleItemCategoryAttributes,
 } from './saleItemCategory.types'
 import { SaleItemCategoryModel } from '../../db/models/saleItemCategory.model'
-import { validateSaleItemCategory } from '../../factories/saleItemCategory.factory'
-import { getNow } from '../../utils/timeManager'
 
 export const getSaleItemCategories = async (): Promise<SaleItemCategory[]> => {
   return await SaleItemCategoryModel.findAll({

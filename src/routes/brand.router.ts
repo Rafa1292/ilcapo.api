@@ -14,6 +14,7 @@ router.get('/', async (_req: Request, res: Response) => {
     const brands = await brandFactory.validateBrands(brandModels)
     response.setResponse(brands, ['Brands retrieved successfully'], false)
   } catch (error) {
+    console.log('aqui esta saliendo')
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
   }
@@ -66,7 +67,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const brand = await brandFactory.validatePartialBrand(req.body)
+    const brand = await brandFactory.validatePartialBrand({...req.body, id})
     await brandService.updateBrand(brand, id)
     response.setResponse({}, ['Brand updated successfully'], false)
   } catch (error) {

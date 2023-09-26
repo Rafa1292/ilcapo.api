@@ -21,9 +21,6 @@ const validateUniqueName = async (name: string, id: number): Promise<void> => {
   const provider = providers.find((provider) => provider.name.toLowerCase() === name.toLowerCase())
   if (provider !== null && provider !== undefined) {
     if (provider.id !== id) {
-      if (provider.delete) {
-        throw new Error('Este nombre ya existe y  fue borrado. Si desea recuperarlo dirigase a la sección de proveedores borrados')
-      }
       throw new Error('Este nombre de proveedor ya existe')
     }
   }

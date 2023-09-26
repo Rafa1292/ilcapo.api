@@ -13,9 +13,6 @@ const validateUniqueName = async (name: string, id: number): Promise<void> => {
   const inputCategory = inputCategories.find((inputCategory) => inputCategory.name.toLowerCase() === name.toLowerCase())
   if (inputCategory !== null && inputCategory !== undefined) {
     if (inputCategory?.id !== id) {
-      if (inputCategory.delete) {
-        throw new Error('Este nombre ya existe y fue borrado. Si desea recuperarlo dirigase a la sección de categorias de insumo borradas')
-      }
       throw new Error('Este nombre de categoria ya existe')
     }
   }
