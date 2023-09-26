@@ -1,0 +1,28 @@
+POST  http://localhost:4008/api/v1/ingredientCategories
+content-type: application/json
+
+{
+    "name": "masas"
+}
+
+####
+
+GET http://localhost:4008/api/v1/ingredientCategories
+
+####
+
+PATCH  http://localhost:4008/api/v1/ingredientCategories/1
+content-type: application/json
+
+{
+    "name": "masas"
+}
+
+####
+
+PATCH  http://localhost:4008/api/v1/ingredientCategories/recovery/1
+####
+
+DELETE  http://localhost:4008/api/v1/ingredientCategories/1
+
+

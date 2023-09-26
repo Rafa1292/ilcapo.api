@@ -21,6 +21,19 @@ router.get('/', async (_req: Request, res: Response) => {
   res.send(response)
 })
 
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await ingredientCategoryService.recoveryIngredientCategory(id)
+    response.setResponse({}, ['Category recovery successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
@@ -54,7 +67,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const ingredientCategory = await ingredientCategoryFactory.validatePartialIngredientCategory(req.body)
+    const ingredientCategory = await ingredientCategoryFactory.validatePartialIngredientCategory({...req.body, id})
     const savedIngredientCategory = await ingredientCategoryService.updateIngredientCategory(ingredientCategory, id)
     response.setResponse(savedIngredientCategory, ['Ingredient category updated successfully'], false)
   } catch (error) {

@@ -20,6 +20,17 @@ export const getIngredientCategoriesWithDeletedItems = async (): Promise<Ingredi
   return await IngredientCategoryModel.findAll()
 }
 
+export const getIngredientCategoryByName = async (name: string, id: number): Promise<IngredientCategory | undefined> => {
+  const objs = await IngredientCategoryModel.findAll({})
+
+  const obj = objs.find((tmp: IngredientCategory) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+
+
+  return obj
+}
+
 export const getIngredientCategoryById = async (id: number): Promise<IngredientCategory> => {
   const response = await IngredientCategoryModel.findByPk(id)
   if (response === null) throw new Error('IngredientCategory not found')

@@ -12,14 +12,14 @@ export const getBrands = async (): Promise<Brand[]> => {
 }
 
 export const getBrandByName = async (name: string, id: number): Promise<Brand | undefined> => {
-  const brands = await BrandModel.findAll({})
+  const objs = await BrandModel.findAll({})
 
-  const brand = brands.find((tmpBrand: Brand) => {
-    return tmpBrand.name.toLowerCase() === name.toLowerCase() && tmpBrand.id !== id
+  const obj = objs.find((tmp: Brand) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
   })
 
 
-  return brand
+  return obj
 }
 
 export const getBrandById = async (id: number): Promise<Brand> => {
