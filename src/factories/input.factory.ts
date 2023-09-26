@@ -1,12 +1,12 @@
 import { z } from 'zod'
 import { Input } from '../services/input/input.types'
-import * as inputValidator from '../validations/input.validator'
+import { getInputByName } from '../services/input/input.service'
 
 export const inputSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   name: z.string({
     required_error: 'El nombre de la marca es requerido',
     invalid_type_error: 'El nombre de la marca debe ser  un texto',
@@ -59,24 +59,30 @@ export const inputSchema = z.object({
 
 export const validateInput = async (input: any): Promise<Input> => {
   const result = await inputSchema.safeParseAsync(input)
-  await inputValidator.newInputIsValid(input)
 
   if (!result.success) {
     throw new Error(result.error.message)
   }
-
+  await validateName(result.data.name, result.data.id)
   return result.data
 }
 
 export const validatePartialInput = async (input: any): Promise<Partial<Input>> => {
   const result = await inputSchema.partial().safeParseAsync(input)
-  await inputValidator.newInputIsValid(input)
 
   if (!result.success) {
     throw new Error(result.error.message)
   }
+  result.data.name 
+  && result.data.id
+  && await validateName(result.data.name, result.data.id)
 
   return result.data
+}
+
+const validateName = async (name: string, id: number): Promise<void> => {
+  const object = await getInputByName(name, id)
+  if (object !== undefined) throw new Error('Este nombre ya existe')
 }
 
 

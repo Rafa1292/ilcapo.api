@@ -1,0 +1,43 @@
+
+
+
+
+POST  http://localhost:4008/api/v1/inputs
+content-type: application/json
+
+{
+    "name": "Azucar",
+    "lowerPrice": 10,
+    "currentPrice": 10,
+    "upperPrice": 10,
+    "lastPrice": 10,
+    "expectedPrice": 10,
+    "stock": 10,
+    "presentation": 10,
+    "suggestedStock": 10,
+    "currentProviderId": 1,
+    "measureId": 1,
+    "inputCategoryId": 1
+}
+
+####
+
+GET http://localhost:4008/api/v1/inputs
+
+####
+
+PATCH  http://localhost:4008/api/v1/inputs/3
+content-type: application/json
+
+{
+    "name": "sal"
+}
+
+####
+
+PATCH  http://localhost:4008/api/v1/inputs/recovery/3
+####
+
+DELETE  http://localhost:4008/api/v1/inputs/3
+
+

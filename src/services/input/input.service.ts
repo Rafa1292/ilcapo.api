@@ -16,6 +16,15 @@ export const getInputs = async (): Promise<Input[]> => {
   )
 }
 
+export const getInputByName = async (name: string, id: number): Promise<Input | undefined> => {
+  const objs = await InputModel.findAll({})
+  const obj = objs.find((tmp: Input) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}
+
+
 export const getInputsWithDeletedItems = async (): Promise<Input[]> => {
   return await InputModel.findAll()
 }

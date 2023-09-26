@@ -82,6 +82,7 @@ export const inputSchema = {
   name: {
     allowNull: false,
     type: DataTypes.STRING,
+    unique: true,
   },
   lowerPrice: {
     allowNull: false,

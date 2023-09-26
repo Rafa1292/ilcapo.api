@@ -13,12 +13,9 @@ export const getBrands = async (): Promise<Brand[]> => {
 
 export const getBrandByName = async (name: string, id: number): Promise<Brand | undefined> => {
   const objs = await BrandModel.findAll({})
-
   const obj = objs.find((tmp: Brand) => {
     return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
   })
-
-
   return obj
 }
 

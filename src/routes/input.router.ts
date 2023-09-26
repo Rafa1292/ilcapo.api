@@ -11,7 +11,7 @@ router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const inputModels = await inputService.getInputs()
-    const inputs = inputFactory.validateInputs(inputModels)
+    const inputs = await inputFactory.validateInputs(inputModels)
     response.setResponse(inputs, ['Inputs retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -27,6 +27,19 @@ router.get('/:id', async (req: Request, res: Response) => {
     const inputModel = await inputService.getInputById(id)
     const input = inputFactory.validateInput(inputModel)
     response.setResponse(input, ['Input retrieved successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await inputService.recoveryInput(id)
+    response.setResponse({}, ['Input recovery successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -51,7 +64,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const input = await inputFactory.validatePartialInput(req.body)
+    const input = await inputFactory.validatePartialInput({...req.body, id})
     const savedInput = await inputService.updateInput(input, id)
     response.setResponse(savedInput, ['Input updated successfully'], false)
   } catch (error) {
