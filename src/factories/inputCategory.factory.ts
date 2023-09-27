@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { InputCategory } from '../services/inputCategory/inputCategory.types'
-import * as inputCategoryValidator from '../validations/inputCategory.validator'
+import { getInputCategoryByName } from '../services/inputCategory/inputCategory.service'
 
 const inputCategorySchema = z.object({
   id: z.number({
@@ -15,26 +15,34 @@ const inputCategorySchema = z.object({
 
 export const validateInputCategory = async (inputCategory: any): Promise<InputCategory> => {
   const result = await inputCategorySchema.safeParseAsync(inputCategory)
-  await inputCategoryValidator.newInputCategoryIsValid(inputCategory)
 
   if (!result.success) {
     throw new Error(result.error.message)
   }
-
+  await validateName(result.data.name, result.data.id)
+  
   return result.data
 }
 
 export const validatePartialInputCategory = async (inputCategory: any): Promise<Partial<InputCategory>> => {
   const result = await inputCategorySchema.partial().safeParseAsync(inputCategory)
-  await inputCategoryValidator.newInputCategoryIsValid(inputCategory)
 
   if (!result.success) {
     throw new Error(result.error.message)
   }
+  result.data.name 
+  && result.data.id
+  && await validateName(result.data.name, result.data.id)
 
   return result.data
 }
 
 export const validateInputCategories = async (inputCategories: any[]): Promise<InputCategory[]> => {
   return await Promise.all(inputCategories.map(async (inputCategory) => await validateInputCategory(inputCategory)))
+}
+
+
+const validateName = async (name: string, id: number): Promise<void> => {
+  const object = await getInputCategoryByName(name, id)
+  if (object !== undefined) throw new Error('Este nombre ya existe')
 }

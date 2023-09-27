@@ -1,0 +1,36 @@
+
+
+
+
+POST  http://localhost:4008/api/v1/magnitudes
+content-type: application/json
+
+{
+    "name": "Masa"
+}
+
+####
+
+GET http://localhost:4008/api/v1/magnitudes
+
+####
+
+GET http://localhost:4008/api/v1/magnitudes/3
+
+####
+
+PATCH  http://localhost:4008/api/v1/magnitudes/3
+content-type: application/json
+
+{
+    "name": "Masa"
+}
+
+####
+
+PATCH  http://localhost:4008/api/v1/magnitudes/recovery/3
+####
+
+DELETE  http://localhost:4008/api/v1/magnitudes/3
+
+

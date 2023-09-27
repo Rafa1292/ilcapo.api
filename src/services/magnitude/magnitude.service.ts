@@ -16,6 +16,14 @@ export const getMagnitudes = async (): Promise<Magnitude[]> => {
   )
 }
 
+export const getMagnitudeByName = async (name: string, id: number): Promise<Magnitude | undefined> => {
+  const objs = await MagnitudeModel.findAll({})
+  const obj = objs.find((tmp: Magnitude) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}
+
 export const getMagnitudeById = async (id: number): Promise<Magnitude> => {
   const magnitude = await MagnitudeModel.findByPk(id)
   if (magnitude === null) throw new Error('Magnitude not found')

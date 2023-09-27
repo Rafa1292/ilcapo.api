@@ -11,7 +11,7 @@ router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const magnitudeModels = await magnitudeService.getMagnitudes()
-    const magnitudes = magnitudeFactory.validateMagnitudes(magnitudeModels)
+    const magnitudes = await magnitudeFactory.validateMagnitudes(magnitudeModels)
     response.setResponse(magnitudes, ['Magnitudes retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -25,7 +25,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id)
     const magnitudeModel = await magnitudeService.getMagnitudeById(id)
-    const magnitude = magnitudeFactory.validateMagnitude(magnitudeModel)
+    const magnitude = await magnitudeFactory.validateMagnitude(magnitudeModel)
       response.setResponse(magnitude, ['Magnitude retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -51,9 +51,22 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const magnitude = await magnitudeFactory.validatePartialMagnitude(req.body)
+    const magnitude = await magnitudeFactory.validatePartialMagnitude({...req.body, id})
     const savedMagnitude = await magnitudeService.updateMagnitude(magnitude, id)
     response.setResponse(savedMagnitude, ['Magnitude updated successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await magnitudeService.recoveryMagnitude(id)
+    response.setResponse({}, ['Magnitude recovery successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

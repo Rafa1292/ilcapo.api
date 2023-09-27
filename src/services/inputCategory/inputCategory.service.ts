@@ -16,6 +16,15 @@ export const getInputCategories = async (): Promise<InputCategory[]> => {
   )
 }
 
+export const getInputCategoryByName = async (name: string, id: number): Promise<InputCategory | undefined> => {
+  const objs = await InputCategoryModel.findAll({})
+  const obj = objs.find((tmp: InputCategory) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}
+
+
 export const getInputCategoriesWithDeletedItems = async (): Promise<InputCategory[]> => {
   return await InputCategoryModel.findAll()
 }

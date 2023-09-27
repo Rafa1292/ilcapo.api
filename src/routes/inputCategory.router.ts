@@ -64,7 +64,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const inputCategory = await inputCategoryFactory.validatePartialInputCategory(req.body)
+    const inputCategory = await inputCategoryFactory.validatePartialInputCategory({...req.body, id})
     const savedInputCategory = await inputCategoryService.updateInputCategory(inputCategory, id)
     response.setResponse(savedInputCategory, ['Input category updated successfully'], false)
   } catch (error) {
