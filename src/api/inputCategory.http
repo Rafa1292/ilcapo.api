@@ -1,0 +1,36 @@
+
+
+
+
+POST  http://localhost:4008/api/v1/inputCategories
+content-type: application/json
+
+{
+    "name": "Harinas"
+}
+
+####
+
+GET http://localhost:4008/api/v1/inputCategories
+
+####
+
+GET http://localhost:4008/api/v1/inputCategories/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/inputCategories/1
+content-type: application/json
+
+{
+    "name": "harinas"
+}
+
+####
+
+PATCH  http://localhost:4008/api/v1/inputCategories/recovery/1
+####
+
+DELETE  http://localhost:4008/api/v1/inputCategories/1
+
+

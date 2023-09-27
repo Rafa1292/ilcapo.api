@@ -6,7 +6,7 @@ const inputCategorySchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   name: z.string({
     required_error: 'El nombre de la categoria es requerido',
     invalid_type_error: 'El nombre de la categoria debe ser  un texto',

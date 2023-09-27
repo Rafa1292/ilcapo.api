@@ -15,7 +15,7 @@ PATCH  http://localhost:4008/api/v1/ingredientCategories/1
 content-type: application/json
 
 {
-    "name": "masas"
+    "name": "salsonas"
 }
 
 ####
