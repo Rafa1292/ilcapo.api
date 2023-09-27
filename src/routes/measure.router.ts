@@ -11,7 +11,7 @@ router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const measureModels = await measureService.getMeasures()
-    const measures = measureFactory.validateMeasures(measureModels)
+    const measures = await measureFactory.validateMeasures(measureModels)
     response.setResponse(measures, ['Measures retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -20,12 +20,25 @@ router.get('/', async (_req: Request, res: Response) => {
   res.send(response)
 })
 
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await measureService.recoveryMeasure(id)
+    response.setResponse({}, ['Measure recovery successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
     const measureModel = await measureService.getMeasureById(id)
-    const measure = measureFactory.validateMeasure(measureModel)
+    const measure = await measureFactory.validateMeasure(measureModel)
       response.setResponse(measure, ['Measure retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -51,7 +64,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const measure = await measureFactory.validatePartialMeasure(req.body)
+    const measure = await measureFactory.validatePartialMeasure({...req.body, id})
     const savedMeasure = await measureService.updateMeasure(measure, id)
     response.setResponse(savedMeasure, ['Measure updated successfully'], false)
   } catch (error) {

@@ -60,7 +60,8 @@ export const measureSchema = {
   },
   name: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    unique: true
   },
   principalMeasure: {
     allowNull: false,

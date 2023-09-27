@@ -16,6 +16,15 @@ export const getMeasures = async (): Promise<Measure[]> => {
   )
 }
 
+export const getMeasureByName = async (name: string, id: number): Promise<Measure | undefined> => {
+  const objs = await MeasureModel.findAll({})
+  const obj = objs.find((tmp: Measure) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}
+
+
 export const getMeasuresWithDeletedItems = async (): Promise<MeasureAttributes[]> => {
   return await MeasureModel.findAll()
 }

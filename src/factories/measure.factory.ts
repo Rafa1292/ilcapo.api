@@ -1,12 +1,12 @@
 import { z } from 'zod'
 import { Measure } from '../services/measure/measure.types'
-import * as measureValidator from '../validations/measure.validator'
+import { getMeasureByName } from '../services/measure/measure.service'
 
 export const measureSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   name: z.string({
     required_error: 'El nombre de la marca es requerido',
     invalid_type_error: 'El nombre de la marca debe ser  un texto',
@@ -31,12 +31,12 @@ export const measureSchema = z.object({
 
 
 export const validateMeasure = async (measure: any): Promise<Measure> => {
-  await measureValidator.newMeasureIsValid(measure)
   const result = await measureSchema.safeParseAsync(measure)
 
   if (!result.success) {
     throw new Error(result.error.message)
   }
+  await validateName(result.data.name, result.data.id)
 
   return result.data
 }
@@ -47,10 +47,19 @@ export const validatePartialMeasure = async (measure: any): Promise<Partial<Meas
   if (!result.success) {
     throw new Error(result.error.message)
   }
+  result.data.name 
+  && result.data.id
+  && await validateName(result.data.name, result.data.id)
 
   return result.data
 }
 
 export const validateMeasures = async (measures: any[]): Promise<Measure[]> => {
   return await Promise.all(measures.map(async (measure) => await validateMeasure(measure)))
+}
+
+
+const validateName = async (name: string, id: number): Promise<void> => {
+  const object = await getMeasureByName(name, id)
+  if (object !== undefined) throw new Error('Este nombre ya existe')
 }

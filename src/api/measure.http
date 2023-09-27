@@ -1,0 +1,40 @@
+
+
+
+
+POST  http://localhost:4008/api/v1/measures
+content-type: application/json
+
+{
+    "name": "Gramo",
+    "principalMeasure": false,
+    "value": 0.1,
+    "abbreviation": "g",
+    "magnitudeId": 2
+}
+
+####
+
+GET http://localhost:4008/api/v1/measures
+
+####
+
+GET http://localhost:4008/api/v1/measures/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/measures/1
+content-type: application/json
+
+{
+    "name": "gramo"
+}
+
+####
+
+PATCH  http://localhost:4008/api/v1/measures/recovery/1
+####
+
+DELETE  http://localhost:4008/api/v1/measures/1
+
+
