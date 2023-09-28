@@ -34,6 +34,19 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.json(response)
 })
 
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await modifierGroupService.recoveryModifierGroup(id)
+    response.setResponse({}, ['Modifier group recovery successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
@@ -51,7 +64,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const modifierGroup = await modifierGroupFactory.validatePartialModifierGroup(req.body)
+    const modifierGroup = await modifierGroupFactory.validatePartialModifierGroup({...req.body, id})
     const savedModifierGroup = await modifierGroupService.updateModifierGroup(modifierGroup, id)
     response.setResponse(savedModifierGroup, ['ModifierGroup updated successfully'], false)
   } catch (error) {

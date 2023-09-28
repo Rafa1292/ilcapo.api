@@ -47,6 +47,9 @@ export const getIngredientById = async (id: number): Promise<Ingredient> => {
       include: [
         {
           association: 'preparationSteps',
+          where: {
+            delete: false
+          },
           include: [
             {
               association: 'preparationStepInputs',

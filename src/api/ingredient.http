@@ -13,6 +13,9 @@ content-type: application/json
 ####
 
 GET http://localhost:4008/api/v1/ingredients
+####
+
+GET http://localhost:4008/api/v1/ingredients/1
 
 ####
 
@@ -26,8 +29,10 @@ content-type: application/json
 ####
 
 PATCH  http://localhost:4008/api/v1/ingredients/recovery/1
+
 ####
 
 DELETE  http://localhost:4008/api/v1/ingredients/1
 
+####
 

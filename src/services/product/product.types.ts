@@ -6,7 +6,7 @@ export interface ProductAttributes {
   name: string
   pictureUrl: string
   allowsModify: boolean
-  productModifiers: ProductModifier[]
+  productModifiers?: ProductModifier[]
   needsCommand: boolean
   active: boolean
   delete: boolean

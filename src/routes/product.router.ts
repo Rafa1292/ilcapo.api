@@ -11,7 +11,7 @@ router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const productModels = await productService.getProducts()
-    const products = productFactory.validateProducts(productModels)
+    const products = await productFactory.validateProducts(productModels)
     response.setResponse(products, ['Products retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -25,7 +25,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id)
     const productModel = await productService.getProductById(id)
-    const product = productFactory.validateProduct(productModel)
+    const product = await productFactory.validateProduct(productModel)
       response.setResponse(product, ['Product retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -67,6 +67,19 @@ router.delete('/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     await productService.deleteProduct(id)
     response.setResponse({}, ['Product deleted successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await productService.recoveryProduct(id)
+    response.setResponse({}, ['Product recovery successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

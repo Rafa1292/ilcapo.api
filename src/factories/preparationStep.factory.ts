@@ -1,13 +1,12 @@
 import { z } from 'zod'
 import { PreparationStep } from '../services/preparationStep/preparationStep.types'
-import * as preparationStepValidator from '../validations/preparationStep.validator'
 import { preparationStepInputSchema } from './preparationStepInput.factory'
 
 export const preparationStepSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   stepNumber: z.number({
     required_error: 'El numero de paso es requerido',
     invalid_type_error: 'El numero de paso debe ser un numero entero',
@@ -28,13 +27,11 @@ export const preparationStepSchema = z.object({
     required_error: 'El ingrediente es requerido',
     invalid_type_error: 'El ingrediente debe ser un numero entero',
   }),
-  preparationStepInputs: z.array(preparationStepInputSchema)
+  preparationStepInputs: z.union([z.array(preparationStepInputSchema), z.undefined()]),
 })
 
 export const validatePreparationStep = async (preparationStep: any): Promise<PreparationStep> => {
-  
   const result = await preparationStepSchema.safeParseAsync(preparationStep)
-  await preparationStepValidator.newPreparationStepIsValid()
 
   if (!result.success) {
     throw new Error(result.error.message)
@@ -46,7 +43,6 @@ export const validatePreparationStep = async (preparationStep: any): Promise<Pre
 export const validatePartialPreparationStep = async (preparationStep: any): Promise<Partial<PreparationStep>> => {
   
   const result = await preparationStepSchema.partial().safeParseAsync(preparationStep)
-  await preparationStepValidator.newPreparationStepIsValid()
 
   if (!result.success) {
     throw new Error(result.error.message)

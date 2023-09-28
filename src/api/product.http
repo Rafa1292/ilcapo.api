@@ -1,0 +1,39 @@
+POST  http://localhost:4008/api/v1/products
+content-type: application/json
+
+{
+    "name": "jamon y queso",
+    "allowsModify": true,
+    "pictureUrl": "",
+    "needsCommand": true,
+    "active": true
+}
+
+####
+
+GET http://localhost:4008/api/v1/products/
+
+####
+
+GET http://localhost:4008/api/v1/products/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/products/1
+content-type: application/json
+
+{
+    "name": "peperoni"
+}
+
+####
+
+
+
+PATCH http://localhost:4008/api/v1/products/recovery/1
+
+####
+
+DELETE  http://localhost:4008/api/v1/products/1
+
+

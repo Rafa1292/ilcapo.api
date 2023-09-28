@@ -5,7 +5,7 @@ export const preparationStepInputSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   quantity: z.number({
     required_error: 'La cantidad es requerida',
     invalid_type_error: 'La cantidad debe ser un numero entero',

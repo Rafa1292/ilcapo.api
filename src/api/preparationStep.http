@@ -1,0 +1,42 @@
+
+
+
+
+POST  http://localhost:4008/api/v1/preparationSteps
+content-type: application/json
+
+{
+    "stepNumber": 1,
+    "description": "agregar agua",
+    "cost": 100,
+    "minutesOfPreparation": 10,
+    "ingredientId": 1
+}
+
+####
+
+GET http://localhost:4008/api/v1/preparationSteps/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/preparationSteps/10
+content-type: application/json
+
+{
+    "ingredientId": 1,
+    "stepNumber": 2
+}
+
+####
+
+GET http://localhost:4008/api/v1/preparationSteps/stepUp/1
+
+####
+
+GET http://localhost:4008/api/v1/preparationSteps/stepDown/1
+
+####
+
+DELETE  http://localhost:4008/api/v1/preparationSteps/1
+
+

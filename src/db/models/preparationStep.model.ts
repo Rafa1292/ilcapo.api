@@ -76,7 +76,7 @@ export const preparationStepSchema = {
   },
   cost: {
     allowNull: false,
-    type: DataTypes.DECIMAL,
+    type: DataTypes.INTEGER,
   },
   minutesOfPreparation: {
     allowNull: false,

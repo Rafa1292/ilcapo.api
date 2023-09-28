@@ -33,7 +33,8 @@ export const updatePreparationStep = async (preparationStep: Partial<Preparation
 
 export const deletePreparationStep = async (id: number): Promise<void> => {
   const preparationStep = await getPreparationStepById(id)
-  await updatePreparationStep({ ...preparationStep, delete: true }, id)
+  await PreparationStepModel.update({ ...preparationStep, delete: true }, { where: { id } })
+  await sortStepsAfterDelete(preparationStep)
 }
 
 export const recoveryPreparationStep = async (id: number): Promise<void> => {
@@ -58,10 +59,10 @@ const sortStepsAfterInsert = async (preparationStep: Partial<PreparationStep>): 
   const preparationSteps = await getPreparationStepsByIngredientId(preparationStep.ingredientId)
   const repeatPreparationStep = preparationSteps.find((step) => step.stepNumber === preparationStep.stepNumber && step.id !== preparationStep.id)
   if (repeatPreparationStep !== undefined) {
-    for (const preparationStep of preparationSteps) {
-      if (preparationStep.stepNumber >= preparationStep.stepNumber && preparationStep.id !== preparationStep.id) {
-        const stepNumber = preparationStep.stepNumber + 1
-        await updatePreparationStep({ stepNumber }, preparationStep.id)
+    for (const tmpPreparationStep of preparationSteps) {
+      if (tmpPreparationStep.stepNumber >= preparationStep.stepNumber && tmpPreparationStep.id !== preparationStep.id) {
+        const stepNumber = tmpPreparationStep.stepNumber + 1
+        await PreparationStepModel.update({ stepNumber }, { where: { id: tmpPreparationStep.id } })
       }
     }
   }
@@ -74,7 +75,7 @@ export const sortStepsAfterDelete = async (preparationStep: Partial<PreparationS
   for (const preparationStep of preparationSteps) {
     if (preparationStep.stepNumber > preparationStep.stepNumber) {
       const stepNumber = preparationStep.stepNumber - 1
-      await updatePreparationStep({ stepNumber }, preparationStep.id)
+      await PreparationStepModel.update({ stepNumber }, { where: { id: preparationStep.id }})
     }
   }
 }
@@ -91,10 +92,10 @@ const sortStepsAfterUpdate = async (preparationStep: Partial<PreparationStep>): 
   const index = diference > 0 ? preparationStep.stepNumber : updatedPreparationStep.stepNumber
   const length = diference > 0 ? updatedPreparationStep.stepNumber : preparationStep.stepNumber
 
-  for (const preparationStep of preparationSteps) {
-    if (preparationStep.stepNumber >= index && preparationStep.stepNumber <= length && preparationStep.id !== preparationStep.id) {
-      const stepNumber = preparationStep.stepNumber + modifier
-      await updatePreparationStep({ stepNumber }, preparationStep.id)
+  for (const tmpPreparationStep of preparationSteps) {
+    if (tmpPreparationStep.stepNumber >= index && tmpPreparationStep.stepNumber <= length && tmpPreparationStep.id !== preparationStep.id) {
+      const stepNumber = tmpPreparationStep.stepNumber + modifier
+      await PreparationStepModel.update({ stepNumber }, {where: {id:tmpPreparationStep.id}})
     }
   }
 }

@@ -51,6 +51,15 @@ export const getModifierGroupById = async (id: number): Promise<ModifierGroup> =
   return modifierGroup
 }
 
+export const getModifierGroupByName = async (name: string, id: number): Promise<ModifierGroup | undefined> => {
+  const objs = await ModifierGroupModel.findAll({})
+  const obj = objs.find((tmp: ModifierGroup) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}
+
+
 export const saveModifierGroup = async (modifierGroup: ModifierGroup): Promise<ModifierGroup> => {
   const {id, ...rest } = ModifierGroupModel.getModifierGroup(modifierGroup, 0)
   return await ModifierGroupModel.create(rest)

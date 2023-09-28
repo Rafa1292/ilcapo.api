@@ -1,0 +1,38 @@
+
+
+
+
+POST  http://localhost:4008/api/v1/modifierGroups
+content-type: application/json
+
+{
+    "name": "Sabores",
+    "showLabel": true,
+    "elements": []
+}
+
+####
+
+GET http://localhost:4008/api/v1/modifierGroups
+
+####
+
+GET http://localhost:4008/api/v1/modifierGroups/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/modifierGroups/1
+content-type: application/json
+
+{
+    "name": "sabores"
+}
+
+####
+
+PATCH  http://localhost:4008/api/v1/modifierGroups/recovery/1
+####
+
+DELETE  http://localhost:4008/api/v1/modifierGroups/1
+
+

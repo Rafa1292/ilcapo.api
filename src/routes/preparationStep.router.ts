@@ -76,7 +76,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const transaction = await sequelize.transaction()
   try {
     const id = parseInt(req.params.id)
-    const preparationStep = await preparationStepFactory.validatePartialPreparationStep(req.body)
+    const preparationStep = await preparationStepFactory.validatePartialPreparationStep({...req.body, id})
     const savedPreparationStep = await preparationStepService.updatePreparationStep(preparationStep, id)
     response.setResponse(savedPreparationStep, ['PreparationStep updated successfully'], false)
     await transaction.commit()

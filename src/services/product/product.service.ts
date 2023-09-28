@@ -58,3 +58,11 @@ export const deleteProduct = async (id: number): Promise<void> => {
 export const recoveryProduct = async (id: number): Promise<void> => {
   await updateProduct({ delete: false }, id)
 }
+
+export const getProductByName = async (name: string, id: number): Promise<Product | undefined> => {
+  const objs = await ProductModel.findAll({})
+  const obj = objs.find((tmp: Product) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}
