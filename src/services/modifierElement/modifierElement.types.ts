@@ -6,13 +6,13 @@ import { ProductReference } from '../productReference/productReference.types'
 export interface ModifierElementAttributes {
   id: number
   name: string
-  delete: boolean
   defaultRecipeId: number
   combinable: boolean
   prices?: ElementPrice[]
   combinableModifierGroupId: number
   modifierUpgrade?: ModifierElementUpgrade
   modifierGroupId: number
+  delete: boolean
   createdAt?: string
   updatedAt?: string
   createdBy?: number

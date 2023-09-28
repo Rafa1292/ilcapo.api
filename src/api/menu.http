@@ -1,0 +1,37 @@
+
+
+
+
+POST  http://localhost:4008/api/v1/menus
+content-type: application/json
+
+{
+    "name": "PY",
+    "comissionPercentage": 10
+}
+
+####
+
+GET http://localhost:4008/api/v1/menus
+
+####
+
+GET http://localhost:4008/api/v1/menus/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/menus/1
+content-type: application/json
+
+{
+    "name": "normal"
+}
+
+####
+
+PATCH  http://localhost:4008/api/v1/menus/recovery/1
+####
+
+DELETE  http://localhost:4008/api/v1/menus/1
+
+

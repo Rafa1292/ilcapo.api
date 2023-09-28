@@ -1,13 +1,15 @@
 import { z } from 'zod'
 import { ModifierElement } from '../services/modifierElement/modifierElement.types'
-import * as modifierElementValidator from '../validations/modifierElement.validator'
 import { elementPriceSchema } from './elementPrice.factory'
+import { getModifierElementByName } from '../services/modifierElement/modifierElement.service'
 
 export const modifierElementSchema = z.object({
-  id: z.number({
-    required_error: 'El id es requerido',
-    invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  id: z
+    .number({
+      required_error: 'El id es requerido',
+      invalid_type_error: 'El id debe ser un numero entero',
+    })
+    .default(0),
   name: z.string({
     required_error: 'El nombre del elemento es requerido',
     invalid_type_error: 'El nombre del elemento debe ser  un texto',
@@ -28,29 +30,29 @@ export const modifierElementSchema = z.object({
     required_error: 'El grupo de modificadores combinables es requerido',
     invalid_type_error: 'El grupo de modificadores combinables debe ser un numero entero',
   }),
-  prices: z.array(elementPriceSchema)
+  prices: z.union([z.array(elementPriceSchema), z.undefined()]),
 })
 
 export const validateModifierElement = async (modifierElement: any): Promise<ModifierElement> => {
   const result = await modifierElementSchema.safeParseAsync(modifierElement)
-  await modifierElementValidator.newModifierElementIsValid(modifierElement)
 
   if (!result.success) {
     throw new Error(result.error.message)
   }
+  await validateName(result.data.name, result.data.id)
 
-  return result.data  
+  return result.data
 }
 
 export const validatePartialModifierElement = async (modifierElement: any): Promise<Partial<ModifierElement>> => {
   const result = await modifierElementSchema.partial().safeParseAsync(modifierElement)
-  await modifierElementValidator.newModifierElementIsValid(modifierElement)
-
+  console.log(modifierElement)
   if (!result.success) {
     throw new Error(result.error.message)
   }
+  result.data.name && result.data.id && (await validateName(result.data.name, result.data.id))
 
-  return result.data  
+  return result.data
 }
 
 export const validateModifierElements = async (modifierElements: any): Promise<ModifierElement[]> => {
@@ -61,4 +63,10 @@ export const validateModifierElements = async (modifierElements: any): Promise<M
   }
 
   return modifierElementsArray
+}
+
+const validateName = async (name: string, id: number): Promise<void> => {
+  console.log('validateName-------------------------------', name, id)
+  const object = await getModifierElementByName(name, id)
+  if (object !== undefined) throw new Error('Este nombre ya existe')
 }

@@ -11,7 +11,7 @@ router.get("/", async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse();
   try {
     const menuModels = await menuService.getMenus();
-    const menus = menuFactory.validateMenus(menuModels);
+    const menus = await menuFactory.validateMenus(menuModels);
     response.setResponse(
       menus,
       ["Menus retrieved successfully"],
@@ -24,12 +24,25 @@ router.get("/", async (_req: Request, res: Response) => {
   res.send(response);
 });
 
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await menuService.recoveryMenu(id)
+    response.setResponse({}, ['Menu recovery successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.get("/:id", async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse();
   try {
     const id = parseInt(req.params.id);
     const menuModel = await menuService.getMenuById(id);
-    const menu = menuFactory.validateMenu(menuModel);
+    const menu = await menuFactory.validateMenu(menuModel);
     response.setResponse(
       menu,
       ["Menu retrieved successfully"],
@@ -55,10 +68,11 @@ router.post("/", async (req: Request, res: Response) => {
   res.send(response);
 });
 
-router.put("/", async (req: Request, res: Response) => {
+router.patch("/:id", async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse();
   try {
-    const updateMenu = await menuFactory.validatePartialMenu(req.body);
+    const id = parseInt(req.params.id);
+    const updateMenu = await menuFactory.validatePartialMenu({...req.body, id});
     const updatedMenu = await menuService.updateMenu(updateMenu);
     response.setResponse(updatedMenu, ["Menu updated successfully"], false);
   } catch (error: any) {
