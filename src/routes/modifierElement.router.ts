@@ -12,16 +12,9 @@ const router = express.Router()
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const modifierElementModels =
-      await modifierElementService.getModifierElements()
-    const modifierElements = modifierElementFactory.validateModifierElements(
-      modifierElementModels
-    )
-    response.setResponse(
-      modifierElements,
-      ['ModifierElements retrieved successfully'],
-      false
-    )
+    const modifierElementModels = await modifierElementService.getModifierElements()
+    const modifierElements = await modifierElementFactory.validateModifierElements(modifierElementModels)
+    response.setResponse(modifierElements, ['ModifierElements retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse([], errors, true)
@@ -29,19 +22,12 @@ router.get('/', async (_req: Request, res: Response) => {
   res.send(response)
 })
 
-router.get('/:id', async (req: Request, res: Response) => {
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const modifierElementModel =
-      await modifierElementService.getModifierElementById(id)
-    const modifierElement =
-      modifierElementFactory.validateModifierElement(modifierElementModel)
-    response.setResponse(
-      modifierElement,
-      ['ModifierElement retrieved successfully'],
-      false
-    )
+    await modifierElementService.recoveryModifierElement(id)
+    response.setResponse({}, ['Modifier element recovery successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -49,39 +35,34 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.json(response)
 })
 
-router.post('/:modifierGroupId', async (req: Request, res: Response) => {
+router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const id = parseInt(req.params.modifierGroupId)
-    const createModifierElement =
-      await modifierElementFactory.validateModifierElement(req.body)
-    if (id > 0) {
-      response.setResponse(
-        undefined,
-        ['ModifierElement already exists and was recovery'],
-        false
-      )
-    } else {
-      const savedModifierElement =
-        await modifierElementService.saveModifierElement(createModifierElement)
-      if (
-        createModifierElement.productReference !== undefined &&
-        createModifierElement.productReference.id === 0
-      ) {
-        const productReference =
-          await productReferenceFactory.validateProductReference({
-            ...createModifierElement.productReference,
-            modifierElementId: savedModifierElement.id,
-          })
+    const id = parseInt(req.params.id)
+    const modifierElementModel = await modifierElementService.getModifierElementById(id)
+    const modifierElement = await modifierElementFactory.validateModifierElement(modifierElementModel)
+    response.setResponse(modifierElement, ['ModifierElement retrieved successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
 
-        await productReferenceService.saveProductReference(productReference)
-      }
-      response.setResponse(
-        savedModifierElement,
-        ['ModifierElement saved successfully'],
-        false
-      )
+router.post('/', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const createModifierElement = await modifierElementFactory.validateModifierElement(req.body)
+    const savedModifierElement = await modifierElementService.saveModifierElement(createModifierElement)
+    if (createModifierElement.productReference !== undefined && createModifierElement.productReference.id === 0) {
+      const productReference = await productReferenceFactory.validateProductReference({
+        ...createModifierElement.productReference,
+        modifierElementId: savedModifierElement.id,
+      })
+
+      await productReferenceService.saveProductReference(productReference)
     }
+    response.setResponse(savedModifierElement, ['ModifierElement saved successfully'], false)
   } catch (error: any) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)
@@ -89,25 +70,19 @@ router.post('/:modifierGroupId', async (req: Request, res: Response) => {
   res.json(response)
 })
 
-router.patch('/:id/:modifierGroupId', async (req: Request, res: Response) => {
+router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const elementId = parseInt(req.params.id)
-    const modifierElement =
-      await modifierElementFactory.validatePartialModifierElement(req.body)
-    const savedModifierElement =
-      await modifierElementService.updateModifierElement(
-        modifierElement,
-        elementId
-      )
+    const id = parseInt(req.params.id)
+    const modifierElement = await modifierElementFactory.validatePartialModifierElement({ ...req.body, id })
+    const savedModifierElement = await modifierElementService.updateModifierElement(modifierElement, id)
     if (modifierElement.productReference !== undefined) {
       if (modifierElement.productReference?.id === 0) {
         const createProductReference = modifierElement.productReference
-        const productReference =
-          await productReferenceFactory.validateProductReference({
-            ...createProductReference,
-            modifierElementId: elementId,
-          })
+        const productReference = await productReferenceFactory.validateProductReference({
+          ...createProductReference,
+          modifierElementId: id,
+        })
         await productReferenceService.saveProductReference(productReference)
       } else {
         await productReferenceService.updateProductReference(
@@ -116,13 +91,9 @@ router.patch('/:id/:modifierGroupId', async (req: Request, res: Response) => {
         )
       }
     } else {
-      await productReferenceService.deleteProductReference(elementId)
+      await productReferenceService.deleteProductReference(id)
     }
-    response.setResponse(
-      savedModifierElement,
-      ['ModifierElement updated successfully'],
-      false
-    )
+    response.setResponse(savedModifierElement, ['ModifierElement updated successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

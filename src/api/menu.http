@@ -1,0 +1,41 @@
+
+
+
+
+POST  http://localhost:4008/api/v1/modifierElements
+content-type: application/json
+
+{
+    "name": "Tomate",
+    "defaultRecipeId": 1,
+    "combinable": false,
+    "combinableModifierGroupId": 1,
+    "modifierGroupId": 1,
+    "prices": []
+}
+
+####
+
+GET http://localhost:4008/api/v1/modifierElements
+
+####
+
+GET http://localhost:4008/api/v1/modifierElements/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/modifierElements/1
+content-type: application/json
+
+{
+    "name": "tomate"
+}
+
+####
+
+PATCH  http://localhost:4008/api/v1/modifierElements/recovery/1
+####
+
+DELETE  http://localhost:4008/api/v1/modifierElements/1
+
+

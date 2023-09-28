@@ -9,6 +9,15 @@ export const getMenus = async (): Promise<Menu[]> => {
   })
 }
 
+export const getMenuByName = async (name: string, id: number): Promise<Menu | undefined> => {
+  const objs = await MenuModel.findAll({})
+  const obj = objs.find((tmp: Menu) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}
+
+
 export const getMenuById = async (id: number): Promise<Menu | null> => {
   return await MenuModel.findOne({
     where: {
@@ -35,4 +44,8 @@ export const updateMenu = async (menu: Partial<MenuAttributes>): Promise<Menu | 
 
 export const deleteMenu = async (id: number): Promise<Menu | null> => {
   return await updateMenu({ id, delete: true })
+}
+
+export const recoveryMenu = async (id: number): Promise<Menu | null> => {
+  return await updateMenu({ id, delete: false })
 }
