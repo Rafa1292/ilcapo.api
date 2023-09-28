@@ -2,16 +2,30 @@
 
 
 
+<<<<<<< HEAD
 POST  http://localhost:4008/api/v1/menus
 content-type: application/json
 
 {
     "name": "PY",
     "comissionPercentage": 10
+=======
+POST  http://localhost:4008/api/v1/modifierElements
+content-type: application/json
+
+{
+    "name": "Tomate",
+    "defaultRecipeId": 1,
+    "combinable": false,
+    "combinableModifierGroupId": 1,
+    "modifierGroupId": 1,
+    "prices": []
+>>>>>>> 74d7dff2fc7584edf7aa6a944f1b2a12fd560096
 }
 
 ####
 
+<<<<<<< HEAD
 GET http://localhost:4008/api/v1/menus
 
 ####
@@ -25,13 +39,35 @@ content-type: application/json
 
 {
     "name": "normal"
+=======
+GET http://localhost:4008/api/v1/modifierElements
+
+####
+
+GET http://localhost:4008/api/v1/modifierElements/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/modifierElements/1
+content-type: application/json
+
+{
+    "name": "tomate"
+>>>>>>> 74d7dff2fc7584edf7aa6a944f1b2a12fd560096
 }
 
 ####
 
+<<<<<<< HEAD
 PATCH  http://localhost:4008/api/v1/menus/recovery/1
 ####
 
 DELETE  http://localhost:4008/api/v1/menus/1
+=======
+PATCH  http://localhost:4008/api/v1/modifierElements/recovery/1
+####
+
+DELETE  http://localhost:4008/api/v1/modifierElements/1
+>>>>>>> 74d7dff2fc7584edf7aa6a944f1b2a12fd560096
 
 
