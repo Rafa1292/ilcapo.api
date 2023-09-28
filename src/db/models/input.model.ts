@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Input, InputAttributes } from '../../services/input/input.types'
+import { getNow } from '../../utils/timeManager'
 
 export class InputModel extends Model implements InputAttributes {
   public id!: number
@@ -19,11 +20,11 @@ export class InputModel extends Model implements InputAttributes {
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   public static getInput(input: Input, userId: number): InputAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...input,
       delete: false,
@@ -35,7 +36,7 @@ export class InputModel extends Model implements InputAttributes {
   }
 
   public static getPartialInput(input: Partial<InputAttributes>, userId: number): Partial<InputAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...input,
       updatedBy: userId,
@@ -67,7 +68,7 @@ export class InputModel extends Model implements InputAttributes {
       sequelize,
       tableName: 'inputs',
       modelName: 'input',
-      timestamps: true,
+      timestamps: false,
     }
   }
 }
@@ -140,4 +141,12 @@ export const inputSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  }
 }

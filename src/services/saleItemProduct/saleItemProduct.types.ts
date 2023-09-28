@@ -9,8 +9,8 @@ export interface SaleItemProductAttributes {
   discount: number
   product?: Product
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

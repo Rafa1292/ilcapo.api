@@ -4,8 +4,8 @@ export interface ExcludeElementAttributes {
   id: number
   productModifierId: number
   modifierElementId: number
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

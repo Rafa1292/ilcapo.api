@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { Menu, MenuAttributes } from "../../services/menu/menu.types";
+import { getNow } from "../../utils/timeManager";
 
 export class MenuModel extends Model implements MenuAttributes {
   public id!: number;
@@ -9,20 +10,20 @@ export class MenuModel extends Model implements MenuAttributes {
   public createdBy!: number;
   public updatedBy!: number;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static config(sequelize: Sequelize): any {
     return {
       sequelize,
       tableName: "menus",
       modelName: "menu",
-      timestamps: true,
+      timestamps: false,
     };
   }
 
   public static getMenu(menu: Menu, userId: number): MenuAttributes {
-    const now = new Date();
+    const now = getNow()
     return {
       ...menu,
       delete: false,
@@ -34,7 +35,7 @@ export class MenuModel extends Model implements MenuAttributes {
   }
 
   public static getPartialMenu(menu: Partial<MenuAttributes>, userId: number): Partial<MenuAttributes> {
-    const now = new Date();
+    const now = getNow()
     return {
       ...menu,
       updatedBy: userId,
@@ -70,4 +71,12 @@ export const menuSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  }
 };

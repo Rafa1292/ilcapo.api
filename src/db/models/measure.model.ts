@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Measure, MeasureAttributes } from '../../services/measure/measure.types'
+import { getNow } from '../../utils/timeManager'
 
 export class MeasureModel extends Model implements MeasureAttributes {
   public id!: number
@@ -12,8 +13,8 @@ export class MeasureModel extends Model implements MeasureAttributes {
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.hasMany(models.input, { foreignKey: 'measureId' })
@@ -25,12 +26,12 @@ export class MeasureModel extends Model implements MeasureAttributes {
       sequelize,
       tableName: 'measures',
       modelName: 'measure',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getMeasure (measure: Measure, userId: number): MeasureAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...measure,
       delete: false,
@@ -42,7 +43,7 @@ export class MeasureModel extends Model implements MeasureAttributes {
   }
 
   public static getPartialMeasure (measure: Partial<MeasureAttributes>, userId: number): Partial<MeasureAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...measure,
       updatedBy: userId,
@@ -90,5 +91,13 @@ export const measureSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

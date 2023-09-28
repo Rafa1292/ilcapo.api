@@ -9,8 +9,8 @@ export interface RecipeStepIngredientAttributes {
   extra: boolean
   isOptional: boolean
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

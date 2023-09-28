@@ -5,8 +5,8 @@ export interface MenuAttributes {
   name: string
   comissionPercentage: number
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

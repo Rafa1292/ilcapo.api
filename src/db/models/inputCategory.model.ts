@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { InputCategory, InputCategoryAttributes } from '../../services/inputCategory/inputCategory.types'
+import { getNow } from '../../utils/timeManager'
 
 export class InputCategoryModel extends Model implements InputCategoryAttributes {
   public id!: number
@@ -8,8 +9,8 @@ export class InputCategoryModel extends Model implements InputCategoryAttributes
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.hasMany(models.input, { foreignKey: 'inputCategoryId' })
@@ -20,12 +21,12 @@ export class InputCategoryModel extends Model implements InputCategoryAttributes
       sequelize,
       tableName: 'inputCategories',
       modelName: 'inputCategory',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getInputCategory (inputCategory: InputCategory, userId: number): InputCategoryAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...inputCategory,
       delete: false,
@@ -37,7 +38,7 @@ export class InputCategoryModel extends Model implements InputCategoryAttributes
   }
 
   public static getPartialInputCategory (inputCategory: Partial<InputCategoryAttributes>, userId: number): Partial<InputCategoryAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...inputCategory,
       updatedBy: userId,
@@ -69,5 +70,13 @@ export const inputCategorySchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

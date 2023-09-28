@@ -7,8 +7,8 @@ export interface ModifierElementUpgradeAttributes {
   prices: UpgradeElementPrice[]
   modifierElementId: number
   newModifierGroupId: number
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

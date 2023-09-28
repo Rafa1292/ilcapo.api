@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { UpgradeElementPrice, UpgradeElementPriceAttributes } from "../../services/upgradeElementPrice/upgradeElementPrice.types";
+import { getNow } from "../../utils/timeManager";
 
 export class UpgradeElementPriceModel extends Model implements UpgradeElementPriceAttributes {
   public id!: number;
@@ -10,20 +11,20 @@ export class UpgradeElementPriceModel extends Model implements UpgradeElementPri
   public createdBy!: number;
   public updatedBy!: number;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly createdAt!: string;
+  public readonly updatedAt!: string;
 
   static config(sequelize: Sequelize): any {
     return {
       sequelize,
       tableName: "upgradePrices",
       modelName: "upgradePrice",
-      timestamps: true,
+      timestamps: false,
     };
   }
 
   public static getUpgradeElementPrice(upgradeElementPrice: UpgradeElementPrice, userId: number): UpgradeElementPriceAttributes {
-    const now = new Date();
+    const now = getNow()
     return {
       ...upgradeElementPrice,
       delete: false,
@@ -35,7 +36,7 @@ export class UpgradeElementPriceModel extends Model implements UpgradeElementPri
   }
 
   public static getPartialUpgradeElementPrice(upgradeElementPrice: Partial<UpgradeElementPriceAttributes>, userId: number): Partial<UpgradeElementPriceAttributes> {
-    const now = new Date();
+    const now = getNow()
     return {
       ...upgradeElementPrice,
       updatedBy: userId,
@@ -74,5 +75,13 @@ export const upgradeElementPriceSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER,
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING,
   },
 };

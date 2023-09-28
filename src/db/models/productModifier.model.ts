@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ModifierGroup } from '../../services/modifierGroup/modifierGroup.types'
 import { ProductModifier, ProductModifierAttributes } from '../../services/productModifier/productModifier.types'
+import { getNow } from '../../utils/timeManager'
 
 export class ProductModifierModel extends Model implements ProductModifierAttributes {
   public id!: number
@@ -16,8 +17,8 @@ export class ProductModifierModel extends Model implements ProductModifierAttrib
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.belongsTo(models.modifierGroup, {
@@ -31,12 +32,12 @@ export class ProductModifierModel extends Model implements ProductModifierAttrib
       sequelize,
       tableName: 'productModifiers',
       modelName: 'productModifier',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getProductModifier(productModifier: ProductModifier, userId:number): ProductModifierAttributes{
-    const now = new Date()
+    const now = getNow()
     return {
       ...productModifier,
       delete: false,
@@ -48,7 +49,7 @@ export class ProductModifierModel extends Model implements ProductModifierAttrib
   }
 
   public static getPartialProductModifier(productModifier: Partial<ProductModifierAttributes>, userId:number): Partial<ProductModifierAttributes>{
-    const now = new Date()
+    const now = getNow()
     return {
       ...productModifier,
       updatedBy: userId,

@@ -1,14 +1,9 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import {
-  PreparationStep,
-  PreparationStepAttributes,
-} from '../../services/preparationStep/preparationStep.types'
+import { PreparationStep, PreparationStepAttributes } from '../../services/preparationStep/preparationStep.types'
 import { PreparationStepInput } from '../../services/preparationStepInput/preparationStepInput.types'
+import { getNow } from '../../utils/timeManager'
 
-export class PreparationStepModel
-  extends Model
-  implements PreparationStepAttributes
-{
+export class PreparationStepModel extends Model implements PreparationStepAttributes {
   public id!: number
   public stepNumber!: number
   public description!: string
@@ -20,8 +15,8 @@ export class PreparationStepModel
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate(models: any): void {
     this.hasMany(models.preparationStepInput, {
@@ -35,7 +30,7 @@ export class PreparationStepModel
       sequelize,
       tableName: 'preparationSteps',
       modelName: 'preparationStep',
-      timestamps: true,
+      timestamps: false,
     }
   }
 
@@ -43,7 +38,7 @@ export class PreparationStepModel
     preparationStep: Partial<PreparationStep>,
     userId: number
   ): Partial<PreparationStepAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...preparationStep,
       updatedBy: userId,
@@ -51,11 +46,8 @@ export class PreparationStepModel
     }
   }
 
-  public static getPreparationStep(
-    preparationStep: PreparationStep,
-    userId: number
-  ): PreparationStepAttributes {
-    const now = new Date()
+  public static getPreparationStep(preparationStep: PreparationStep, userId: number): PreparationStepAttributes {
+    const now = getNow()
     return {
       ...preparationStep,
       delete: false,
@@ -65,7 +57,6 @@ export class PreparationStepModel
       updatedAt: now,
     }
   }
-
 }
 
 export const preparationStepSchema = {
@@ -107,4 +98,12 @@ export const preparationStepSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  }
 }

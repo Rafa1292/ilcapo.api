@@ -2,6 +2,7 @@ import { DataTypes, Model, Sequelize } from 'sequelize'
 import { SaleItem, SaleItemAttributes } from '../../services/saleItem/saleItem.types'
 import { ItemPrice } from '../../services/itemPrice/itemPrice.types'
 import { SaleItemProduct } from '../../services/saleItemProduct/saleItemProduct.types'
+import { getNow } from '../../utils/timeManager'
 
 export class SaleItemModel extends Model implements SaleItemAttributes {
   public id!: number
@@ -14,8 +15,8 @@ export class SaleItemModel extends Model implements SaleItemAttributes {
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate(models: any): void {
     this.hasMany(models.itemPrice, { foreignKey: 'itemId', as: 'prices' })
@@ -33,7 +34,7 @@ export class SaleItemModel extends Model implements SaleItemAttributes {
       sequelize,
       tableName: 'saleItems',
       modelName: 'saleItem',
-      timestamps: true,
+      timestamps: false,
     }
   }
 
@@ -41,7 +42,7 @@ export class SaleItemModel extends Model implements SaleItemAttributes {
     saleItem: SaleItem,
     userId: number
   ): SaleItemAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...saleItem,
       delete: false,
@@ -56,7 +57,7 @@ export class SaleItemModel extends Model implements SaleItemAttributes {
     saleItem: Partial<SaleItemAttributes>,
     userId: number
   ): Partial<SaleItemAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...saleItem,
       updatedBy: userId,
@@ -95,5 +96,13 @@ export const saleItemSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER,
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING,
   },
 }

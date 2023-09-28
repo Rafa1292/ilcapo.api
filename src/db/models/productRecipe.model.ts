@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ProductRecipe, ProductRecipeAttributes } from '../../services/productRecipe/productRecipe.types'
+import { getNow } from '../../utils/timeManager'
 
 export class ProductRecipeModel extends Model implements ProductRecipeAttributes {
   public id!: number
@@ -10,8 +11,8 @@ export class ProductRecipeModel extends Model implements ProductRecipeAttributes
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   public static associate (models: any): void {
     this.belongsTo(models.product, { foreignKey: 'productId' })
@@ -24,12 +25,12 @@ export class ProductRecipeModel extends Model implements ProductRecipeAttributes
       sequelize,
       tableName: 'productRecipes',
       modelName: 'productRecipe',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getProductRecipe (productRecipe: ProductRecipe, userId: number): ProductRecipeAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...productRecipe,
       delete: false,
@@ -41,7 +42,7 @@ export class ProductRecipeModel extends Model implements ProductRecipeAttributes
   }
 
   public static getPartialProductRecipe (productRecipe: Partial<ProductRecipeAttributes>, userId: number): Partial<ProductRecipeAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...productRecipe,
       updatedBy: userId,
@@ -80,5 +81,13 @@ export const productRecipeSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

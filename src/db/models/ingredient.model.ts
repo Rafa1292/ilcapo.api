@@ -1,10 +1,8 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import {
-  Ingredient,
-  IngredientAttributes,
-} from '../../services/ingredient/ingredient.types'
+import { Ingredient, IngredientAttributes } from '../../services/ingredient/ingredient.types'
 import { Measure } from '../../services/measure/measure.types'
 import { PreparationStep } from '../../services/preparationStep/preparationStep.types'
+import { getNow } from '../../utils/timeManager'
 
 export class IngredientModel extends Model implements IngredientAttributes {
   public id!: number
@@ -20,14 +18,11 @@ export class IngredientModel extends Model implements IngredientAttributes {
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
-  public static getIngredient(
-    ingredient: Ingredient,
-    userId: number
-  ): IngredientAttributes {
-    const now = new Date()
+  public static getIngredient(ingredient: Ingredient, userId: number): IngredientAttributes {
+    const now = getNow()
     return {
       ...ingredient,
       createdAt: now,
@@ -38,11 +33,8 @@ export class IngredientModel extends Model implements IngredientAttributes {
     }
   }
 
-  public static getPartialIngredient(
-    ingredient: Partial<Ingredient>,
-    userId: number
-  ): Partial<IngredientAttributes> {
-    const now = new Date()
+  public static getPartialIngredient(ingredient: Partial<Ingredient>, userId: number): Partial<IngredientAttributes> {
+    const now = getNow()
     return {
       ...ingredient,
       updatedAt: now,
@@ -63,7 +55,7 @@ export class IngredientModel extends Model implements IngredientAttributes {
       sequelize,
       tableName: 'ingredients',
       modelName: 'ingredient',
-      timestamps: true,
+      timestamps: false,
     }
   }
 }
@@ -112,4 +104,12 @@ export const ingredientSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  }
 }

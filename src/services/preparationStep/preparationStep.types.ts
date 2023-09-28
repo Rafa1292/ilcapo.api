@@ -10,8 +10,8 @@ export interface PreparationStepAttributes {
   ingredientId: number
   preparationStepInputs?: PreparationStepInput[]
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

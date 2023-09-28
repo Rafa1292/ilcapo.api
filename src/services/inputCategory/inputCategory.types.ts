@@ -4,8 +4,8 @@ export interface InputCategoryAttributes {
   id: number
   name: string
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

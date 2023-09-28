@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Provider, ProviderAttributes } from '../../services/provider/provider.types'
+import { getNow } from '../../utils/timeManager'
 export class ProviderModel extends Model implements ProviderAttributes {
   public id!: number
   public name!: string
@@ -9,8 +10,8 @@ export class ProviderModel extends Model implements ProviderAttributes {
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.hasMany(models.providerInput, { foreignKey: 'providerId', as: 'providerInputs' })
@@ -21,12 +22,12 @@ export class ProviderModel extends Model implements ProviderAttributes {
       sequelize,
       tableName: 'providers',
       modelName: 'provider',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getProvider (provider: Provider, userId: number): ProviderAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...provider,
       delete: false,
@@ -38,7 +39,7 @@ export class ProviderModel extends Model implements ProviderAttributes {
   }
 
   public static getPartialProvider (provider: Partial<ProviderAttributes>, userId: number): Partial<ProviderAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...provider,
       updatedBy: userId,
@@ -80,5 +81,13 @@ export const providerSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

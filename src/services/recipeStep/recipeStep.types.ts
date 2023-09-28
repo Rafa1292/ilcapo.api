@@ -10,8 +10,8 @@ export interface RecipeStepAttributes {
   minutesOfPreparation: number
   recipeStepIngredients?: RecipeStepIngredient[]
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

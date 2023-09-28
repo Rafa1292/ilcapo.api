@@ -7,8 +7,8 @@ export interface RecipeAttributes {
   cost: number
   recipeSteps: RecipeStep[]
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

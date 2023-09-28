@@ -4,6 +4,7 @@ import { Input } from '../../services/input/input.types'
 import { Measure } from '../../services/measure/measure.types'
 import { Provider } from '../../services/provider/provider.types'
 import { ProviderInput, ProviderInputAttributes } from '../../services/providerInput/providerInput.types'
+import { getNow } from '../../utils/timeManager'
 
 export class ProviderInputModel extends Model implements ProviderInputAttributes {
   public id!: number
@@ -24,8 +25,8 @@ export class ProviderInputModel extends Model implements ProviderInputAttributes
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.belongsTo(models.input, { foreignKey: 'inputId', as: 'input' })
@@ -39,12 +40,12 @@ export class ProviderInputModel extends Model implements ProviderInputAttributes
       sequelize,
       tableName: 'providerInputs',
       modelName: 'providerInput',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getProviderInput (providerInput: ProviderInput, userId: number): ProviderInputAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...providerInput,
       delete: false,
@@ -56,7 +57,7 @@ export class ProviderInputModel extends Model implements ProviderInputAttributes
   }
 
   public static getPartialProviderInput (providerInput: Partial<ProviderInputAttributes>, userId: number): Partial<ProviderInputAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...providerInput,
       updatedBy: userId,
@@ -123,5 +124,13 @@ export const providerInputSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

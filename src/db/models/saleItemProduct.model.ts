@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { SaleItemProduct, SaleItemProductAttributes } from '../../services/saleItemProduct/saleItemProduct.types'
 import { Product } from '../../services/product/product.types'
+import { getNow } from '../../utils/timeManager'
 
 export class SaleItemProductModel extends Model implements SaleItemProductAttributes {
   public id!: number
@@ -13,8 +14,8 @@ export class SaleItemProductModel extends Model implements SaleItemProductAttrib
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.belongsTo(models.product, {
@@ -28,12 +29,12 @@ export class SaleItemProductModel extends Model implements SaleItemProductAttrib
       sequelize,
       tableName: 'saleItemProducts',
       modelName: 'saleItemProduct',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getSaleItemProduct (saleItemProduct: SaleItemProduct, userId: number): SaleItemProductAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...saleItemProduct,
       delete: false,
@@ -45,7 +46,7 @@ export class SaleItemProductModel extends Model implements SaleItemProductAttrib
   }
 
   public static getPartialSaleItemProduct (saleItemProduct: Partial<SaleItemProductAttributes>, userId: number): Partial<SaleItemProductAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...saleItemProduct,
       updatedBy: userId,
@@ -88,5 +89,13 @@ export const saleItemProductSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

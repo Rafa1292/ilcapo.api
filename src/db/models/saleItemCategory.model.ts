@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { SaleItemCategory, SaleItemCategoryAttributes } from '../../services/saleItemCategory/saleItemCategory.types'
 import { SaleItem } from '../../services/saleItem/saleItem.types'
+import { getNow } from '../../utils/timeManager'
 
 export class SaleItemCategoryModel extends Model implements SaleItemCategoryAttributes {
   public id!: number
@@ -10,8 +11,8 @@ export class SaleItemCategoryModel extends Model implements SaleItemCategoryAttr
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.hasMany(models.saleItem, { foreignKey: 'saleItemCategoryId' })
@@ -22,12 +23,12 @@ export class SaleItemCategoryModel extends Model implements SaleItemCategoryAttr
       sequelize,
       tableName: 'saleItemCategories',
       modelName: 'saleItemCategory',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getSaleItemCategory (saleItemCategory: SaleItemCategory, userId: number): SaleItemCategoryAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...saleItemCategory,
       delete: false,
@@ -39,7 +40,7 @@ export class SaleItemCategoryModel extends Model implements SaleItemCategoryAttr
   }
 
   public static getPartialSaleItemCategory (saleItemCategory: Partial<SaleItemCategoryAttributes>, userId: number): Partial<SaleItemCategoryAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...saleItemCategory,
       updatedBy: userId,
@@ -70,5 +71,13 @@ export const saleItemCategorySchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

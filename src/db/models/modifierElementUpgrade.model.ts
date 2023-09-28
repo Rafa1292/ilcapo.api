@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ModifierElementUpgrade, ModifierElementUpgradeAttributes } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
 import { UpgradeElementPrice } from '../../services/upgradeElementPrice/upgradeElementPrice.types'
+import { getNow } from '../../utils/timeManager'
 
 export class ModifierElementUpgradeModel extends Model implements ModifierElementUpgradeAttributes {
   public id!: number
@@ -10,8 +11,8 @@ export class ModifierElementUpgradeModel extends Model implements ModifierElemen
   public prices!: UpgradeElementPrice[]
   public modifierElementId!: number
   public newModifierGroupId!: number
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.hasMany(models.upgradePrice, { foreignKey: 'upgradeId', as: 'prices' })
@@ -22,12 +23,12 @@ export class ModifierElementUpgradeModel extends Model implements ModifierElemen
       sequelize,
       tableName: 'modifierElementUpgrades',
       modelName: 'modifierElementUpgrade',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getModifierElementUpgrade (modifierElementUpgrade: ModifierElementUpgrade, userId: number): ModifierElementUpgradeAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...modifierElementUpgrade,
       createdBy: userId,
@@ -38,7 +39,7 @@ export class ModifierElementUpgradeModel extends Model implements ModifierElemen
   }
 
     public static getPartialModifierElementUpgrade (modifierElementUpgrade: Partial<ModifierElementUpgrade>, userId: number): Partial<ModifierElementUpgradeAttributes> {
-      const now = new Date()
+      const now = getNow()
       return {
         ...modifierElementUpgrade,
         updatedBy: userId,
@@ -74,5 +75,13 @@ export const modifierElementUpgradeSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

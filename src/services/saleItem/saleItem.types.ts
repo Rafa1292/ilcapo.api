@@ -10,8 +10,8 @@ export interface SaleItemAttributes {
   prices: ItemPrice[]
   delete: boolean
   saleItemProducts?: SaleItemProduct[]
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

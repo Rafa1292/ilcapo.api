@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ProductReference, ProductReferenceAttributes } from '../../services/productReference/productReference.types'
+import { getNow } from '../../utils/timeManager'
 
 export class ProductReferenceModel extends Model implements ProductReferenceAttributes {
   public id!: number
@@ -8,8 +9,8 @@ export class ProductReferenceModel extends Model implements ProductReferenceAttr
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   // static associate (models: any): void {
   //   this.belongsTo(models.modifierElement, {
@@ -23,12 +24,12 @@ export class ProductReferenceModel extends Model implements ProductReferenceAttr
       sequelize,
       tableName: 'productRefrences',
       modelName: 'productReference',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getProductReference (productReference: ProductReference, userId: number): ProductReferenceAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...productReference,
       createdBy: userId,
@@ -39,7 +40,7 @@ export class ProductReferenceModel extends Model implements ProductReferenceAttr
   }
 
   public static getPartialProductReference (productReference: Partial<ProductReferenceAttributes>, userId: number): Partial<ProductReferenceAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...productReference,
       updatedBy: userId,
@@ -70,5 +71,13 @@ export const productReferenceSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

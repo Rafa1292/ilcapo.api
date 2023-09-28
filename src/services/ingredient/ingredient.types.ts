@@ -13,8 +13,8 @@ export interface IngredientAttributes {
   preparationSteps?: PreparationStep[]
   measure?: Measure
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

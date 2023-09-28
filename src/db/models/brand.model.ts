@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Brand, BrandAttributes } from '../../services/brand/brand.types'
+import { getNow } from '../../utils/timeManager'
 
 export class BrandModel extends Model implements BrandAttributes {
   public id!: number
@@ -7,8 +8,8 @@ export class BrandModel extends Model implements BrandAttributes {
   public delete!: boolean
   public createdBy!: number
   public updatedBy!: number
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.hasMany(models.providerInput, { foreignKey: 'brandId' })
@@ -19,13 +20,13 @@ export class BrandModel extends Model implements BrandAttributes {
       sequelize,
       tableName: 'brands',
       modelName: 'brand',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getBrand (brand: Brand, userId: number): BrandAttributes {
-    const now = new Date()
-    return {
+    const now = getNow()  
+     return {
       ...brand,
       createdAt: now,
       updatedAt: now,
@@ -36,7 +37,7 @@ export class BrandModel extends Model implements BrandAttributes {
   }
 
   public static getPartialBrand (brand: Partial<BrandAttributes>, userId: number): Partial<BrandAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...brand,
       updatedAt: now,
@@ -68,5 +69,13 @@ export const brandSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

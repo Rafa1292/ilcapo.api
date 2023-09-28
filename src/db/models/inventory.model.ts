@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Inventory, InventoryAttributes } from '../../services/inventory/inventory.types'
+import { getNow } from '../../utils/timeManager'
 
 export class InventoryModel extends Model implements InventoryAttributes {
   public id!: number
@@ -12,8 +13,8 @@ export class InventoryModel extends Model implements InventoryAttributes {
   public createdBy!: number
   public updatedBy!: number
   public delete!: boolean
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.belongsToMany(models.input, {
@@ -28,12 +29,12 @@ export class InventoryModel extends Model implements InventoryAttributes {
       sequelize,
       tableName: 'inventories',
       modelName: 'inventory',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getInventory (inventory: Inventory, userId: number): InventoryAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...inventory,
       delete: false,
@@ -45,7 +46,7 @@ export class InventoryModel extends Model implements InventoryAttributes {
   }
 
   public static getPartialInventory (inventory: Partial<InventoryAttributes>, userId: number): Partial<InventoryAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...inventory,
       updatedBy: userId,
@@ -97,5 +98,13 @@ export const inventorySchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

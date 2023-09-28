@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Magnitude, MagnitudeAttributes } from '../../services/magnitude/magnitude.types'
+import { getNow } from '../../utils/timeManager'
 
 export class MagnitudeModel extends Model implements MagnitudeAttributes {
   public id!: number
@@ -8,8 +9,8 @@ export class MagnitudeModel extends Model implements MagnitudeAttributes {
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.hasMany(models.measure, { foreignKey: 'magnitudeId' })
@@ -20,12 +21,12 @@ export class MagnitudeModel extends Model implements MagnitudeAttributes {
       sequelize,
       tableName: 'magnitudes',
       modelName: 'magnitude',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getMagnitude (magnitude: Magnitude, userId: number): MagnitudeAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...magnitude,
       delete: false,
@@ -37,7 +38,7 @@ export class MagnitudeModel extends Model implements MagnitudeAttributes {
   }
 
   public static getPartialMagnitude (magnitude: Partial<MagnitudeAttributes>, userId: number): Partial<MagnitudeAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...magnitude,
       updatedBy: userId,
@@ -70,5 +71,13 @@ export const magnitudeSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

@@ -12,8 +12,8 @@ export interface ProductModifierAttributes {
   priceByGroup: boolean
   modifierGroup: ModifierGroup
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

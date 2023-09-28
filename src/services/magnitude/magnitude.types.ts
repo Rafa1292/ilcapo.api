@@ -6,8 +6,8 @@ export interface MagnitudeAttributes {
   name: string
   measures?: Measure[]
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Recipe, RecipeAttributes } from '../../services/recipe/recipe.types'
 import { RecipeStep } from '../../services/recipeStep/recipeStep.types'
+import { getNow } from '../../utils/timeManager'
 
 export class RecipeModel extends Model implements RecipeAttributes {
   public id!: number
@@ -11,8 +12,8 @@ export class RecipeModel extends Model implements RecipeAttributes {
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.hasMany(models.recipeStep, { foreignKey: 'recipeId' })
@@ -23,12 +24,12 @@ export class RecipeModel extends Model implements RecipeAttributes {
       sequelize,
       tableName: 'recipes',
       modelName: 'recipe',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getRecipe (recipe: Recipe, userId: number): RecipeAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...recipe,
       delete: false,
@@ -40,7 +41,7 @@ export class RecipeModel extends Model implements RecipeAttributes {
   }
 
   public static getPartialRecipe (recipe: Partial<RecipeAttributes>, userId: number): Partial<RecipeAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...recipe,
       updatedBy: userId,
@@ -75,5 +76,13 @@ export const recipeSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

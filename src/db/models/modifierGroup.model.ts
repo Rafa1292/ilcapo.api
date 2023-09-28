@@ -2,6 +2,7 @@ import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ModifierGroup, ModifierGroupAttributes } from '../../services/modifierGroup/modifierGroup.types'
 import { ModifierElementUpgrade } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
 import { ModifierElement } from '../../services/modifierElement/modifierElement.types'
+import { getNow } from '../../utils/timeManager'
 
 export class ModifierGroupModel extends Model implements ModifierGroupAttributes {
   public id!: number
@@ -13,8 +14,8 @@ export class ModifierGroupModel extends Model implements ModifierGroupAttributes
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     ModifierGroupModel.hasMany(models.modifierElement, {
@@ -28,12 +29,12 @@ export class ModifierGroupModel extends Model implements ModifierGroupAttributes
       sequelize,
       tableName: 'modifierGroups',
       modelName: 'modifierGroup',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getModifierGroup(modifierGroup: ModifierGroup, userId:number): ModifierGroupAttributes{
-    const now = new Date()
+    const now = getNow()
     return {
       ...modifierGroup,
       delete: false,
@@ -45,7 +46,7 @@ export class ModifierGroupModel extends Model implements ModifierGroupAttributes
   }
 
   public static getPartialModifierGroup(modifierGroup: Partial<ModifierGroup>, userId:number): Partial<ModifierGroupAttributes>{
-    const now = new Date()
+    const now = getNow()
     return {
       ...modifierGroup,
       updatedBy: userId,
@@ -80,5 +81,13 @@ export const modifierGroupSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

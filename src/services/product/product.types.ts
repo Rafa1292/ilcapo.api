@@ -10,8 +10,8 @@ export interface ProductAttributes {
   needsCommand: boolean
   active: boolean
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

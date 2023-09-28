@@ -8,8 +8,8 @@ export interface MeasureAttributes {
   magnitudeId: number
   abbreviation: string
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

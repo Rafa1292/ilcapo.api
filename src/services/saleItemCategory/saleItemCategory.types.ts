@@ -6,8 +6,8 @@ export interface SaleItemCategoryAttributes {
   name: string
   delete: boolean
   saleItems?: SaleItem[]
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

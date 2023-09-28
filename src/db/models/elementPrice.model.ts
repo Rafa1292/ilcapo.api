@@ -1,8 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import {
-  ElementPrice,
-  ElementPriceAttributes,
-} from '../../services/elementPrice/elementPrice.types'
+import { ElementPrice, ElementPriceAttributes } from '../../services/elementPrice/elementPrice.types'
+import { getNow } from '../../utils/timeManager'
 
 export class ElementPriceModel extends Model implements ElementPriceAttributes {
   public id!: number
@@ -13,23 +11,20 @@ export class ElementPriceModel extends Model implements ElementPriceAttributes {
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static config(sequelize: Sequelize): any {
     return {
       sequelize,
       tableName: 'elementPrices',
       modelName: 'elementPrice',
-      timestamps: true,
+      timestamps: false,
     }
   }
 
-  public static getElementPrice(
-    elementPrice: ElementPrice,
-    userId: number
-  ): ElementPriceAttributes {
-    const now = new Date()
+  public static getElementPrice(elementPrice: ElementPrice, userId: number): ElementPriceAttributes {
+    const now = getNow()
     return {
       ...elementPrice,
       createdBy: userId,
@@ -40,12 +35,15 @@ export class ElementPriceModel extends Model implements ElementPriceAttributes {
     }
   }
 
-  public static getPartialElementPrice(elementPrice: Partial<ElementPrice>, userId: number): Partial<ElementPriceAttributes> {
-    const now = new Date()
+  public static getPartialElementPrice(
+    elementPrice: Partial<ElementPrice>,
+    userId: number
+  ): Partial<ElementPriceAttributes> {
+    const now = getNow()
     return {
       ...elementPrice,
       updatedAt: now,
-      updatedBy: userId
+      updatedBy: userId,
     }
   }
 }
@@ -80,5 +78,13 @@ export const elementPriceSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER,
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING,
   },
 }

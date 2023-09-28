@@ -1,5 +1,6 @@
-export const getNow = (): Date => {
-    const serverTimezone = 'America/Costa_Rica'
-    const now = new Date().toLocaleString('en-US', { timeZone: serverTimezone })
-    return new Date(now)
+import moment from "moment"
+
+export const getNow = (): string => {
+    const now = moment()
+    return now.format('YYYY-MM-DD HH:mm:ss')
 }

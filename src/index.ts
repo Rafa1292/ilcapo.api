@@ -27,11 +27,14 @@ import productRecipeRouter from './routes/productRecipe.router'
 import productReferenceRouter from './routes/productReference.router'
 import modifierElementUpgradeRouter from './routes/modifierElementUpgrade.router'
 import menuRouter from './routes/menu.router'
+import moment from 'moment-timezone'
+import { getNow } from './utils/timeManager'
 
 const app = express()
-app.use(express.json())
 const PORT = 4008
-
+app.use(express.json())
+moment.tz.setDefault('America/Costa_Rica');
+console.log(getNow())
 app.use(cors({
   origin: ['http://localhost:3008', 'http://localhost:3001']
 }))

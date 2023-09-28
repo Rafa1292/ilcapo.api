@@ -21,8 +21,8 @@ export interface ProviderInputAttributes {
   measure?: Measure
   brand?: Brand
   delete: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

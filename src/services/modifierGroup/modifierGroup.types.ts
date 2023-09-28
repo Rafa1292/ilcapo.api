@@ -7,8 +7,8 @@ export interface ModifierGroupAttributes {
   showLabel: boolean
   delete: boolean
   elements?: ModifierElement[]
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }

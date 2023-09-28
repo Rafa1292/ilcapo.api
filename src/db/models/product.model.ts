@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Product, ProductAttributes } from '../../services/product/product.types'
 import { ProductModifier } from '../../services/productModifier/productModifier.types'
+import { getNow } from '../../utils/timeManager'
 
 export class ProductModel extends Model implements ProductAttributes {
   public id!: number
@@ -14,8 +15,8 @@ export class ProductModel extends Model implements ProductAttributes {
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.hasMany(models.productModifier, { foreignKey: 'productId', as: 'productModifiers' })
@@ -27,12 +28,12 @@ export class ProductModel extends Model implements ProductAttributes {
       sequelize,
       tableName: 'products',
       modelName: 'product',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getProduct (product: Product, userId: number): ProductAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...product,
       delete: false,
@@ -44,7 +45,7 @@ export class ProductModel extends Model implements ProductAttributes {
   }
 
   public static getPartialProduct (product: Partial<ProductAttributes>, userId: number): Partial<ProductAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...product,
       updatedBy: userId,
@@ -91,5 +92,13 @@ export const productSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

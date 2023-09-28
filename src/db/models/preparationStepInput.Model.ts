@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { PreparationStepInput, PreparationStepInputAttributes } from '../../services/preparationStepInput/preparationStepInput.types'
+import { getNow } from '../../utils/timeManager'
 
 export class PreparationStepInputModel extends Model implements PreparationStepInputAttributes {
   public id!: number
@@ -11,8 +12,8 @@ export class PreparationStepInputModel extends Model implements PreparationStepI
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   public static associate (models: any): void {
     this.belongsTo(models.input, {
@@ -34,12 +35,12 @@ export class PreparationStepInputModel extends Model implements PreparationStepI
       sequelize,
       tableName: 'preparationStepInputs',
       modelName: 'preparationStepInput',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getPeparationStepInput (preparationStepInput: PreparationStepInput, userId: number): PreparationStepInputAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...preparationStepInput,
       delete: false,
@@ -51,7 +52,7 @@ export class PreparationStepInputModel extends Model implements PreparationStepI
   }
 
   public static getPartialPeparationStepInput (preparationStepInput: Partial<PreparationStepInputAttributes>, userId: number): Partial<PreparationStepInputAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...preparationStepInput,
       updatedBy: userId,
@@ -94,5 +95,13 @@ export const preparationStepInputSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

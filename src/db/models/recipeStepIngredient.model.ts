@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { RecipeStepIngredient, RecipeStepIngredientAttributes } from '../../services/recipeStepIngredient/recipeStepIngredient.type'
+import { getNow } from '../../utils/timeManager'
 
 export class RecipeStepIngredientModel extends Model implements RecipeStepIngredientAttributes {
   public id!: number
@@ -13,8 +14,8 @@ export class RecipeStepIngredientModel extends Model implements RecipeStepIngred
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.belongsTo(models.ingredient, {
@@ -38,12 +39,12 @@ export class RecipeStepIngredientModel extends Model implements RecipeStepIngred
       sequelize,
       tableName: 'recipeStepIngredients',
       modelName: 'recipeStepIngredient',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getRecipeStepIngredient (recipeStepIngredient: RecipeStepIngredient, userId: number): RecipeStepIngredientAttributes {
-    const now = new Date()
+    const now = getNow()
     return {
       ...recipeStepIngredient,
       delete: false,
@@ -55,7 +56,7 @@ export class RecipeStepIngredientModel extends Model implements RecipeStepIngred
   }
 
   public static getPartialRecipeStepIngredient (recipeStepIngredient: Partial<RecipeStepIngredientAttributes>, userId: number): Partial<RecipeStepIngredientAttributes> {
-    const now = new Date()
+    const now = getNow()
     return {
       ...recipeStepIngredient,
       updatedBy: userId,
@@ -106,5 +107,13 @@ export const recipeStepIngredientSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

@@ -28,6 +28,7 @@ export const getBrandById = async (id: number): Promise<Brand> => {
 
 export const saveBrand = async (brand: Brand): Promise<Brand> => {
   const { id, ...newBrand } = BrandModel.getBrand(brand, 0)
+  console.log(newBrand)
   return await BrandModel.create(newBrand)
 }
 

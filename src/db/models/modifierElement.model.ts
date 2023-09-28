@@ -2,6 +2,7 @@ import { DataTypes, Model, Sequelize } from 'sequelize'
 import { ModifierElement, ModifierElementAttributes } from '../../services/modifierElement/modifierElement.types'
 import { ModifierElementUpgrade } from '../../services/modifierElementUpgrade/modifierElementUpgrade.types'
 import { ElementPrice } from '../../services/elementPrice/elementPrice.types'
+import { getNow } from '../../utils/timeManager'
 
 export class ModifierElementModel extends Model implements ModifierElementAttributes {
   public id!: number
@@ -16,8 +17,8 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   public createdBy!: number
   public updatedBy!: number
 
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
+  public readonly createdAt!: string
+  public readonly updatedAt!: string
 
   static associate (models: any): void {
     this.hasMany(models.elementPrice, { foreignKey: 'elementId', as: 'prices' })
@@ -42,12 +43,12 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
       sequelize,
       tableName: 'modifierElements',
       modelName: 'modifierElement',
-      timestamps: true
+      timestamps: false
     }
   }
 
   public static getModifierElement(modifierElement: ModifierElement, userId:number): ModifierElementAttributes{
-    const now = new Date()
+    const now = getNow()
     return {
       ...modifierElement,
       delete: false,
@@ -59,7 +60,7 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   }
 
   public static getPartialModifierElement(modifierElement: Partial<ModifierElementAttributes>, userId:number): Partial<ModifierElementAttributes>{
-    const now = new Date()
+    const now = getNow()
     return {
       ...modifierElement,
       updatedBy: userId,
@@ -106,5 +107,13 @@ export const modifierElementSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

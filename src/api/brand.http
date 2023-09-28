@@ -2,7 +2,7 @@ POST  http://localhost:4008/api/v1/brands
 content-type: application/json
 
 {
-    "name": "AdidAs"
+    "name": "fredesd"
 }
 
 ####

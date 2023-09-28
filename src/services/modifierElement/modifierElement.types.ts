@@ -13,8 +13,8 @@ export interface ModifierElementAttributes {
   combinableModifierGroupId: number
   modifierUpgrade?: ModifierElementUpgrade
   modifierGroupId: number
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: string
+  updatedAt?: string
   createdBy?: number
   updatedBy?: number
 }
