@@ -1,6 +1,5 @@
 import { ModifierElementUpgrade } from './modifierElementUpgrade.types'
 import { ModifierElementUpgradeModel } from '../../db/models/modifierElementUpgrade.model'
-import { newModifierElementUpgradeIsValid } from '../../validations/modifierElementUpgrade.validator'
 import { Transaction } from 'sequelize'
 import {
   deleteUpgradeElementPrice,
@@ -12,8 +11,6 @@ export const saveModifierElementUpgrade = async (
   modifierElementUpgrade: ModifierElementUpgrade,
   transaction: Transaction
 ): Promise<void> => {
-  const isValid = await newModifierElementUpgradeIsValid(modifierElementUpgrade)
-  if (isValid) {
     const { id, ...rest } = ModifierElementUpgradeModel.getModifierElementUpgrade(modifierElementUpgrade, 0)
     const newModifierElementUpgrade = await ModifierElementUpgradeModel.create(
       rest,
@@ -26,7 +23,7 @@ export const saveModifierElementUpgrade = async (
       newModifierElementUpgrade.id
     )
   }
-}
+
 
 const getModifierElementUpgradeById = async (
   id: number
