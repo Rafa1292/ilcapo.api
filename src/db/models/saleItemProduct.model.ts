@@ -76,7 +76,7 @@ export const saleItemProductSchema = {
   },
   discount: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.INTEGER
   },
   delete: {
     type: DataTypes.BOOLEAN,

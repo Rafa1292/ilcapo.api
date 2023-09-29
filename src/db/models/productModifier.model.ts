@@ -79,7 +79,7 @@ export const productModifierSchema = {
   },
   price: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.INTEGER
   },
   minSelect: {
     allowNull: false,
@@ -104,5 +104,13 @@ export const productModifierSchema = {
   updatedBy: {
     allowNull: false,
     type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.STRING
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.STRING
   }
 }

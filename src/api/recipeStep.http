@@ -1,0 +1,42 @@
+POST  http://localhost:4008/api/v1/recipeSteps
+content-type: application/json
+
+{
+    "stepNumber": 1,
+    "description": "description",
+    "cost": 200,
+    "minutesOfPreparation": 150,
+    "recipeId": 1
+}
+
+####
+
+GET http://localhost:4008/api/v1/recipeSteps/2
+
+
+####
+
+GET http://localhost:4008/api/v1/recipeSteps/stepUp/1
+
+####
+
+GET http://localhost:4008/api/v1/recipeSteps/stepDown/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/recipeSteps/2
+content-type: application/json
+
+{
+    "description": "new",
+    "stepNumber": 1,
+    "recipeId": 1
+}
+
+####
+
+DELETE  http://localhost:4008/api/v1/recipeSteps/2
+
+####
+
+PATCH  http://localhost:4008/api/v1/recipeSteps/recovery/2

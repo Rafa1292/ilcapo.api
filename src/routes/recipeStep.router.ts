@@ -13,7 +13,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id)
     const recipeStepModel = await recipeStepService.getRecipeStepById(id)
-    const recipeStep = recipeStepFactory.validateRecipeStep(recipeStepModel)
+    const recipeStep = await recipeStepFactory.validateRecipeStep(recipeStepModel)
       response.setResponse(recipeStep, ['RecipeStep retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -75,7 +75,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const transaction = await sequelize.transaction()
   try {
     const id = parseInt(req.params.id)
-    const recipeStep = await recipeStepFactory.validatePartialRecipeStep(req.body)
+    const recipeStep = await recipeStepFactory.validatePartialRecipeStep({...req.body, id})
     const savedRecipeStep = await recipeStepService.updateRecipeStep(recipeStep, id)
     response.setResponse(savedRecipeStep, ['RecipeStep updated successfully'], false)
     await transaction.commit()
@@ -93,6 +93,19 @@ router.delete('/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     await recipeStepService.deleteRecipeStep(id)
     response.setResponse({}, ['RecipeStep deleted successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await recipeStepService.recoveryRecipeStep(id)
+    response.setResponse({}, ['RecipeStep recovery successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

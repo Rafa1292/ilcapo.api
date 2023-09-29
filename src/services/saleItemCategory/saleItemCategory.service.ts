@@ -28,6 +28,14 @@ export const getSaleItemCategories = async (): Promise<SaleItemCategory[]> => {
   })
 }
 
+export const getSaleItemCategoryByName = async (name: string, id: number): Promise<SaleItemCategory | undefined> => {
+  const objs = await SaleItemCategoryModel.findAll({})
+  const obj = objs.find((tmp: SaleItemCategory) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}
+
 export const getSaleItemCategoriesWithActiveProducts = async (): Promise<
   SaleItemCategory[]
 > => {

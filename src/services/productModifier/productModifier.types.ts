@@ -10,7 +10,7 @@ export interface ProductModifierAttributes {
   minSelect: number
   maxSelect: number
   priceByGroup: boolean
-  modifierGroup: ModifierGroup
+  modifierGroup?: ModifierGroup
   delete: boolean
   createdAt?: string
   updatedAt?: string

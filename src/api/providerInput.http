@@ -1,0 +1,45 @@
+POST  http://localhost:4008/api/v1/providerInputs
+content-type: application/json
+
+{
+    "measureId": 1,
+    "lowerPrice": 100,
+    "upperPrice": 200,
+    "currentPrice": 150,
+    "lastPrice": 100,
+    "expectedPrice": 150,
+    "presentation": 100,
+    "inputId": 2,
+    "providerId": 1,
+    "brandId": 1
+}
+
+####
+
+GET http://localhost:4008/api/v1/providerInputs/providerInputsByInputId/2
+
+
+####
+
+GET http://localhost:4008/api/v1/providerInputs/providerInputsByProviderId/1
+
+####
+
+GET http://localhost:4008/api/v1/providerInputs/2
+
+####
+
+PATCH  http://localhost:4008/api/v1/providerInputs/2
+content-type: application/json
+
+{
+    "lowerPrice": 50
+}
+
+####
+
+DELETE  http://localhost:4008/api/v1/providerInputs/2
+
+####
+
+PATCH  http://localhost:4008/api/v1/providerInputs/recovery/2

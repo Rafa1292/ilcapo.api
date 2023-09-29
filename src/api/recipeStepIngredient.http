@@ -1,0 +1,27 @@
+POST  http://localhost:4008/api/v1/recipeStepIngredients
+content-type: application/json
+
+{
+    "quantity": 1,
+    "ingredientId": 1,
+    "recipeStepId": 1,
+    "measureId": 1,
+    "extra": false,
+    "isOptional": false
+}
+
+####
+
+
+PATCH  http://localhost:4008/api/v1/recipeStepIngredients/1
+content-type: application/json
+
+{
+    "quantity": 100
+}
+
+####
+
+DELETE  http://localhost:4008/api/v1/recipeStepIngredients/2
+
+####

@@ -20,6 +20,19 @@ router.get('/', async (_req: Request, res: Response) => {
   res.send(response)
 })
 
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await recipeService.recoveryRecipe(id)
+    response.setResponse({}, ['Recipe recovery successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.get('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {

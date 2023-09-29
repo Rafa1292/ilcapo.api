@@ -40,3 +40,11 @@ export const deleteProvider = async (id: number): Promise<void> => {
 export const recoveryProvider = async (id: number): Promise<void> => {
   await updateProvider({ delete: false }, id)
 }
+
+export const getProviderByName = async (name: string, id: number): Promise<Provider | undefined> => {
+  const objs = await ProviderModel.findAll({})
+  const obj = objs.find((tmp: Provider) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}

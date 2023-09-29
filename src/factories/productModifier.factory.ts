@@ -6,7 +6,7 @@ export const productModifierSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   productId: z.number({
     required_error: 'El producto es requerido',
     invalid_type_error: 'El producto debe ser un numero entero',
@@ -35,7 +35,7 @@ export const productModifierSchema = z.object({
     required_error: 'El precio por grupo es requerido',
     invalid_type_error: 'El precio por grupo debe ser un booleano',
   }),
-  modifierGroup: modifierGroupSchema
+  modifierGroup: z.union([modifierGroupSchema, z.undefined()]),
 })
 
 export const validateProductModifier = async (productModifier: any): Promise<ProductModifier> => {

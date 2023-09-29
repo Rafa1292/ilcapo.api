@@ -1,0 +1,48 @@
+POST  http://localhost:4008/api/v1/saleItems
+content-type: application/json
+
+{
+    "name": "Jamon y queso",
+    "saleItemCategoryId": 1,
+    "pictureUrl": "200",
+    "prices": [
+        {
+            "menuId": 1,
+            "price": 100,
+            "itemId": 0
+        }
+    ]
+}
+
+####
+
+GET http://localhost:4008/api/v1/saleItems
+
+
+####
+
+GET http://localhost:4008/api/v1/saleItems/19
+
+####
+
+PATCH  http://localhost:4008/api/v1/saleItems/19
+content-type: application/json
+
+{
+    "prices": [
+        {
+            "id": 1,
+            "menuId": 1,
+            "price": 1000,
+            "itemId": 0
+        }
+    ]
+}
+
+####
+
+DELETE  http://localhost:4008/api/v1/saleItems/19
+
+####
+
+PATCH  http://localhost:4008/api/v1/saleItems/recovery/19

@@ -9,7 +9,7 @@ const providerInputSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   measureId: z.number({
     required_error: 'La medida es requerida',
     invalid_type_error: 'La medida debe ser un numero entero',
@@ -50,10 +50,10 @@ const providerInputSchema = z.object({
     required_error: 'La marca es requerida',
     invalid_type_error: 'La marca debe ser un numero entero',
   }),
-  provider: providerSchema,
-  measure: measureSchema,
-  brand: brandSchema,
-  input: inputSchema,
+  provider: z.union([providerSchema, z.undefined()]),
+  measure: z.union([measureSchema, z.undefined()]),
+  brand: z.union([brandSchema, z.undefined()]),
+  input: z.union([inputSchema, z.undefined()])
 })
 
 export const validateProviderInput = async (providerInput: any): Promise<ProviderInput> => {

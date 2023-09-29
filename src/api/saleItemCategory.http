@@ -1,0 +1,36 @@
+POST  http://localhost:4008/api/v1/saleItemCategories
+content-type: application/json
+
+{
+    "name": "Ensalada"
+}
+
+####
+
+GET http://localhost:4008/api/v1/saleItemCategories
+
+
+####
+
+GET http://localhost:4008/api/v1/saleItemCategories/2
+
+####
+
+PATCH  http://localhost:4008/api/v1/saleItemCategories/2
+content-type: application/json
+
+{
+    "name": "pizza"
+}
+
+####
+
+DELETE  http://localhost:4008/api/v1/saleItemCategories/2
+
+####
+
+PATCH  http://localhost:4008/api/v1/saleItemCategories/recovery/2
+
+####
+
+GET http://localhost:4008/api/v1/saleItemCategories/activeProducts

@@ -15,7 +15,15 @@ export const saveProviderInput = async (providerInput: ProviderInput): Promise<P
 }
 
 export const updateProviderInput = async (providerInput: Partial<ProviderInputAttributes>, id: number): Promise<ProviderInput> => {
-  const updateProviderInput = await ProviderInputModel.getPartialProviderInput(providerInput, 0)
+  const providerInputModel = await getProviderInputById(id)
+  const updateProviderInput = 
+  await ProviderInputModel.getPartialProviderInput(
+    {
+      ...providerInput,
+      providerId: providerInputModel.providerId,
+      inputId: providerInputModel.inputId,
+      brandId: providerInputModel.brandId
+    }, 0)
   await newProviderInputIsValid({ ...updateProviderInput, id })
   await ProviderInputModel.update(providerInput, { where: { id } })
   return await getProviderInputById(id)

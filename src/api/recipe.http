@@ -1,0 +1,33 @@
+POST  http://localhost:4008/api/v1/recipes
+content-type: application/json
+
+{
+    "name": "jamon y queso",
+    "cost": 100
+}
+
+####
+
+GET http://localhost:4008/api/v1/recipes/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/recipes/1
+content-type: application/json
+
+{
+    "cost": 300
+}
+
+####
+
+DELETE  http://localhost:4008/api/v1/recipes/1
+
+
+####
+
+GET http://localhost:4008/api/v1/recipes/upProductModifierOrder/1
+
+####
+
+GET http://localhost:4008/api/v1/recipes/downProductModifierOrder/1

@@ -5,9 +5,21 @@ import * as saleItemFactory from '../factories/saleItem.factory'
 import * as responseFactory from '../factories/response.factory'
 import { errorHandler } from '../utils/errorHandler'
 import { ItemPrice } from '../services/itemPrice/itemPrice.types'
-import { validatePrices } from '../validations/saleItem.validator'
 
 const router = express.Router()
+
+router.post('/', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const createSaleItem = await saleItemFactory.validateSaleItem(req.body)
+    const savedSaleItem = await saleItemService.saveSaleItem(createSaleItem)
+    response.setResponse(savedSaleItem, ['SaleItem saved successfully'], false)
+  } catch (error: any) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
 
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
@@ -36,25 +48,11 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.json(response)
 })
 
-router.post('/', async (req: Request, res: Response) => {
-  const response = responseFactory.toNewCustomResponse()
-  try {
-    const createSaleItem = await saleItemFactory.validateSaleItem(req.body)
-    const savedSaleItem = await saleItemService.saveSaleItem(createSaleItem)
-    response.setResponse(savedSaleItem, ['SaleItem saved successfully'], false)
-  } catch (error: any) {
-    const errors = errorHandler(error)
-    response.setResponse(undefined, errors, true)
-  }
-  res.json(response)
-})
-
 router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
     const prices = req.body.prices as ItemPrice[]
-    validatePrices(prices)
     const saleItem = await saleItemFactory.validatePartialSaleItem({ ...req.body, prices })
     const savedSaleItem = await saleItemService.updateSaleItem(saleItem, id)
     response.setResponse(savedSaleItem, ['SaleItem updated successfully'], false)
@@ -71,6 +69,19 @@ router.delete('/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     await saleItemService.deleteSaleItem(id)
     response.setResponse({}, ['SaleItem deleted successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await saleItemService.recoverySaleItem(id)
+    response.setResponse({}, ['Sale Item recovery successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

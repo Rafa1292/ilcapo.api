@@ -69,7 +69,7 @@ export const recipeStepSchema = {
   },
   cost: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.INTEGER
   },
   stepNumber: {
     allowNull: false,

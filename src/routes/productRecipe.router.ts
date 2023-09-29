@@ -53,7 +53,7 @@ router.get('/:productId/:modifierElementId', async (req: Request, res: Response)
     const productId = parseInt(req.params.productId)
     const modifierElementId = parseInt(req.params.modifierElementId)
     const productRecipeModel = await productRecipeService.findProductRecipe(productId, modifierElementId)
-    const productRecipe = productRecipeFactory.validateProductRecipe(productRecipeModel)
+    const productRecipe = await productRecipeFactory.validateProductRecipe(productRecipeModel)
       response.setResponse(productRecipe, ['ProductRecipe retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)

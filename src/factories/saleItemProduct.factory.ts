@@ -1,13 +1,12 @@
 import { z } from 'zod'
 import { SaleItemProduct } from '../services/saleItemProduct/saleItemProduct.types'
-import * as saleItemProductValidator from '../validations/saleItemProduct.validator'
 import { productSchema } from './product.factory'
 
 export const saleItemProductSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   saleItemId: z.number({
     required_error: 'El item de venta es requerido',
     invalid_type_error: 'El item de venta debe ser un numero entero',
@@ -24,12 +23,11 @@ export const saleItemProductSchema = z.object({
     required_error: 'El descuento es requerido',
     invalid_type_error: 'El descuento debe ser un numero',
   }),
-  product: productSchema
+  product: z.union([productSchema, z.undefined()]),
 })
 
 export const validateSaleItemProduct = async (saleItemProduct: any): Promise<SaleItemProduct> => {
   const result = await saleItemProductSchema.safeParseAsync(saleItemProduct)
-  await saleItemProductValidator.newSaleItemProductIsValid(saleItemProduct)
 
   if (!result.success) {
     throw new Error(result.error.message)
@@ -40,7 +38,6 @@ export const validateSaleItemProduct = async (saleItemProduct: any): Promise<Sal
 
 export const validatePartialSaleItemProduct = async (saleItemProduct: any): Promise<Partial<SaleItemProduct>> => {
   const result = await saleItemProductSchema.partial().safeParseAsync(saleItemProduct)
-  await saleItemProductValidator.newSaleItemProductIsValid(saleItemProduct)
 
   if (!result.success) {
     throw new Error(result.error.message)

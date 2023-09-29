@@ -1,0 +1,38 @@
+POST  http://localhost:4008/api/v1/productModifiers
+content-type: application/json
+
+{
+    "productId": 1,
+    "modifierGroupId": 1,
+    "order": 1,
+    "maxSelect": 1,
+    "minSelect": 1,
+    "price": 100,
+    "priceByGroup": true
+}
+
+####
+
+GET http://localhost:4008/api/v1/productModifiers/byProductId/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/productModifiers/1
+content-type: application/json
+
+{
+    "maxSelect": 3
+}
+
+####
+
+DELETE  http://localhost:4008/api/v1/productModifiers/1
+
+
+####
+
+GET http://localhost:4008/api/v1/productModifiers/upProductModifierOrder/1
+
+####
+
+GET http://localhost:4008/api/v1/productModifiers/downProductModifierOrder/1

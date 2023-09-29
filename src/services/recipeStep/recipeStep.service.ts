@@ -33,11 +33,15 @@ export const updateRecipeStep = async (recipeStep: Partial<RecipeStepAttributes>
 }
 
 export const deleteRecipeStep = async (id: number): Promise<void> => {
-  await updateRecipeStep({ delete: true }, id)
+  await RecipeStepModel.update({ delete: true }, { where: { id } })
+  const recipeStep = await getRecipeStepById(id)
+  await sortStepsAfterDelete({...recipeStep})
 }
 
 export const recoveryRecipeStep = async (id: number): Promise<void> => {
-  await updateRecipeStep({ delete: false }, id)
+  await RecipeStepModel.update({ delete: false }, { where: { id } })
+  const recipeStep = await getRecipeStepById(id)
+  await sortStepsAfterInsert(recipeStep)
 }
 
 export const stepUp = async (recipeStep: RecipeStep): Promise<void> => {

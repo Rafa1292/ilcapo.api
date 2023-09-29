@@ -7,6 +7,19 @@ import { errorHandler } from '../utils/errorHandler'
 
 const router = express.Router()
 
+router.post('/', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const createSaleItemCategory = await saleItemCategoryFactory.validateSaleItemCategory(req.body)
+    const savedSaleItemCategory = await saleItemCategoryService.saveSaleItemCategory(createSaleItemCategory)
+    response.setResponse(savedSaleItemCategory, ['SaleItem category saved successfully'], false)
+  } catch (error: any) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 router.get('/', async (_req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
@@ -47,24 +60,11 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.json(response)
 })
 
-router.post('/', async (req: Request, res: Response) => {
-  const response = responseFactory.toNewCustomResponse()
-  try {
-    const createSaleItemCategory = await saleItemCategoryFactory.validateSaleItemCategory(req.body)
-    const savedSaleItemCategory = await saleItemCategoryService.saveSaleItemCategory(createSaleItemCategory)
-    response.setResponse(savedSaleItemCategory, ['SaleItem category saved successfully'], false)
-  } catch (error: any) {
-    const errors = errorHandler(error)
-    response.setResponse(undefined, errors, true)
-  }
-  res.json(response)
-})
-
 router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const saleItemCategory = await saleItemCategoryFactory.validatePartialSaleItemCategory(req.body)
+    const saleItemCategory = await saleItemCategoryFactory.validatePartialSaleItemCategory({...req.body, id})
     const savedSaleItemCategory = await saleItemCategoryService.updateSaleItemCategory(saleItemCategory, id)
     response.setResponse(savedSaleItemCategory, ['SaleItem category updated successfully'], false)
   } catch (error) {
@@ -86,5 +86,19 @@ router.delete('/:id', async (req: Request, res: Response) => {
   }
   res.json(response)
 })
+
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await saleItemCategoryService.recoverySaleItemCategory(id)
+    response.setResponse({}, ['Category recovery successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 
 export default router

@@ -1,13 +1,12 @@
 import { z } from 'zod'
 import { RecipeStep } from '../services/recipeStep/recipeStep.types'
-import * as recipeStepValidator from '../validations/recipeStep.validator'
 import { recipeStepIngredientSchema } from './recipeStepIngredient.factory'
 
 export const recipeStepSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   stepNumber: z.number({
     required_error: 'El numero de paso es requerido',
     invalid_type_error: 'El numero de paso debe ser un numero entero',
@@ -28,12 +27,11 @@ export const recipeStepSchema = z.object({
     required_error: 'La receta es requerida',
     invalid_type_error: 'La receta debe ser un numero entero',
   }),
-  recipeStepIngredients: z.array(recipeStepIngredientSchema)
+  recipeStepIngredients: z.union([ z.array(recipeStepIngredientSchema), z.undefined() ])
 })
 
 export const validateRecipeStep = async (recipeStep: any): Promise<RecipeStep> => {
   const result = await recipeStepSchema.safeParseAsync(recipeStep)
-  await recipeStepValidator.newRecipeStepIsValid()
 
   if (!result.success) {
     throw new Error(result.error.message)
@@ -44,7 +42,6 @@ export const validateRecipeStep = async (recipeStep: any): Promise<RecipeStep> =
 
 export const validatePartialRecipeStep = async (recipeStep: any): Promise<Partial<RecipeStep>> => {
   const result = await recipeStepSchema.partial().safeParseAsync(recipeStep)
-  await recipeStepValidator.newRecipeStepIsValid()
 
   if (!result.success) {
     throw new Error(result.error.message)

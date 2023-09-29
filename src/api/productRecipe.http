@@ -1,0 +1,30 @@
+POST  http://localhost:4008/api/v1/productRecipes
+content-type: application/json
+
+{
+    "modifierElementId": 1,
+    "productId": 1,
+    "recipeId": 1
+}
+
+
+####
+
+
+PATCH  http://localhost:4008/api/v1/productRecipes/1
+content-type: application/json
+
+{
+    "cost": 300
+}
+
+####
+
+DELETE  http://localhost:4008/api/v1/productRecipes/1
+
+
+####
+
+GET http://localhost:4008/api/v1/productRecipes/1/1
+
+####

@@ -38,14 +38,24 @@ export const saveSaleItem = async (saleItem: SaleItem): Promise<void> => {
   if (!transaction) throw new Error('Transaction not found')
   try {
     const { id, ...rest } = SaleItemModel.getSaleItem(saleItem, 0)
-    const newSaleItem = await SaleItemModel.create(rest, { transaction })
-    await savePrices({ ...newSaleItem, prices: saleItem.prices }, transaction)
+    const saleItemModel = await SaleItemModel.create(rest, { transaction })
+    const itemId = saleItemModel.id
+    await savePrices({...saleItemModel, id: itemId, prices: saleItem.prices }, transaction)
     await transaction?.commit()
   } catch (error) {
     await transaction?.rollback()
     throw error
   }
 }
+
+export const getSaleItemByName = async (name: string, id: number): Promise<SaleItem | undefined> => {
+  const objs = await SaleItemModel.findAll({})
+  const obj = objs.find((tmp: SaleItem) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}
+
 
 export const updateSaleItem = async (saleItem: Partial<SaleItemAttributes>, id: number ): Promise<void> => {
   const transaction = await SaleItemModel.sequelize?.transaction()
@@ -57,7 +67,7 @@ export const updateSaleItem = async (saleItem: Partial<SaleItemAttributes>, id: 
     const pricesToUpdate = saleItem.prices?.filter(
       (price) => prices?.some((p) => p.id === price.id)
     ) || []
-    const pricesToRemove = prices.filter(
+    const pricesToRemove = prices?.filter(
       (price) => !saleItem.prices?.some((p) => p.id === price.id)
     )
     const pricesToSave = saleItem.prices?.filter(
@@ -76,7 +86,6 @@ export const updateSaleItem = async (saleItem: Partial<SaleItemAttributes>, id: 
 
 const savePrices = async (saleItem: SaleItem, transaction: Transaction): Promise<void> => {
   // console.log('---------------------------------------')
-  // console.log(saleItem)
   for (const price of saleItem.prices) {
     // console.log('---------------------------------------')
     // console.log(saleItem)
@@ -101,5 +110,5 @@ export const deleteSaleItem = async (id: number): Promise<void> => {
 }
 
 export const recoverySaleItem = async (id: number): Promise<void> => {
-  await updateSaleItem({delete: false}, id)
+  await SaleItemModel.update({delete: false}, { where: { id } })
 }

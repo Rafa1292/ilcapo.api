@@ -18,7 +18,7 @@ export const validateBrand = async (brand: any): Promise<Brand> => {
   if (!result.success) {
     throw new Error(result.error.message)
   }
-  
+
   await validateName(result.data.name, result.data.id)
 
   return result.data

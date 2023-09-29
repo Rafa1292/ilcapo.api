@@ -1,0 +1,34 @@
+POST  http://localhost:4008/api/v1/providers
+content-type: application/json
+
+{
+    "name": "Sigma",
+    "phone": 100,
+    "fixedExpense": false
+}
+
+####
+
+GET http://localhost:4008/api/v1/providers/
+
+
+####
+
+GET http://localhost:4008/api/v1/providers/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/providers/1
+content-type: application/json
+
+{
+    "name": "sigma"
+}
+
+####
+
+DELETE  http://localhost:4008/api/v1/providers/1
+
+####
+
+PATCH  http://localhost:4008/api/v1/providers/recovery/1

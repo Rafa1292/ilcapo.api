@@ -63,7 +63,7 @@ export const recipeSchema = {
   },
   cost: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.INTEGER
   },
   delete: {
     type: DataTypes.BOOLEAN,

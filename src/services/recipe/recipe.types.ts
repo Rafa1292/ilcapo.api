@@ -5,7 +5,7 @@ export interface RecipeAttributes {
   id: number
   name: string
   cost: number
-  recipeSteps: RecipeStep[]
+  recipeSteps?: RecipeStep[]
   delete: boolean
   createdAt?: string
   updatedAt?: string

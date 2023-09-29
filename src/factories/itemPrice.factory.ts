@@ -5,7 +5,7 @@ export const itemPriceSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   itemId: z.number({
     required_error: 'El item es requerido',
     invalid_type_error: 'El item debe ser un numero entero',

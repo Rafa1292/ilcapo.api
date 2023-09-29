@@ -5,7 +5,7 @@ const productRecipeSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',
-  }),
+  }).default(0),
   modifierElementId: z.number({
     required_error: 'El elemento modificador es requerido',
     invalid_type_error: 'El elemento modificador debe ser un numero entero',

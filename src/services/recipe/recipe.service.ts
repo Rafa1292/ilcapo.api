@@ -10,6 +10,7 @@ export const getRecipes = async (): Promise<Recipe[]> => {
       include: [
         {
           association: 'recipeSteps',
+          where: { delete: false },
           include: [
             {
               association: 'recipeStepIngredients',
@@ -31,6 +32,14 @@ export const getRecipes = async (): Promise<Recipe[]> => {
   return recipes
 }
 
+export const getRecipeByName = async (name: string, id: number): Promise<Recipe | undefined> => {
+  const objs = await RecipeModel.findAll({})
+  const obj = objs.find((tmp: Recipe) => {
+    return tmp.name.toLowerCase() === name.toLowerCase() && tmp.id !== id
+  })
+  return obj
+}
+
 export const getRecipesWithDeletedItems = async (): Promise<Recipe[]> => {
   return await RecipeModel.findAll()
 }
@@ -41,6 +50,7 @@ export const getRecipeById = async (id: number): Promise<Recipe> => {
       include: [
         {
           association: 'recipeSteps',
+          where: { delete: false },
           include: [
             {
               association: 'recipeStepIngredients',

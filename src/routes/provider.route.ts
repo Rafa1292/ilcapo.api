@@ -51,9 +51,22 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const provider = await providerFactory.validatePartialProvider(req.body)
+    const provider = await providerFactory.validatePartialProvider({...req.body, id})
     const savedProvider = await providerService.updateProvider(provider, id)
     response.setResponse(savedProvider, ['Provider updated successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await providerService.recoveryProvider(id)
+    response.setResponse({}, ['Provider recovery successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
     response.setResponse(undefined, errors, true)

@@ -1,0 +1,24 @@
+POST  http://localhost:4008/api/v1/saleItemProducts
+content-type: application/json
+
+{
+    "saleItemId": 19,
+    "productId": 1,
+    "quantity": 100,
+    "discount": 10
+}
+
+####
+
+PATCH  http://localhost:4008/api/v1/saleItemProducts/1
+content-type: application/json
+
+{
+    "quantity": 200
+}
+
+####
+
+DELETE  http://localhost:4008/api/v1/saleItemProducts/2
+
+

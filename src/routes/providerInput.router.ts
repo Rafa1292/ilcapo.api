@@ -12,7 +12,7 @@ router.get('/providerInputsByInputId/:id', async (req: Request, res: Response) =
   try {
     const id = parseInt(req.params.id)
     const providerInputModels = await providerInputService.getProviderInputsByInputId(id)
-    const providerInputs = providerInputFactory.validateProviderInputs(providerInputModels)
+    const providerInputs = await providerInputFactory.validateProviderInputs(providerInputModels)
     response.setResponse(providerInputs, ['Provider inputs retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -26,7 +26,7 @@ router.get('/providerInputsByProviderId/:id', async (req: Request, res: Response
   try {
     const id = parseInt(req.params.id)
     const providerInputModels = await providerInputService.getProviderInputsByProviderId(id)
-    const providerInputs = providerInputFactory.validateProviderInputs(providerInputModels)
+    const providerInputs = await providerInputFactory.validateProviderInputs(providerInputModels)
     response.setResponse(providerInputs, ['Provider inputs retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -40,7 +40,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id)
     const providerInputModel = await providerInputService.getProviderInputById(id)
-    const providerInput = providerInputFactory.validateProviderInput(providerInputModel)
+    const providerInput = await providerInputFactory.validateProviderInput(providerInputModel)
     response.setResponse(providerInput, ['Provider input retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
@@ -66,7 +66,7 @@ router.patch('/:id', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
     const id = parseInt(req.params.id)
-    const providerInput = await providerInputFactory.validatePartialProviderInput(req.body)
+    const providerInput = await providerInputFactory.validatePartialProviderInput({...req.body, id})
     const savedProviderInput = await providerInputService.updateProviderInput(providerInput, id)
     response.setResponse(savedProviderInput, ['Provider input updated successfully'], false)
   } catch (error) {
@@ -88,5 +88,19 @@ router.delete('/:id', async (req: Request, res: Response) => {
   }
   res.json(response)
 })
+
+router.patch('/recovery/:id', async (req: Request, res: Response) => {
+  const response = responseFactory.toNewCustomResponse()
+  try {
+    const id = parseInt(req.params.id)
+     await providerInputService.recoveryProviderInput(id)
+    response.setResponse({}, ['ProviderInput recovery successfully'], false)
+  } catch (error) {
+    const errors = errorHandler(error)
+    response.setResponse(undefined, errors, true)
+  }
+  res.json(response)
+})
+
 
 export default router
