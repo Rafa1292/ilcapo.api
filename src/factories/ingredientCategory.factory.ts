@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { IngredientCategory } from '../services/ingredientCategory/ingredientCategory.types'
 import { getIngredientCategoryByName } from '../services/ingredientCategory/ingredientCategory.service'
+import { ingredientSchema } from './ingredient.factory'
 
 
 const ingredientCategorySchema = z.object({
@@ -11,7 +12,8 @@ const ingredientCategorySchema = z.object({
   name: z.string({
     required_error: 'El nombre de la marca es requerido',
     invalid_type_error: 'El nombre de la marca debe ser  un texto',
-  })
+  }),
+  ingredients: z.union([ z.undefined(), z.array(ingredientSchema) ])
 })
 
 export const validateIngredientCategory = async (ingredientCategory: any): Promise<IngredientCategory> => {

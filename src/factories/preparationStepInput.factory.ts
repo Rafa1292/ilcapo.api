@@ -1,5 +1,7 @@
 import { z } from 'zod'
 import { PreparationStepInput } from '../services/preparationStepInput/preparationStepInput.types'
+import { inputSchema } from './input.factory'
+import { measureSchema } from './measure.factory'
 
 export const preparationStepInputSchema = z.object({
   id: z.number({
@@ -22,6 +24,8 @@ export const preparationStepInputSchema = z.object({
     required_error: 'La medida es requerida',
     invalid_type_error: 'La medida debe ser un numero entero',
   }),
+  input: z.union([z.undefined(), inputSchema]),
+  measure: z.union([z.undefined(), measureSchema]),
 })
 
 export const validatePreparationStepInput = async (preparationStepInput: any): Promise<PreparationStepInput> => {

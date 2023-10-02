@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { InputCategory } from '../services/inputCategory/inputCategory.types'
 import { getInputCategoryByName } from '../services/inputCategory/inputCategory.service'
+import { inputSchema } from './input.factory'
 
 const inputCategorySchema = z.object({
   id: z.number({
@@ -11,6 +12,7 @@ const inputCategorySchema = z.object({
     required_error: 'El nombre de la categoria es requerido',
     invalid_type_error: 'El nombre de la categoria debe ser  un texto',
   }),
+  inputs: z.union([ z.undefined(), z.array(inputSchema) ])
 })
 
 export const validateInputCategory = async (inputCategory: any): Promise<InputCategory> => {

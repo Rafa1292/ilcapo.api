@@ -1,5 +1,6 @@
 import { Recipe, RecipeAttributes } from './recipe.types'
 import { RecipeModel } from '../../db/models/recipe.model'
+import { getRecipeStepsByRecipeId } from '../recipeStep/recipeStep.service'
 
 export const getRecipes = async (): Promise<Recipe[]> => {
   const recipes = await RecipeModel.findAll(
@@ -9,25 +10,15 @@ export const getRecipes = async (): Promise<Recipe[]> => {
       },
       include: [
         {
-          association: 'recipeSteps',
-          where: { delete: false },
-          include: [
-            {
-              association: 'recipeStepIngredients',
-              include: [
-                {
-                  association: 'ingredient'
-                },
-                {
-                  association: 'measure'
-                }
-              ]
-            }
-          ]
+          association: 'recipeSteps'
         }
       ]
     }
   )
+
+  for (const recipe of recipes) {
+    recipe.recipeSteps = await getRecipeStepsByRecipeId(recipe.id)
+  }
 
   return recipes
 }

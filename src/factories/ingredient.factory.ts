@@ -4,7 +4,7 @@ import { measureSchema } from './measure.factory'
 import { preparationStepSchema } from './preparationStep.factory'
 import { getIngredientByName } from '../services/ingredient/ingredient.service'
 
-const ingredientSchema = z.object({
+export const ingredientSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',

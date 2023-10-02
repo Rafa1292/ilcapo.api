@@ -2,7 +2,7 @@ import { IngredientCategory, IngredientCategoryAttributes } from './ingredientCa
 import { IngredientCategoryModel } from '../../db/models/ingredientCategory.model'
 
 export const getIngredientCategories = async (): Promise<IngredientCategory[]> => {
-  return await IngredientCategoryModel.findAll(
+  const cats = await IngredientCategoryModel.findAll(
     {
       where: {
         delete: false
@@ -14,6 +14,7 @@ export const getIngredientCategories = async (): Promise<IngredientCategory[]> =
       ]
     }
   )
+  return cats
 }
 
 export const getIngredientCategoriesWithDeletedItems = async (): Promise<IngredientCategory[]> => {

@@ -78,7 +78,7 @@ export const preparationStepInputSchema = {
   },
   quantity: {
     allowNull: false,
-    type: DataTypes.DECIMAL
+    type: DataTypes.INTEGER
   },
   measureId: {
     allowNull: false,

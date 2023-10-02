@@ -26,10 +26,10 @@ export const modifierElementSchema = z.object({
     required_error: 'La combinabilidad es requerida',
     invalid_type_error: 'La combinabilidad debe ser un booleano',
   }),
-  combinableModifierGroupId: z.number({
+  combinableGroupId: z.number({
     required_error: 'El grupo de modificadores combinables es requerido',
     invalid_type_error: 'El grupo de modificadores combinables debe ser un numero entero',
-  }),
+  }).default(0),
   prices: z.union([z.array(elementPriceSchema), z.undefined()]),
 })
 

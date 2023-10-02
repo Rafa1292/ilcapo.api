@@ -2,7 +2,7 @@ import { Product, ProductAttributes } from './product.types'
 import { ProductModel } from '../../db/models/product.model'
 
 export const getProducts = async (): Promise<Product[]> => {
-  return await ProductModel.findAll(
+  const result = await ProductModel.findAll(
     {
       where: {
         delete: false
@@ -27,6 +27,7 @@ export const getProducts = async (): Promise<Product[]> => {
       ]
     }
   )
+  return result
 
 }
 

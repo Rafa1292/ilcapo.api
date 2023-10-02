@@ -3,7 +3,7 @@ import { Magnitude } from '../services/magnitude/magnitude.types'
 import { measureSchema } from './measure.factory'
 import { getMagnitudeByName } from '../services/magnitude/magnitude.service'
 
-const magnitudeSchema = z.object({
+export const magnitudeSchema = z.object({
   id: z.number({
     required_error: 'El id es requerido',
     invalid_type_error: 'El id debe ser un numero entero',

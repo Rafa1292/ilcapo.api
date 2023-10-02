@@ -9,7 +9,7 @@ content-type: application/json
     "name": "Tomate",
     "defaultRecipeId": 1,
     "combinable": false,
-    "combinableModifierGroupId": 1,
+    "combinableGroupId": 1,
     "modifierGroupId": 1,
     "prices": []
 }

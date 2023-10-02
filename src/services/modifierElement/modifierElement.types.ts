@@ -9,7 +9,7 @@ export interface ModifierElementAttributes {
   defaultRecipeId: number
   combinable: boolean
   prices?: ElementPrice[]
-  combinableModifierGroupId: number
+  combinableGroupId: number
   modifierUpgrade?: ModifierElementUpgrade
   modifierGroupId: number
   delete: boolean

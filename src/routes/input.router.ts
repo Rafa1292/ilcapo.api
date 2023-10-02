@@ -25,7 +25,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id)
     const inputModel = await inputService.getInputById(id)
-    const input = inputFactory.validateInput(inputModel)
+    const input = await inputFactory.validateInput(inputModel)
     response.setResponse(input, ['Input retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)

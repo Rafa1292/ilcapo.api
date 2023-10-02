@@ -1,9 +1,17 @@
+import { Transaction } from 'sequelize'
 import { RecipeStepIngredientModel } from '../../db/models/recipeStepIngredient.model'
 import { RecipeStepIngredient } from './recipeStepIngredient.type'
 
-export const saveRecipeStepIngredient = async (recipeStepIngredient: RecipeStepIngredient): Promise<RecipeStepIngredient> => {
+export const saveRecipeStepIngredient = async (recipeStepIngredient: RecipeStepIngredient, transaction?: Transaction): Promise<RecipeStepIngredient> => {
+  console.log('init saveRecipeStepIngredient----------------')
+  const currentTransaction = transaction ?? await RecipeStepIngredientModel.sequelize?.transaction()
+  if (currentTransaction === undefined) throw new Error('Transaction undefined')
   const { id, ...rest } = RecipeStepIngredientModel.getRecipeStepIngredient(recipeStepIngredient,0)
-  return await RecipeStepIngredientModel.create(rest)
+  const result = await RecipeStepIngredientModel.create(rest, { transaction: currentTransaction } )
+
+  if(transaction === undefined) await currentTransaction.commit()
+
+  return result
 }
 
 export const updateRecipeStepIngredient = async (recipeStepIngredient: Partial<RecipeStepIngredient>, id: number): Promise<void> => {
@@ -15,8 +23,8 @@ export const deleteRecipeStepIngredient = async (id: number): Promise<void> => {
   await RecipeStepIngredientModel.destroy({ where: { id } })
 }
 
-export const saveRecipeStepIngredients = async (recipeStepIngredients: RecipeStepIngredient[], recipeStepId: number): Promise<void> => {
+export const saveRecipeStepIngredients = async (recipeStepIngredients: RecipeStepIngredient[], recipeStepId: number, Transaction?: Transaction): Promise<void> => {
   for (const recipeStepIngredient of recipeStepIngredients) {
-    await saveRecipeStepIngredient({ ...recipeStepIngredient, recipeStepId })
+    await saveRecipeStepIngredient({ ...recipeStepIngredient, recipeStepId }, Transaction)
   }
 }

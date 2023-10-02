@@ -10,7 +10,7 @@ export class ModifierElementModel extends Model implements ModifierElementAttrib
   public defaultRecipeId!: number
   public combinable!: boolean
   public prices!: ElementPrice[]
-  public combinableModifierGroupId!: number
+  public combinableGroupId!: number
   public modifierUpgrade!: ModifierElementUpgrade
   public modifierGroupId!: number
   public delete!: boolean
@@ -84,7 +84,7 @@ export const modifierElementSchema = {
     allowNull: false,
     type: DataTypes.BOOLEAN
   },
-  combinableModifierGroupId: {
+  combinableGroupId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },

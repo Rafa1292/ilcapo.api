@@ -25,7 +25,8 @@ export const validateProvider = async (provider: any): Promise<Provider> => {
   const result = await providerSchema.safeParseAsync(provider)
 
   if (!result.success) {
-    throw new Error(result.error.message)
+    console.log(result.error.issues[0].message)
+    throw new Error(result.error.issues[0].message)
   }
 
   await validateName(result.data.name, result.data.id)

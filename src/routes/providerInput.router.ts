@@ -52,7 +52,8 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const response = responseFactory.toNewCustomResponse()
   try {
-    const createProviderInput = await providerInputFactory.validateProviderInput(req.body)
+    const { measure, ...rest } = req.body
+    const createProviderInput = await providerInputFactory.validateProviderInput(rest)
     const savedProviderInput = await providerInputService.saveProviderInput(createProviderInput)
     response.setResponse(savedProviderInput, ['Provider input saved successfully'], false)
   } catch (error: any) {

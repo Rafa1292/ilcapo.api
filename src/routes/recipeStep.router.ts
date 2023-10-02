@@ -28,8 +28,6 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     const createRecipeStep = await recipeStepFactory.validateRecipeStep(req.body)
     const savedRecipeStep = await recipeStepService.saveRecipeStep(createRecipeStep)
-    // la transaccion debe ir en el servicio
-    // await saveRecipeStepIngredients(createRecipeStep.recipeStepIngredients, savedRecipeStep.id)
     await transaction.commit()
     response.setResponse(savedRecipeStep, ['RecipeStep saved successfully'], false)
   } catch (error: any) {

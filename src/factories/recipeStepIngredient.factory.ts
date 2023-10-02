@@ -1,5 +1,7 @@
 import { z } from 'zod'
 import { RecipeStepIngredient } from '../services/recipeStepIngredient/recipeStepIngredient.type'
+import { measureSchema } from './measure.factory'
+import { ingredientSchema } from './ingredient.factory'
 
 export const recipeStepIngredientSchema = z.object({
   id: z.number({
@@ -29,7 +31,9 @@ export const recipeStepIngredientSchema = z.object({
   isOptional: z.boolean({
     required_error: 'El opcional es requerido',
     invalid_type_error: 'El opcional debe ser un texto',
-  })
+  }),
+  measure: z.union([z.undefined(), measureSchema]),
+  ingredient: z.union([z.undefined(), ingredientSchema]),
 })
 
 export const validateRecipeStepIngredient = async (recipeStepIngredient: any): Promise<RecipeStepIngredient> => {
