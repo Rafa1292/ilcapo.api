@@ -26,7 +26,7 @@ router.get('/elementUpgrade/:modifierElementId', async (_req: Request, res: Resp
   try {
     const modifierElementId = parseInt(_req.params.modifierElementId)
     const modifierElementUpgradeModel = await modifierElementUpgradeService.getModifierElementUpgradeByModifierElementId(modifierElementId)
-    const modifierElementUpgrade = modifierElementUpgradeFactory.validateModifierElementUpgrade(modifierElementUpgradeModel)
+    const modifierElementUpgrade = modifierElementUpgradeModel === null ? null : modifierElementUpgradeFactory.validateModifierElementUpgrade(modifierElementUpgradeModel)
     response.setResponse(modifierElementUpgrade, ['ModifierElementUpgrade retrieved successfully'], false)
   } catch (error) {
     const errors = errorHandler(error)
