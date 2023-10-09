@@ -2,6 +2,7 @@ import { SaleItem, SaleItemAttributes } from './saleItem.types'
 import { SaleItemModel } from '../../db/models/saleItem.model'
 import { Transaction } from 'sequelize'
 import { deleteItemPrice, saveItemPrice, updateItemPrice } from '../itemPrice/itemPrice.service'
+import { ItemPrice } from '../itemPrice/itemPrice.types'
 
 export const getSaleItems = async (): Promise<SaleItem[]> => {
   return await SaleItemModel.findAll({
@@ -40,7 +41,7 @@ export const saveSaleItem = async (saleItem: SaleItem): Promise<void> => {
     const { id, ...rest } = SaleItemModel.getSaleItem(saleItem, 0)
     const saleItemModel = await SaleItemModel.create(rest, { transaction })
     const itemId = saleItemModel.id
-    await savePrices({...saleItemModel, id: itemId, prices: saleItem.prices }, transaction)
+    await savePrices(itemId, saleItem.prices, transaction)
     await transaction?.commit()
   } catch (error) {
     await transaction?.rollback()
@@ -72,10 +73,11 @@ export const updateSaleItem = async (saleItem: Partial<SaleItemAttributes>, id: 
     )
     const pricesToSave = saleItem.prices?.filter(
       (price) => price.id === 0) || []
+    
 
     if (pricesToUpdate.length > 0) await updatePrices({...currentSaleItem, prices: pricesToUpdate}, transaction)
     if (pricesToRemove.length > 0) await removePrices({...currentSaleItem, prices: pricesToRemove}, transaction)
-    if (pricesToSave?.length > 0) await savePrices({...currentSaleItem, prices: pricesToSave}, transaction)
+    if (pricesToSave?.length > 0) await savePrices(id, pricesToSave, transaction)
 
     await transaction.commit()
   } catch (error) {
@@ -84,12 +86,11 @@ export const updateSaleItem = async (saleItem: Partial<SaleItemAttributes>, id: 
   }
 }
 
-const savePrices = async (saleItem: SaleItem, transaction: Transaction): Promise<void> => {
-  // console.log('---------------------------------------')
-  for (const price of saleItem.prices) {
+const savePrices = async (saleItemId: number, prices: ItemPrice[], transaction: Transaction): Promise<void> => {
+  console.log(saleItemId)
+  for (const price of prices) {
     // console.log('---------------------------------------')
-    // console.log(saleItem)
-    await saveItemPrice({...price, itemId: saleItem.id}, transaction)
+    await saveItemPrice({...price, itemId: saleItemId}, transaction)
   }
 }
 

@@ -8,6 +8,7 @@ import {
   updateModifierElementUpgrade,
 } from '../modifierElementUpgrade/modifierElementUpgrade.service'
 import { ModifierElementUpgrade } from '../modifierElementUpgrade/modifierElementUpgrade.types'
+import { ElementPrice } from '../elementPrice/elementPrice.types'
 
 export const getModifierElements = async (): Promise<ModifierElement[]> => {
   return await ModifierElementModel.findAll({
@@ -30,7 +31,6 @@ export const getModifierElementByName = async (name: string, id: number): Promis
   return obj
 }
 
-
 export const getModifierElementsWithDeletedItems = async (modifierGroupId: number): Promise<ModifierElement[]> => {
   const modifierelements = await ModifierElementModel.findAll()
   return modifierelements.filter((modifierElement) => modifierElement.modifierGroupId === modifierGroupId)
@@ -50,6 +50,8 @@ export const saveModifierElement = async (modifierElement: ModifierElement): Pro
   try {
     const { id, ...rest } = ModifierElementModel.getModifierElement(modifierElement, 0)
     const newModifierElement = await ModifierElementModel.create(rest, { transaction })
+    const newId = newModifierElement.id
+
     if (modifierElement.modifierUpgrade)
       await saveModifierElementUpgrade(
         {
@@ -58,14 +60,10 @@ export const saveModifierElement = async (modifierElement: ModifierElement): Pro
         },
         transaction
       )
+      
+    if (modifierElement.prices !== undefined)
+     await savePrices(newId, modifierElement.prices, transaction)
 
-    await savePrices(
-      {
-        id: newModifierElement.id,
-        prices: modifierElement.prices,
-      } as ModifierElement,
-      transaction
-    )
     await transaction.commit()
     return await getModifierElementById(newModifierElement.id)
   } catch (error) {
@@ -96,7 +94,7 @@ export const updateModifierElement = async (
       await removePrices({ ...currentModifierElement, prices: pricesToRemove }, transaction)
     if (pricesToUpdate?.length > 0)
       await updatePrices({ ...currentModifierElement, prices: pricesToUpdate }, transaction)
-    if (pricesToSave?.length > 0) await savePrices({ ...currentModifierElement, prices: pricesToSave }, transaction)
+    if (pricesToSave?.length > 0) await savePrices(id, pricesToSave, transaction)
     await transaction.commit()
   } catch (error) {
     await transaction.rollback()
@@ -134,10 +132,13 @@ export const recoveryModifierElement = async (id: number): Promise<void> => {
   await updateModifierElement({ delete: false }, id)
 }
 
-const savePrices = async (modifierElement: ModifierElement, transaction: Transaction): Promise<void> => {
-  if (modifierElement.prices === undefined) throw new Error('Prices undefined')
-  for (const price of modifierElement.prices) {
-    await saveElementPrice({ ...price, elementId: modifierElement.id }, transaction)
+const savePrices = async (
+  modifierElementId: number,
+  prices: ElementPrice[],
+  transaction: Transaction
+): Promise<void> => {
+  for (const price of prices) {
+    await saveElementPrice({ ...price, elementId: modifierElementId }, transaction)
   }
 }
 
